@@ -1,0 +1,100 @@
+#!/usr/bin/python -tt
+
+
+# Twisted hosts our website and helps with async development.
+from twisted.internet import reactor
+from twisted.web.server import Site
+from twisted.web.wsgi import WSGIResource
+
+# Data are stored in a PostgreSQL database.
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import create_engine
+from sqlsoup import SQLSoup
+
+import psycopg2
+from psycopg2._range import register_range
+
+# Command line arguments follow the GNU conventions.
+from getopt import gnu_getopt
+from sys import argv, exit
+
+# Configuration is stored in a boring ini file.
+from ConfigParser import ConfigParser
+
+# The application itself also comes in handy... ;-)
+from ntk.adminator import *
+
+from twisted.internet import ssl
+
+if __name__ == '__main__':
+    def do_start(config):
+        # Prepare SQLSoup database connection.
+        engine = create_engine(config.get('postgresql', 'url'),
+                               isolation_level='SERIALIZABLE')
+        session = scoped_session(sessionmaker(autocommit=True,
+                                              autoflush=True))
+        conn = engine.connect()
+
+        register_range('network.inetrange', 'InetRange', conn, True)
+
+        db = SQLSoup(engine, session=session)
+
+        # Prepare the manager that takes care of business logic.
+        manager = Manager(db)
+
+        # Prepare the application.
+        app = make_website_app(manager, config.getboolean('http', 'debug'))
+
+        # Workaround for RHEL6 Twisted.
+        reactor.suggestThreadPoolSize(5)
+
+        # Prepare WSGI site.
+        site = Site(WSGIResource(reactor, reactor.threadpool, app))
+
+        # Bind the website to it's address.
+        reactor.listenTCP(config.getint('http', 'port'), site,
+                          interface=config.get('http', 'host'))
+
+        # Run twisted.
+        reactor.run()
+
+
+    def do_help(*args, **kwargs):
+        print 'Usage: adminator [--config=/etc/ntk/adminator.ini]'
+        print 'Runs adminator daemon with given configuration.'
+        print ''
+        print 'OPTIONS:'
+        print '  --help, -h          Display this help.'
+        print '  --version, -V       Display version info.'
+        print ''
+        print '  --config, -c file   Load alternative configuration file.'
+        print '                      Defaults to /etc/ntk/adminator.ini.'
+        print ''
+        print 'Report bugs at <http://redmine.ntkcz.cz/>.'
+
+    def do_version(*args, **kwargs):
+        print 'adminator (NTK) 1'
+
+    # Parse command line arguments.
+    opts, args = gnu_getopt(argv, 'hVc:', ['help', 'version', 'config='])
+
+    action = do_start
+    config_path = '/etc/ntk/adminator.ini'
+
+    for k, v in opts:
+        if k in ('--help', '-h'):
+            action = do_help
+        elif k in ('--version', '-V'):
+            action = do_version
+        elif k in ('--config', '-c'):
+            config_path = v
+
+    # Load the configuration from file.
+    config = ConfigParser()
+    config.read(config_path)
+
+    # Perform the selected action.
+    action(config=config)
+
+# vim:set sw=4 ts=4 et:
+# -*- coding: utf-8 -*-
