@@ -1,3 +1,3 @@
-# examplator
+# Adminator
 
-NTK example application# adminator
+NTK DNS, DHCP and RADIUS management application
