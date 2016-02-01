@@ -2,7 +2,7 @@
 from datetime import datetime
 from pprint import pprint as pp
 import inspect
-from psycopg2._range import DateTimeRange, Range
+from psycopg2._range import Range
 from sqlalchemy.orm import class_mapper
 from psycopg2.extras import Inet
 
@@ -12,10 +12,6 @@ __all__ = ['object_to_dict']
 def process_value(obj, c):
     if isinstance(getattr(obj, c), datetime):
         return (c, getattr(obj, c).isoformat())
-    elif isinstance(getattr(obj, c), DateTimeRange):
-        return (c, (getattr(obj, c).lower.isoformat(), getattr(obj, c).upper.isoformat()))
-    elif issubclass(type(getattr(obj, c)), Range):
-        return (c, (getattr(obj, c).lower, getattr(obj, c).upper))
     elif isinstance(getattr(obj, c), Inet):
         return (c, getattr(obj, c).addr)
     else:

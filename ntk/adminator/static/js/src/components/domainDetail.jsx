@@ -24,7 +24,7 @@ var DomainDetail = React.createClass({
     return (
       <div>
         <AdminNavbar/>
-        <RecordCreate />
+        <RecordCreate domain={this.props.params.id} />
 
         <div className='col-xs-12 container well'>
           <h3>Records</h3>

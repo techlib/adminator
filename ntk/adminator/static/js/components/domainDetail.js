@@ -28,7 +28,7 @@ var DomainDetail = React.createClass({
       'div',
       null,
       React.createElement(AdminNavbar, null),
-      React.createElement(RecordCreate, null),
+      React.createElement(RecordCreate, { domain: this.props.params.id }),
       React.createElement(
         'div',
         { className: 'col-xs-12 container well' },

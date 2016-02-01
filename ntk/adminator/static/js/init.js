@@ -18,3 +18,4 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var Tooltip = ReactBootstrap.Tooltip;
 var Alert = ReactBootstrap.Alert;
 var DateTimeField = window.ReactBootstrapDatetimepicker;
+var Typeahead = window.ReactTypeahead.Typeahead

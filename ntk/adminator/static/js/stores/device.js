@@ -29,7 +29,7 @@ var deviceStore = Reflux.createStore({
 
   onUpdate: function onUpdate(device) {
     $.ajax({
-      url: '/device/' + device.id,
+      url: '/device/' + device.uuid,
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',

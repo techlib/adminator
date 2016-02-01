@@ -78,6 +78,27 @@ def make_website_app(manager, debug):
             device['uuid'] = uuid
             return flask.jsonify(manager.device.update(device))
 
+    # Interfaces
+    @app.route('/interface/', methods=['GET', 'POST'])
+    def interface_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.interface.list())
+        if 'POST' == flask.request.method:
+            return flask.jsonify(manager.interface.insert(flask.request.get_json(force=True)))
+
+    @app.route('/interface/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    def interface_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.interface.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.interface.delete(uuid))
+        if 'PUT' == flask.request.method:
+            interface = flask.request.get_json(force=True)
+            interface['uuid'] = uuid
+            return flask.jsonify(manager.interface.update(interface))
+
+
+
     # DHCP option values
     @app.route('/dhcp-option-values/', methods=['GET'])
     def list_dhpc_option_values():

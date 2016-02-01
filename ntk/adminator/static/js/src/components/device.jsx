@@ -26,12 +26,14 @@ var DeviceInterfacesComponent = React.createClass({
     return <div>
       {this.props.data.map((item) => {
         return (
-            <LinkContainer to={`/interfaces/${item.uuid}`}>
-              <OverlayTrigger placement="left" overlay=<Tooltip>{item.hostname} <br/> {item.ip4addr} <br/> {item.ip6addr}</Tooltip>>
-                <a>{item.macaddr}</a>
-              </OverlayTrigger>
-            </LinkContainer>
-            )
+          <div>
+            <OverlayTrigger placement="left" overlay=<Tooltip>{item.hostname} <br/> {item.ip4addr} <br/> {item.ip6addr}</Tooltip>>
+                <span className='label label-warning'>
+                  {item.macaddr}
+                </span>
+            </OverlayTrigger>
+          </div>
+          )
         }
       )}
     </div>

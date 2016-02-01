@@ -28,7 +28,7 @@ var interfaceStore = Reflux.createStore({
 
   onUpdate(item){
     $.ajax({
-      url: `/interface/${item.id}`,
+      url: `/interface/${item.uuid}`,
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',

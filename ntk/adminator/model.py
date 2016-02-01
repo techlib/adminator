@@ -1,5 +1,6 @@
 #!/usr/bin/python -tt
 from utils import object_to_dict
+from sqlalchemy.orm import class_mapper
 
 __all__ = ['Model']
 
@@ -30,7 +31,6 @@ class Model(object):
 
     def list(self):
         items = []
-        print self.e().all()
         for item in self.e().all():
             item = object_to_dict(item, include=self.include_relations.get('list'))
             items.append(item)
@@ -45,6 +45,8 @@ class Model(object):
     def update(self, item):
         assert item.get(self.pkey) is not None, 'Primary key is not set'
         for k,v in item.iteritems():
+            if k in self.get_relationships():
+                continue
             entity = self.e().filter_by(**{self.pkey: item.get(self.pkey)}).one()
             setattr(entity, k, v)
         return object_to_dict(entity)
@@ -72,6 +74,10 @@ class Model(object):
 
     def relate(self, name, entity):
         return self.e().relate(name, entity)
+
+    def get_relationships(self):
+        mapper = class_mapper(self.e())
+        return mapper.relationships.keys()
 
 # vim:set sw=4 ts=4 et:
 # -*- coding: utf-8 -*-

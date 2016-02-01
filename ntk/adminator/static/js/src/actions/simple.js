@@ -18,3 +18,7 @@ var NetworkActions = Reflux.createActions([
 var InterfaceActions = Reflux.createActions([
   'create', 'read', 'update', 'delete', 'list'
 ])
+
+var UserActions = Reflux.createActions([
+  'create', 'read', 'update', 'delete', 'list'
+])

@@ -11,6 +11,7 @@ from domain import Domain
 from record import Record
 from lease4 import Lease4
 from lease6 import Lease6
+from interface import Interface
 
 class Manager(object):
     """The main application logic of Examplator."""
@@ -19,10 +20,10 @@ class Manager(object):
         # Stores DB connection for later use.
         self.db = db
 
-
         # Something like models
         self.user = User(self)
         self.device = Device(self)
+        self.interface = Interface(self)
         self.dhcp_option = DhcpOption(self)
         self.dhcp_option_value = DhcpOptionValue(self)
         self.network = Network(self)

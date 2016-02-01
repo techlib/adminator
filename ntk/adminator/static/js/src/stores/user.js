@@ -1,12 +1,12 @@
 'use strict';
 
-var deviceStore = Reflux.createStore({
-  listenables: [DeviceActions],
-  data: {'device': [], 'list': []},
+var userStore = Reflux.createStore({
+  listenables: [UserActions],
+  data: {'user': [], 'list': []},
 
   onRead(id) {
-    $.ajax({url: `/device/${id}`, success: result => {
-        this.data.device = result
+    $.ajax({url: `/user/${id}`, success: result => {
+        this.data.user = result
         this.trigger(this.data)
       }
     })
@@ -15,7 +15,7 @@ var deviceStore = Reflux.createStore({
   onDelete(id){
     var _this = this;
     $.ajax({
-      url: `/device/${id}`,
+      url: `/user/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
@@ -26,24 +26,24 @@ var deviceStore = Reflux.createStore({
   },
 
 
-  onUpdate(device){
+  onUpdate(user){
     $.ajax({
-      url: `/device/${device.uuid}`,
+      url: `/user/${user.id}`,
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(device)
+      data: JSON.stringify(user)
     })
   },
 
-  onCreate(device){
+  onCreate(user){
     var _this = this;
     $.ajax({
-      url: '/device/',
+      url: '/user/',
       method: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(device),
+      data: JSON.stringify(user),
       success: result => {
         _this.onList()
       }
@@ -51,7 +51,7 @@ var deviceStore = Reflux.createStore({
   },
 
   onList() {
-    $.ajax({url: '/device', success: result => {
+    $.ajax({url: '/user', success: result => {
         this.data.list = result.result
         this.trigger(this.data)
       }

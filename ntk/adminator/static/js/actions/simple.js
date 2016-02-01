@@ -9,3 +9,5 @@ var DeviceActions = Reflux.createActions(['create', 'read', 'update', 'delete', 
 var NetworkActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
 
 var InterfaceActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
+
+var UserActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);

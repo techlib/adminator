@@ -1,14 +1,14 @@
 'use strict';
 
-var interfaceStore = Reflux.createStore({
-  listenables: [InterfaceActions],
-  data: { 'interface': [], 'list': [] },
+var userStore = Reflux.createStore({
+  listenables: [UserActions],
+  data: { 'user': [], 'list': [] },
 
   onRead: function onRead(id) {
     var _this2 = this;
 
-    $.ajax({ url: '/interface/' + id, success: function success(result) {
-        _this2.data['interface'] = result;
+    $.ajax({ url: '/user/' + id, success: function success(result) {
+        _this2.data.user = result;
         _this2.trigger(_this2.data);
       }
     });
@@ -17,7 +17,7 @@ var interfaceStore = Reflux.createStore({
   onDelete: function onDelete(id) {
     var _this = this;
     $.ajax({
-      url: '/interface/' + id,
+      url: '/user/' + id,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
@@ -27,24 +27,24 @@ var interfaceStore = Reflux.createStore({
     });
   },
 
-  onUpdate: function onUpdate(item) {
+  onUpdate: function onUpdate(user) {
     $.ajax({
-      url: '/interface/' + item.uuid,
+      url: '/user/' + user.id,
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(item)
+      data: JSON.stringify(user)
     });
   },
 
-  onCreate: function onCreate(item) {
+  onCreate: function onCreate(user) {
     var _this = this;
     $.ajax({
-      url: '/interface/',
+      url: '/user/',
       method: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(item),
+      data: JSON.stringify(user),
       success: function success(result) {
         _this.onList();
       }
@@ -54,8 +54,8 @@ var interfaceStore = Reflux.createStore({
   onList: function onList() {
     var _this3 = this;
 
-    $.ajax({ url: '/interface', success: function success(result) {
-        _this3.data['list'] = result.result;
+    $.ajax({ url: '/user', success: function success(result) {
+        _this3.data.list = result.result;
         _this3.trigger(_this3.data);
       }
     });

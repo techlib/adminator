@@ -190,7 +190,7 @@ var RecordCreate = React.createClass({
     }
     return React.createElement(
       Input,
-      { type: 'select', ref: 'domain', onChange: this.handleChange },
+      { type: 'select', ref: 'domain', onChange: this.handleChange, value: this.props.domain },
       rows
     );
   },

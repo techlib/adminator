@@ -7,7 +7,7 @@ var DomainIdComponent = React.createClass({
         <ButtonGroup>
           <LinkContainer to={`/domain/${this.props.data}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Records</Tooltip>>
-              <Button className='btn-success'>
+              <Button className='btn-info'>
                 <i className="fa fa-list-alt"></i>
               </Button>
             </OverlayTrigger>

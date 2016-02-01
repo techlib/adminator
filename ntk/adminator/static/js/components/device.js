@@ -53,8 +53,8 @@ var DeviceInterfacesComponent = React.createClass({
       null,
       this.props.data.map(function (item) {
         return React.createElement(
-          LinkContainer,
-          { to: "/interfaces/" + item.uuid },
+          "div",
+          null,
           React.createElement(
             OverlayTrigger,
             { placement: "left", overlay: React.createElement(
@@ -71,8 +71,8 @@ var DeviceInterfacesComponent = React.createClass({
                 item.ip6addr
               ) },
             React.createElement(
-              "a",
-              null,
+              "span",
+              { className: "label label-warning" },
               item.macaddr
             )
           )

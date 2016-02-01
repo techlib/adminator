@@ -22,7 +22,7 @@ var DomainIdComponent = React.createClass({
             ) },
           React.createElement(
             Button,
-            { className: "btn-success" },
+            { className: "btn-info" },
             React.createElement("i", { className: "fa fa-list-alt" })
           )
         )

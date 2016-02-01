@@ -146,7 +146,7 @@ var RecordCreate = React.createClass({
       rows.push(<option value={domain.id} data-name={domain.name}>{domain.name}</option>)
     }
     return (
-          <Input type='select' ref='domain' onChange={this.handleChange}>
+          <Input type='select' ref='domain' onChange={this.handleChange} value={this.props.domain}>
             {rows}
           </Input>
         )
