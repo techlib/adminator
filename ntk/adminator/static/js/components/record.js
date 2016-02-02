@@ -1,5 +1,17 @@
 'use strict';
 
+var RecordNameComponent = React.createClass({
+  displayName: 'RecordNameComponent',
+
+  render: function render() {
+    return React.createElement(
+      Link,
+      { to: '/record/' + this.props.rowData.id },
+      this.props.data
+    );
+  }
+});
+
 var RecordTypeComponent = React.createClass({
   displayName: 'RecordTypeComponent',
 
@@ -43,8 +55,8 @@ var RecordTypeComponent = React.createClass({
   }
 });
 
-var RecordIdComponent = React.createClass({
-  displayName: 'RecordIdComponent',
+var RecordActionsComponent = React.createClass({
+  displayName: 'RecordActionsComponent',
 
   deleteRecord: function deleteRecord() {
     RecordActions['delete'](this.props.data);
@@ -53,23 +65,6 @@ var RecordIdComponent = React.createClass({
     return React.createElement(
       ButtonGroup,
       null,
-      React.createElement(
-        LinkContainer,
-        { to: '/record/' + this.props.data },
-        React.createElement(
-          OverlayTrigger,
-          { placement: 'top', overlay: React.createElement(
-              Tooltip,
-              null,
-              'Edit'
-            ) },
-          React.createElement(
-            Button,
-            { bsStyle: 'primary' },
-            React.createElement('i', { className: 'fa fa-pencil-square-o' })
-          )
-        )
-      ),
       React.createElement(
         OverlayTrigger,
         { placement: 'top', overlay: React.createElement(
@@ -103,10 +98,22 @@ var Record = React.createClass({
   render: function render() {
     var columnMeta = [{
       columnName: 'type',
+      displayName: 'Type',
       customComponent: RecordTypeComponent
     }, {
-      columnName: 'id',
-      customComponent: RecordIdComponent
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: RecordActionsComponent
+    }, {
+      columnName: 'name',
+      displayName: 'Name',
+      customComponent: RecordNameComponent
+    }, {
+      columnName: 'type',
+      displayName: 'Type'
+    }, {
+      columnName: 'content',
+      displayName: 'Content'
     }];
 
     return React.createElement(
@@ -128,11 +135,9 @@ var Record = React.createClass({
           showFilter: true,
           useCustomPagerComponent: 'true',
           customPagerComponent: Pager,
-          showSettings: true,
-          settingsToggleClassName: 'btn pull-right',
           sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
           sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['name', 'type', 'content', 'id'],
+          columns: ['name', 'type', 'content', 'actions'],
           resultsPerPage: '20',
           customFilter: regexGridFilter,
           columnMetadata: columnMeta

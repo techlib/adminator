@@ -55,26 +55,22 @@ var RecordDetail = React.createClass({
         return React.createElement(
           'div',
           { className: 'form-group' },
-          React.createElement(
-            'div',
-            { className: 'col-xs-8 col-sm-4' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Name',
-              ref: 'name',
-              onChange: this.handleChange,
-              value: this.state.data.record.name })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-8 col-sm-4' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Value',
-              ref: 'content',
-              onChange: this.handleChange,
-              value: this.state.data.record.content })
-          )
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Name',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'name',
+            onChange: this.handleChange,
+            value: this.state.data.record.name }),
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Value',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'content',
+            onChange: this.handleChange,
+            value: this.state.data.record.content })
         );
       case 'SRV':
         var _state$data$record$content$split = this.state.data.record.content.split(' '),
@@ -85,72 +81,60 @@ var RecordDetail = React.createClass({
         return React.createElement(
           'div',
           { className: 'form-group' },
-          React.createElement(
-            'div',
-            { className: 'col-xs-8 col-sm-4' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Name',
-              ref: 'name',
-              onChange: this.handleSrvChange,
-              value: this.state.data.record.name })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-4 col-sm-2' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Priority',
-              ref: 'priority',
-              onChange: this.handleSrvChange,
-              value: priority })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-4 col-sm-2' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Port',
-              ref: 'port',
-              onChange: this.handleSrvChange,
-              value: port })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-8 col-sm-4' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Value',
-              ref: 'value',
-              onChange: this.handleSrvChange,
-              value: value })
-          )
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Name',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'name',
+            onChange: this.handleSrvChange,
+            value: this.state.data.record.name }),
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Priority',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'priority',
+            onChange: this.handleSrvChange,
+            value: priority }),
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Port',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'port',
+            onChange: this.handleSrvChange,
+            value: port }),
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Value',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'value',
+            onChange: this.handleSrvChange,
+            value: value })
         );
         break;
       case 'TXT':
         return React.createElement(
           'div',
           { className: 'form-group' },
-          React.createElement(
-            'div',
-            { className: 'col-xs-4' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Name',
-              ref: 'name',
-              onChange: this.handleChange,
-              value: this.state.data.record.name })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-8' },
-            React.createElement(Input, {
-              type: 'textarea',
-              ref: 'content',
-              addonBefore: 'Content',
-              onChange: this.handleChange,
-              value: this.state.data.record.content })
-          )
+          React.createElement(Input, {
+            type: 'text',
+            label: 'Name',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            ref: 'name',
+            onChange: this.handleChange,
+            value: this.state.data.record.name }),
+          React.createElement(Input, {
+            type: 'textarea',
+            ref: 'content',
+            label: 'Content',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-8',
+            onChange: this.handleChange,
+            value: this.state.data.record.content })
         );
         break;
     }
@@ -164,37 +148,25 @@ var RecordDetail = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
-        { className: 'container col-xs-12' },
+        { className: 'container' },
         React.createElement(
           'h3',
           null,
           'Record'
         ),
         React.createElement(
+          'span',
+          { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
+          this.state.data.record.type
+        ),
+        React.createElement(
           'form',
-          { onSubmit: this.handleSubmit },
+          { className: 'form-horizontal', onSubmit: this.handleSubmit },
+          this.renderInput(),
           React.createElement(
             'div',
-            { className: 'col-xs-2 col-sm-1' },
-            React.createElement(
-              'span',
-              { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
-              this.state.data.record.type
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-10 col-sm-11' },
-            this.renderInput()
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-10 col-sm-11 col-sm-offset-1' },
-            React.createElement(
-              'div',
-              { className: 'col-xs-8 col-sm-4' },
-              React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
-            )
+            { className: 'col-xs-10 col-xs-offset-2' },
+            React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
           )
         )
       )

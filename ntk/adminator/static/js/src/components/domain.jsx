@@ -1,11 +1,25 @@
-var DomainIdComponent = React.createClass({
+
+var DomainNameComponent = React.createClass({
+  render() {
+    return (
+      <div>
+          <Link to={`/domainEdit/${this.props.rowData.id}`}>
+            {this.props.data}
+          </Link>
+      </div>
+    )
+  }
+})
+
+
+var DomainActionsComponent = React.createClass({
   deleteDomain(){
     DomainActions.delete(this.props.data)
   },
   render() {
     return (
         <ButtonGroup>
-          <LinkContainer to={`/domain/${this.props.data}`}>
+          <LinkContainer to={`/domain/${this.props.rowData.id}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Records</Tooltip>>
               <Button bsStyle='info'>
                 <i className="fa fa-list-alt"></i>
@@ -13,15 +27,7 @@ var DomainIdComponent = React.createClass({
             </OverlayTrigger>
           </LinkContainer>
 
-          <LinkContainer to={`/domainEdit/${this.props.data}`}>
-            <OverlayTrigger placement="top" overlay=<Tooltip>Edit</Tooltip>>
-              <Button bsStyle='primary'>
-                <i className="fa fa-pencil-square-o"></i>
-              </Button>
-            </OverlayTrigger>
-          </LinkContainer>
-
-          <LinkContainer to={`/domainEdit/${this.props.data}`}>
+          <LinkContainer to={`/domainEdit/${this.props.rowData.id}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
               <Button bsStyle='danger' onClick={this.deleteDomain}>
                 <i className="fa fa-trash-o"></i>
@@ -48,9 +54,16 @@ var Domain = React.createClass({
   getList(){
     var columnMeta = [
       {
-        columnName: 'id',
-         customComponent: DomainIdComponent
+        columnName: 'actions',
+        displayName: 'Actions',
+        customComponent: DomainActionsComponent
+      },
+      {
+        columnName: 'name',
+        displayName: 'Name',
+        customComponent: DomainNameComponent
       }
+
     ]
 
      return (
@@ -68,7 +81,7 @@ var Domain = React.createClass({
                  sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                  sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                  resultsPerPage='20'
-                 columns={['name', 'id']}
+                 columns={['name', 'actions']}
                  changeFilter={this.setFilter}
                  columnMetadata={columnMeta}
                  />

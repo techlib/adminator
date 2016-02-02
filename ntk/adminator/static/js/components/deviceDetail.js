@@ -31,13 +31,13 @@ var DateRangePicker = React.createClass({
         'div',
         { className: 'form-group' },
         React.createElement(
+          'label',
+          { className: 'control-label col-xs-2' },
+          'Not valid before'
+        ),
+        React.createElement(
           'div',
-          { className: 'input-group' },
-          React.createElement(
-            'span',
-            { className: 'input-group-addon' },
-            'Not valid before'
-          ),
+          { className: 'col-xs-10' },
           React.createElement(DateTimeField, {
             ref: 'valid_since',
             format: 'YYYY-MM-DDTHH:mm:ss',
@@ -51,13 +51,13 @@ var DateRangePicker = React.createClass({
         'div',
         { className: 'form-group' },
         React.createElement(
+          'label',
+          { className: 'control-label col-xs-2' },
+          'Not valid after'
+        ),
+        React.createElement(
           'div',
-          { className: 'input-group' },
-          React.createElement(
-            'span',
-            { className: 'input-group-addon' },
-            'Not valid after'
-          ),
+          { className: 'col-xs-10' },
           React.createElement(DateTimeField, {
             ref: 'valid_until',
             onChange: this.handleValidUntil,
@@ -99,25 +99,33 @@ var InterfaceForm = React.createClass({
       null,
       React.createElement(Input, {
         type: 'text',
-        addonBefore: 'MAC',
+        label: 'MAC',
         ref: 'macaddr',
+        labelClassName: 'col-xs-2',
+        wrapperClassName: 'col-xs-10',
         value: this.state.item.macaddr,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        addonBefore: 'Hostname',
+        label: 'Hostname',
+        labelClassName: 'col-xs-2',
+        wrapperClassName: 'col-xs-10',
         ref: 'hostname',
         value: this.state.item.hostname,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        addonBefore: 'IPv4 address',
+        label: 'IPv4 address',
+        labelClassName: 'col-xs-2',
+        wrapperClassName: 'col-xs-10',
         ref: 'ip4addr',
         value: this.state.item.ip4addr,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        addonBefore: 'IPv6 address',
+        label: 'IPv6 address',
+        labelClassName: 'col-xs-2',
+        wrapperClassName: 'col-xs-10',
         ref: 'ip6addr',
         value: this.state.item.ip6addr,
         onChange: this.handleChange }),
@@ -125,7 +133,9 @@ var InterfaceForm = React.createClass({
         Input,
         {
           type: 'select',
-          addonBefore: 'Network',
+          label: 'Network',
+          labelClassName: 'col-xs-2',
+          wrapperClassName: 'col-xs-10',
           ref: 'network',
           value: this.state.item.network,
           onChange: this.handleChange },
@@ -279,11 +289,13 @@ var DeviceDetail = React.createClass({
         ),
         React.createElement(
           'div',
-          { className: 'well' },
+          { className: 'well form-horizontal' },
           React.createElement(Input, {
             type: 'text',
+            labelClassName: 'col-xs-2',
+            wrapperClassName: 'col-xs-10',
             ref: 'description',
-            addonBefore: 'Description',
+            label: 'Description',
             onChange: this.handleChange,
             value: this.state.data.device.description }),
           React.createElement(
@@ -291,7 +303,9 @@ var DeviceDetail = React.createClass({
             {
               type: 'select',
               ref: 'type',
-              addonBefore: 'Type',
+              labelClassName: 'col-xs-2',
+              wrapperClassName: 'col-xs-10',
+              label: 'Type',
               onChange: this.handleChange,
               value: this.state.data.device.type },
             React.createElement(
@@ -317,7 +331,7 @@ var DeviceDetail = React.createClass({
                 { className: 'form-group' },
                 React.createElement(
                   'label',
-                  null,
+                  { className: 'col-xs-2' },
                   'User (',
                   display_name,
                   ')'
@@ -328,6 +342,7 @@ var DeviceDetail = React.createClass({
                   placeholder: 'Type to select user',
                   options: _this.state.users.list,
                   onOptionSelected: _this.setUser,
+                  className: 'col-xs-10',
                   customClasses: { 'input': 'form-control',
                     'results': 'list-group',
                     'listItem': 'list-group-item'

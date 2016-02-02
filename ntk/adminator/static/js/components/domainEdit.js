@@ -46,79 +46,89 @@ var DomainEdit = React.createClass({
           'Domain'
         ),
         React.createElement(
-          'form',
-          { onSubmit: this.handleSubmit },
+          'div',
+          { className: 'col-xs-12 well' },
           React.createElement(
-            'div',
-            { className: 'col-xs-6' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Name',
-              ref: 'name',
-              onChange: this.handleChange,
-              value: this.state.data.domain.name })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-6' },
-            React.createElement(Input, {
-              type: 'text',
-              addonBefore: 'Master',
-              ref: 'master',
-              onChange: this.handleChange,
-              value: this.state.data.domain.master })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-6' },
-            React.createElement(
-              Input,
-              {
-                type: 'select',
-                addonBefore: 'Type',
-                ref: 'type',
-                onChange: this.handleChange,
-                value: this.state.data.domain.type },
-              React.createElement(
-                'option',
-                { value: 'MASTER' },
-                'Master'
-              ),
-              React.createElement(
-                'option',
-                { value: 'SLAVE' },
-                'Slave'
-              )
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-6' },
+            'form',
+            { onSubmit: this.handleSubmit },
             React.createElement(
               'div',
-              { className: 'form-group' },
+              { className: 'col-xs-6' },
+              React.createElement(Input, {
+                type: 'text',
+                label: 'Name',
+                labelClassName: 'col-xs-2',
+                wrapperClassName: 'col-xs-10',
+                ref: 'name',
+                onChange: this.handleChange,
+                value: this.state.data.domain.name })
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-xs-6' },
+              React.createElement(Input, {
+                type: 'text',
+                label: 'Master',
+                labelClassName: 'col-xs-2',
+                wrapperClassName: 'col-xs-10',
+                ref: 'master',
+                onChange: this.handleChange,
+                value: this.state.data.domain.master })
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-xs-6' },
+              React.createElement(
+                Input,
+                {
+                  type: 'select',
+                  label: 'Type',
+                  labelClassName: 'col-xs-2',
+                  wrapperClassName: 'col-xs-10',
+                  ref: 'type',
+                  onChange: this.handleChange,
+                  value: this.state.data.domain.type },
+                React.createElement(
+                  'option',
+                  { value: 'MASTER' },
+                  'Master'
+                ),
+                React.createElement(
+                  'option',
+                  { value: 'SLAVE' },
+                  'Slave'
+                )
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-xs-6' },
               React.createElement(
                 'div',
-                { className: 'input-group' },
+                { className: 'form-group' },
                 React.createElement(
-                  'span',
-                  { className: 'input-group-addon' },
+                  'label',
+                  { className: 'col-xs-2' },
                   'Last check'
                 ),
-                React.createElement(DateTimeField, {
-                  ref: 'last_check',
-                  defaultText: '',
-                  onChange: this.handleChange,
-                  format: 'X',
-                  inputFormat: 'DD.MM.YYYY HH:mm',
-                  dateTime: this.state.data.domain.last_check })
+                React.createElement(
+                  'div',
+                  { className: 'col-xs-10' },
+                  React.createElement(DateTimeField, {
+                    ref: 'last_check',
+                    defaultText: '',
+                    onChange: this.handleChange,
+                    format: 'X',
+                    inputFormat: 'DD.MM.YYYY HH:mm',
+                    dateTime: this.state.data.domain.last_check })
+                )
               )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-xs-12' },
+              React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
             )
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-xs-12' },
-            React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
           )
         )
       )

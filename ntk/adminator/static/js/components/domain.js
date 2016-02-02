@@ -1,7 +1,23 @@
 "use strict";
 
-var DomainIdComponent = React.createClass({
-  displayName: "DomainIdComponent",
+var DomainNameComponent = React.createClass({
+  displayName: "DomainNameComponent",
+
+  render: function render() {
+    return React.createElement(
+      "div",
+      null,
+      React.createElement(
+        Link,
+        { to: "/domainEdit/" + this.props.rowData.id },
+        this.props.data
+      )
+    );
+  }
+});
+
+var DomainActionsComponent = React.createClass({
+  displayName: "DomainActionsComponent",
 
   deleteDomain: function deleteDomain() {
     DomainActions["delete"](this.props.data);
@@ -12,7 +28,7 @@ var DomainIdComponent = React.createClass({
       null,
       React.createElement(
         LinkContainer,
-        { to: "/domain/" + this.props.data },
+        { to: "/domain/" + this.props.rowData.id },
         React.createElement(
           OverlayTrigger,
           { placement: "top", overlay: React.createElement(
@@ -29,24 +45,7 @@ var DomainIdComponent = React.createClass({
       ),
       React.createElement(
         LinkContainer,
-        { to: "/domainEdit/" + this.props.data },
-        React.createElement(
-          OverlayTrigger,
-          { placement: "top", overlay: React.createElement(
-              Tooltip,
-              null,
-              "Edit"
-            ) },
-          React.createElement(
-            Button,
-            { bsStyle: "primary" },
-            React.createElement("i", { className: "fa fa-pencil-square-o" })
-          )
-        )
-      ),
-      React.createElement(
-        LinkContainer,
-        { to: "/domainEdit/" + this.props.data },
+        { to: "/domainEdit/" + this.props.rowData.id },
         React.createElement(
           OverlayTrigger,
           { placement: "top", overlay: React.createElement(
@@ -80,8 +79,13 @@ var Domain = React.createClass({
 
   getList: function getList() {
     var columnMeta = [{
-      columnName: 'id',
-      customComponent: DomainIdComponent
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: DomainActionsComponent
+    }, {
+      columnName: 'name',
+      displayName: 'Name',
+      customComponent: DomainNameComponent
     }];
 
     return React.createElement(
@@ -105,7 +109,7 @@ var Domain = React.createClass({
           sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
           sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
           resultsPerPage: "20",
-          columns: ['name', 'id'],
+          columns: ['name', 'actions'],
           changeFilter: this.setFilter,
           columnMetadata: columnMeta
         })

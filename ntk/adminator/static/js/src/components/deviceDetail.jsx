@@ -27,8 +27,8 @@ var DateRangePicker = React.createClass({
    return (
       <div>
         <div className='form-group'>
-          <div className='input-group'>
-           <span className='input-group-addon'>Not valid before</span>
+           <label className='control-label col-xs-2'>Not valid before</label>
+           <div className='col-xs-10'>
            <DateTimeField
              ref='valid_since'
              format='YYYY-MM-DDTHH:mm:ss'
@@ -40,8 +40,8 @@ var DateRangePicker = React.createClass({
         </div>
 
         <div className='form-group'>
-         <div className='input-group'>
-          <span className='input-group-addon'>Not valid after</span>
+          <label className='control-label col-xs-2'>Not valid after</label>
+          <div className='col-xs-10'>
           <DateTimeField
             ref='valid_until'
             onChange={this.handleValidUntil}
@@ -81,31 +81,41 @@ var InterfaceForm = React.createClass({
              <div>
               <Input
                 type='text'
-                addonBefore='MAC'
+                label='MAC'
                 ref='macaddr'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 value={this.state.item.macaddr}
                 onChange={this.handleChange} />
               <Input
                 type='text'
-                addonBefore='Hostname'
+                label='Hostname'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='hostname'
                 value={this.state.item.hostname}
                 onChange={this.handleChange} />
               <Input
                 type='text'
-                addonBefore='IPv4 address'
+                label='IPv4 address'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='ip4addr'
                 value={this.state.item.ip4addr}
                 onChange={this.handleChange} />
                <Input
                 type='text'
-                addonBefore='IPv6 address'
+                label='IPv6 address'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='ip6addr'
                 value={this.state.item.ip6addr}
                 onChange={this.handleChange} />
                <Input
                 type='select'
-                addonBefore='Network'
+                label='Network'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='network'
                 value={this.state.item.network}
                 onChange={this.handleChange}>
@@ -245,17 +255,21 @@ var DeviceDetail = React.createClass({
 
           <div className='col-sm-6 col-xs-12'>
             <h3>Details</h3>
-            <div className='well'>
+            <div className='well form-horizontal'>
             <Input
               type='text'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-10'
               ref='description'
-              addonBefore='Description'
+              label='Description'
               onChange={this.handleChange}
               value={this.state.data.device.description} />
             <Input
               type='select'
               ref='type'
-              addonBefore='Type'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-10'
+              label='Type'
               onChange={this.handleChange}
               value={this.state.data.device.type}>
                 <option value='visitor'>Visitor</option>
@@ -266,13 +280,14 @@ var DeviceDetail = React.createClass({
               if(this.state.data.device.type == 'staff'){
                 return (
                   <div className='form-group'>
-                    <label>User ({(display_name)})</label>
+                    <label className='col-xs-2'>User ({(display_name)})</label>
                     <Typeahead
                       filterOption='display_name'
                       displayOption={this.getDisplayOption}
                       placeholder='Type to select user'
                       options={this.state.users.list}
                       onOptionSelected={this.setUser}
+                      className='col-xs-10'
                       customClasses={
                         {'input'   : 'form-control',
                          'results' : 'list-group',

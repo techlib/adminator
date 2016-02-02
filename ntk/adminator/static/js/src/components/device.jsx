@@ -1,18 +1,22 @@
-var DeviceIdComponent = React.createClass({
+var DeviceDescComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/device/${this.props.rowData.uuid}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
+var DeviceActionsComponent = React.createClass({
   deleteDevice(){
     DeviceActions.delete(this.props.data)
   },
   render() {
     return (
       <ButtonGroup>
-        <LinkContainer to={`/device/${this.props.data}`}>
-          <OverlayTrigger placement="top" overlay=<Tooltip>Edit</Tooltip>>
-            <Button className='btn-primary'><i className="fa fa-pencil-square-o"></i></Button>
-          </OverlayTrigger>
-        </LinkContainer>
-
         <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-          <Button className='btn-danger' onClick={this.deleteDevice}>
+          <Button bsStyle='danger' onClick={this.deleteDevice}>
             <i className="fa fa-trash-o"></i>
           </Button>
         </OverlayTrigger>
@@ -27,7 +31,7 @@ var DeviceInterfacesComponent = React.createClass({
       {this.props.data.map((item) => {
         return (
           <div>
-            <OverlayTrigger placement="left" overlay=<Tooltip>{item.hostname} <br/> {item.ip4addr} <br/> {item.ip6addr}</Tooltip>>
+            <OverlayTrigger placement="right" overlay=<Tooltip>{item.hostname} <br/> {item.ip4addr} <br/> {item.ip6addr}</Tooltip>>
                 <span className='label label-warning'>
                   {item.macaddr}
                 </span>
@@ -108,19 +112,32 @@ var Device = React.createClass({
   render() {
     var columnMeta = [
       {
-        columnName: 'uuid',
-        customComponent: DeviceIdComponent
+        columnName: 'actions',
+        displayName: 'Actions',
+        customComponent: DeviceActionsComponent
+      },
+      {
+        columnName: 'description',
+        displayName: 'Description',
+        customComponent: DeviceDescComponent
       },
       {
         columnName: 'valid',
+        displayName: 'Valid',
         customComponent: DeviceValidComponent
       },
       {
         columnName: 'user',
+        displayName: 'User',
         customComponent: DeviceUserComponent
       },
       {
+        columnName: 'type',
+        displayName: 'Type'
+      },
+      {
         columnName: 'interfaces',
+        displayName: 'Interfaces',
         customComponent: DeviceInterfacesComponent
       }
     ]
@@ -138,7 +155,7 @@ var Device = React.createClass({
                  customPagerComponent={Pager}
                  sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                  sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                 columns={['interfaces', 'description', 'type', 'user', 'valid', 'uuid']}
+                 columns={['interfaces', 'description', 'type', 'user', 'valid', 'actions']}
                  resultsPerPage='20'
                  customFilter={regexGridFilter}
                  columnMetadata={columnMeta}

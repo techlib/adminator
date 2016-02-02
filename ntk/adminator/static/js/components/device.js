@@ -1,7 +1,19 @@
 "use strict";
 
-var DeviceIdComponent = React.createClass({
-  displayName: "DeviceIdComponent",
+var DeviceDescComponent = React.createClass({
+  displayName: "DeviceDescComponent",
+
+  render: function render() {
+    return React.createElement(
+      Link,
+      { to: "/device/" + this.props.rowData.uuid },
+      this.props.data
+    );
+  }
+});
+
+var DeviceActionsComponent = React.createClass({
+  displayName: "DeviceActionsComponent",
 
   deleteDevice: function deleteDevice() {
     DeviceActions["delete"](this.props.data);
@@ -11,23 +23,6 @@ var DeviceIdComponent = React.createClass({
       ButtonGroup,
       null,
       React.createElement(
-        LinkContainer,
-        { to: "/device/" + this.props.data },
-        React.createElement(
-          OverlayTrigger,
-          { placement: "top", overlay: React.createElement(
-              Tooltip,
-              null,
-              "Edit"
-            ) },
-          React.createElement(
-            Button,
-            { className: "btn-primary" },
-            React.createElement("i", { className: "fa fa-pencil-square-o" })
-          )
-        )
-      ),
-      React.createElement(
         OverlayTrigger,
         { placement: "top", overlay: React.createElement(
             Tooltip,
@@ -36,7 +31,7 @@ var DeviceIdComponent = React.createClass({
           ) },
         React.createElement(
           Button,
-          { className: "btn-danger", onClick: this.deleteDevice },
+          { bsStyle: "danger", onClick: this.deleteDevice },
           React.createElement("i", { className: "fa fa-trash-o" })
         )
       )
@@ -57,7 +52,7 @@ var DeviceInterfacesComponent = React.createClass({
           null,
           React.createElement(
             OverlayTrigger,
-            { placement: "left", overlay: React.createElement(
+            { placement: "right", overlay: React.createElement(
                 Tooltip,
                 null,
                 item.hostname,
@@ -167,16 +162,27 @@ var Device = React.createClass({
 
   render: function render() {
     var columnMeta = [{
-      columnName: 'uuid',
-      customComponent: DeviceIdComponent
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: DeviceActionsComponent
+    }, {
+      columnName: 'description',
+      displayName: 'Description',
+      customComponent: DeviceDescComponent
     }, {
       columnName: 'valid',
+      displayName: 'Valid',
       customComponent: DeviceValidComponent
     }, {
       columnName: 'user',
+      displayName: 'User',
       customComponent: DeviceUserComponent
     }, {
+      columnName: 'type',
+      displayName: 'Type'
+    }, {
       columnName: 'interfaces',
+      displayName: 'Interfaces',
       customComponent: DeviceInterfacesComponent
     }];
 
@@ -200,7 +206,7 @@ var Device = React.createClass({
           customPagerComponent: Pager,
           sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
           sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
-          columns: ['interfaces', 'description', 'type', 'user', 'valid', 'uuid'],
+          columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
           resultsPerPage: "20",
           customFilter: regexGridFilter,
           columnMetadata: columnMeta

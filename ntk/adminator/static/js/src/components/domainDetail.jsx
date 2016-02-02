@@ -14,10 +14,22 @@ var DomainDetail = React.createClass({
     var columnMeta = [
       {
         columnName: 'type',
+        displayName: 'Type',
         customComponent: RecordTypeComponent
       },{
-        columnName: 'id',
-        customComponent: RecordIdComponent
+        columnName: 'actions',
+        displayName: 'Actions',
+        customComponent: RecordActionsComponent
+      },{
+        columnName: 'name',
+        displayName: 'Name',
+        customComponent: RecordNameComponent
+      }, {
+        columnName: 'type',
+        displayName: 'Type'
+      }, {
+        columnName: 'content',
+        displayName: 'Content'
       }
     ]
 
@@ -36,7 +48,7 @@ var DomainDetail = React.createClass({
                    customPagerComponent={Pager}
                    sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                    sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                   columns={['name', 'type','content', 'id']}
+                   columns={['name', 'type','content', 'actions']}
                    resultsPerPage='20'
                    customFilter={regexGridFilter}
                    columnMetadata={columnMeta}

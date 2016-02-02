@@ -18,10 +18,22 @@ var DomainDetail = React.createClass({
   getDetail: function getDetail() {
     var columnMeta = [{
       columnName: 'type',
+      displayName: 'Type',
       customComponent: RecordTypeComponent
     }, {
-      columnName: 'id',
-      customComponent: RecordIdComponent
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: RecordActionsComponent
+    }, {
+      columnName: 'name',
+      displayName: 'Name',
+      customComponent: RecordNameComponent
+    }, {
+      columnName: 'type',
+      displayName: 'Type'
+    }, {
+      columnName: 'content',
+      displayName: 'Content'
     }];
 
     return React.createElement(
@@ -45,7 +57,7 @@ var DomainDetail = React.createClass({
           customPagerComponent: Pager,
           sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
           sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['name', 'type', 'content', 'id'],
+          columns: ['name', 'type', 'content', 'actions'],
           resultsPerPage: '20',
           customFilter: regexGridFilter,
           columnMetadata: columnMeta

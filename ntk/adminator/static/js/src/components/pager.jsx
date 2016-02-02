@@ -34,11 +34,11 @@ var Pager = React.createClass({
 
         return (
           <div className="row">
-          <div className="col-md-12">
+            <div className="col-md-12">
               <ul className="pagination noselect">
                 {previous}{options}{next}
               </ul>
-              </div>
+            </div>
           </div>
         )
     }

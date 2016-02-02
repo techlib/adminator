@@ -34,11 +34,14 @@ var DomainEdit = React.createClass({
         <AdminNavbar/>
         <div className='container col-xs-12'>
           <h3>Domain</h3>
+          <div className='col-xs-12 well'>
           <form onSubmit={this.handleSubmit}>
             <div className='col-xs-6'>
               <Input
                 type='text'
-                addonBefore='Name'
+                label='Name'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='name'
                 onChange={this.handleChange}
                 value={this.state.data.domain.name} />
@@ -46,7 +49,9 @@ var DomainEdit = React.createClass({
             <div className='col-xs-6'>
               <Input
                 type='text'
-                addonBefore='Master'
+                label='Master'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='master'
                 onChange={this.handleChange}
                 value={this.state.data.domain.master} />
@@ -54,7 +59,9 @@ var DomainEdit = React.createClass({
             <div className='col-xs-6'>
               <Input
                 type='select'
-                addonBefore='Type'
+                label='Type'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-10'
                 ref='type'
                 onChange={this.handleChange}
                 value={this.state.data.domain.type}>
@@ -64,8 +71,8 @@ var DomainEdit = React.createClass({
             </div>
             <div className='col-xs-6'>
               <div className='form-group'>
-               <div className='input-group'>
-                <span className='input-group-addon'>Last check</span>
+                <label className='col-xs-2'>Last check</label>
+                <div className='col-xs-10'>
                 <DateTimeField
                   ref='last_check'
                   defaultText=''
@@ -80,7 +87,8 @@ var DomainEdit = React.createClass({
             <div className='col-xs-12'>
                 <ButtonInput type="submit" className='btn-primary' value="Save" />
             </div>
-          </form>
+            </form>
+            </div>
           </div>
       </div>
     )

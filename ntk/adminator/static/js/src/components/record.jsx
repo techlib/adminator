@@ -1,3 +1,15 @@
+var RecordNameComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/record/${this.props.rowData.id}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
+
+
 var RecordTypeComponent = React.createClass({
   render() {
     var className=''
@@ -35,19 +47,13 @@ var RecordTypeComponent = React.createClass({
   }
 })
 
-var RecordIdComponent = React.createClass({
+var RecordActionsComponent = React.createClass({
   deleteRecord(){
     RecordActions.delete(this.props.data)
   },
   render() {
     return (
       <ButtonGroup>
-        <LinkContainer to={`/record/${this.props.data}`}>
-          <OverlayTrigger placement="top" overlay=<Tooltip>Edit</Tooltip>>
-            <Button bsStyle='primary'><i className="fa fa-pencil-square-o"></i></Button>
-          </OverlayTrigger>
-        </LinkContainer>
-
         <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
           <Button bsStyle='danger' onClick={this.deleteRecord}>
             <i className="fa fa-trash-o"></i>
@@ -75,11 +81,24 @@ var Record = React.createClass({
     var columnMeta = [
       {
         columnName: 'type',
+        displayName: 'Type',
         customComponent: RecordTypeComponent
       },{
-        columnName: 'id',
-        customComponent: RecordIdComponent
+        columnName: 'actions',
+        displayName: 'Actions',
+        customComponent: RecordActionsComponent
+      },{
+        columnName: 'name',
+        displayName: 'Name',
+        customComponent: RecordNameComponent
+      }, {
+        columnName: 'type',
+        displayName: 'Type'
+      }, {
+        columnName: 'content',
+        displayName: 'Content'
       }
+
     ]
 
     return (
@@ -95,11 +114,9 @@ var Record = React.createClass({
                  showFilter={true}
                  useCustomPagerComponent='true'
                  customPagerComponent={Pager}
-                 showSettings={true}
-                 settingsToggleClassName='btn pull-right'
                  sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                  sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                 columns={['name', 'type','content', 'id']}
+                 columns={['name', 'type','content', 'actions']}
                  resultsPerPage='20'
                  customFilter={regexGridFilter}
                  columnMetadata={columnMeta}
