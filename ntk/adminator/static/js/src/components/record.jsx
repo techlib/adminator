@@ -44,12 +44,12 @@ var RecordIdComponent = React.createClass({
       <ButtonGroup>
         <LinkContainer to={`/record/${this.props.data}`}>
           <OverlayTrigger placement="top" overlay=<Tooltip>Edit</Tooltip>>
-            <Button className='btn-primary'><i className="fa fa-pencil-square-o"></i></Button>
+            <Button bsStyle='primary'><i className="fa fa-pencil-square-o"></i></Button>
           </OverlayTrigger>
         </LinkContainer>
 
         <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-          <Button className='btn-danger' onClick={this.deleteRecord}>
+          <Button bsStyle='danger' onClick={this.deleteRecord}>
             <i className="fa fa-trash-o"></i>
           </Button>
         </OverlayTrigger>
@@ -87,10 +87,10 @@ var Record = React.createClass({
       <AdminNavbar/>
         <RecordCreate />
 
-        <div className='col-xs-12 container well'>
+        <div className='col-xs-12 container'>
         <h3>Records</h3>
         <Griddle results={this.state.data['list']}
-                 tableClassName='table table-striped table-hover'
+                 tableClassName='datatable table table-striped table-hover table-bordered datatable'
                  useGriddleStyles={false}
                  showFilter={true}
                  useCustomPagerComponent='true'

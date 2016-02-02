@@ -186,20 +186,18 @@ var Device = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         "div",
-        { className: "col-xs-12 container well" },
+        { className: "col-xs-12 container" },
         React.createElement(
           "h3",
           null,
           "Devices"
         ),
         React.createElement(Griddle, { results: this.state.data.list,
-          tableClassName: "table table-striped table-hover",
+          tableClassName: "table table-bordered table-striped table-hover",
           useGriddleStyles: false,
           showFilter: true,
           useCustomPagerComponent: "true",
           customPagerComponent: Pager,
-          showSettings: true,
-          settingsToggleClassName: "btn pull-right",
           sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
           sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
           columns: ['interfaces', 'description', 'type', 'user', 'valid', 'uuid'],

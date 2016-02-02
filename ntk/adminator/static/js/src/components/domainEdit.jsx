@@ -32,51 +32,55 @@ var DomainEdit = React.createClass({
      <div>
      <AlertSet alerts={this.state.alerts} />
         <AdminNavbar/>
-        <h3>Domain</h3>
-        <div className='col-xs-12 well'>
-        <form onSubmit={this.handleSubmit}>
-          <div className='col-xs-6'>
-            <Input
-              type='text'
-              label='Name'
-              ref='name'
-              onChange={this.handleChange}
-              value={this.state.data.domain.name} />
-          </div>
-          <div className='col-xs-6'>
-            <Input
-              type='text'
-              label='Master'
-              ref='master'
-              onChange={this.handleChange}
-              value={this.state.data.domain.master} />
-          </div>
-          <div className='col-xs-6'>
-            <Input
-              type='select'
-              label='Type'
-              ref='type'
-              onChange={this.handleChange}
-              value={this.state.data.domain.type}>
-                <option value='MASTER'>Master</option>
-                <option value='SLAVE'>Slave</option>
-            </Input>
-          </div>
-          <div className='col-xs-6'>
-            <label>Last check</label>
-            <DateTimeField
-              ref='last_check'
-              defaultText=''
-              onChange={this.handleChange}
-              format='X'
-              inputFormat='DD.MM.YYYY HH:mm'
-              dateTime={this.state.data.domain.last_check} />
-          </div>
+        <div className='container col-xs-12'>
+          <h3>Domain</h3>
+          <form onSubmit={this.handleSubmit}>
+            <div className='col-xs-6'>
+              <Input
+                type='text'
+                addonBefore='Name'
+                ref='name'
+                onChange={this.handleChange}
+                value={this.state.data.domain.name} />
+            </div>
+            <div className='col-xs-6'>
+              <Input
+                type='text'
+                addonBefore='Master'
+                ref='master'
+                onChange={this.handleChange}
+                value={this.state.data.domain.master} />
+            </div>
+            <div className='col-xs-6'>
+              <Input
+                type='select'
+                addonBefore='Type'
+                ref='type'
+                onChange={this.handleChange}
+                value={this.state.data.domain.type}>
+                  <option value='MASTER'>Master</option>
+                  <option value='SLAVE'>Slave</option>
+              </Input>
+            </div>
+            <div className='col-xs-6'>
+              <div className='form-group'>
+               <div className='input-group'>
+                <span className='input-group-addon'>Last check</span>
+                <DateTimeField
+                  ref='last_check'
+                  defaultText=''
+                  onChange={this.handleChange}
+                  format='X'
+                  inputFormat='DD.MM.YYYY HH:mm'
+                  dateTime={this.state.data.domain.last_check} />
+                </div>
+              </div>
+            </div>
 
-          <div className='col-xs-12'>
-              <ButtonInput type="submit" className='btn-primary' value="Save" />
-          </div>
-        </form>
+            <div className='col-xs-12'>
+                <ButtonInput type="submit" className='btn-primary' value="Save" />
+            </div>
+          </form>
           </div>
       </div>
     )

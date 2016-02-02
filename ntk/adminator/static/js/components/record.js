@@ -65,7 +65,7 @@ var RecordIdComponent = React.createClass({
             ) },
           React.createElement(
             Button,
-            { className: 'btn-primary' },
+            { bsStyle: 'primary' },
             React.createElement('i', { className: 'fa fa-pencil-square-o' })
           )
         )
@@ -79,7 +79,7 @@ var RecordIdComponent = React.createClass({
           ) },
         React.createElement(
           Button,
-          { className: 'btn-danger', onClick: this.deleteRecord },
+          { bsStyle: 'danger', onClick: this.deleteRecord },
           React.createElement('i', { className: 'fa fa-trash-o' })
         )
       )
@@ -116,14 +116,14 @@ var Record = React.createClass({
       React.createElement(RecordCreate, null),
       React.createElement(
         'div',
-        { className: 'col-xs-12 container well' },
+        { className: 'col-xs-12 container' },
         React.createElement(
           'h3',
           null,
           'Records'
         ),
         React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: 'table table-striped table-hover',
+          tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
           useGriddleStyles: false,
           showFilter: true,
           useCustomPagerComponent: 'true',

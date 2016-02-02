@@ -31,20 +31,18 @@ var DomainDetail = React.createClass({
       React.createElement(RecordCreate, { domain: this.props.params.id }),
       React.createElement(
         'div',
-        { className: 'col-xs-12 container well' },
+        { className: 'col-xs-12 container' },
         React.createElement(
           'h3',
           null,
           'Records'
         ),
         React.createElement(Griddle, { results: this.state.data['domain'].records,
-          tableClassName: 'table table-striped table-hover',
+          tableClassName: 'table table-bordered table-striped table-hover',
           useGriddleStyles: false,
           showFilter: true,
           useCustomPagerComponent: 'true',
           customPagerComponent: Pager,
-          showSettings: true,
-          settingsToggleClassName: 'btn pull-right',
           sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
           sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
           columns: ['name', 'type', 'content', 'id'],

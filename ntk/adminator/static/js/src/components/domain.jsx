@@ -7,7 +7,7 @@ var DomainIdComponent = React.createClass({
         <ButtonGroup>
           <LinkContainer to={`/domain/${this.props.data}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Records</Tooltip>>
-              <Button className='btn-info'>
+              <Button bsStyle='info'>
                 <i className="fa fa-list-alt"></i>
               </Button>
             </OverlayTrigger>
@@ -15,7 +15,7 @@ var DomainIdComponent = React.createClass({
 
           <LinkContainer to={`/domainEdit/${this.props.data}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Edit</Tooltip>>
-              <Button className='btn-primary'>
+              <Button bsStyle='primary'>
                 <i className="fa fa-pencil-square-o"></i>
               </Button>
             </OverlayTrigger>
@@ -23,7 +23,7 @@ var DomainIdComponent = React.createClass({
 
           <LinkContainer to={`/domainEdit/${this.props.data}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-              <Button className='btn-danger' onClick={this.deleteDomain}>
+              <Button bsStyle='danger' onClick={this.deleteDomain}>
                 <i className="fa fa-trash-o"></i>
               </Button>
             </OverlayTrigger>
@@ -57,16 +57,14 @@ var Domain = React.createClass({
        <div>
        <AdminNavbar/>
 
-        <div className='col-xs-12 container well'>
+        <div className='col-xs-12 container'>
         <h3>Domains</h3>
         <Griddle results={this.state.data['list']}
-                 tableClassName='table table-striped table-hover'
+                 tableClassName='table table-bordered table-striped table-hover'
                  useGriddleStyles={false}
                  showFilter={false}
                  useCustomPagerComponent='true'
                  customPagerComponent={Pager}
-                 showSettings={true}
-                 settingsToggleClassName='btn pull-right'
                  sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                  sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                  resultsPerPage='20'

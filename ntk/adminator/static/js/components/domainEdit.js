@@ -38,13 +38,13 @@ var DomainEdit = React.createClass({
       React.createElement(AlertSet, { alerts: this.state.alerts }),
       React.createElement(AdminNavbar, null),
       React.createElement(
-        'h3',
-        null,
-        'Domain'
-      ),
-      React.createElement(
         'div',
-        { className: 'col-xs-12 well' },
+        { className: 'container col-xs-12' },
+        React.createElement(
+          'h3',
+          null,
+          'Domain'
+        ),
         React.createElement(
           'form',
           { onSubmit: this.handleSubmit },
@@ -53,7 +53,7 @@ var DomainEdit = React.createClass({
             { className: 'col-xs-6' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Name',
+              addonBefore: 'Name',
               ref: 'name',
               onChange: this.handleChange,
               value: this.state.data.domain.name })
@@ -63,7 +63,7 @@ var DomainEdit = React.createClass({
             { className: 'col-xs-6' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Master',
+              addonBefore: 'Master',
               ref: 'master',
               onChange: this.handleChange,
               value: this.state.data.domain.master })
@@ -75,7 +75,7 @@ var DomainEdit = React.createClass({
               Input,
               {
                 type: 'select',
-                label: 'Type',
+                addonBefore: 'Type',
                 ref: 'type',
                 onChange: this.handleChange,
                 value: this.state.data.domain.type },
@@ -95,17 +95,25 @@ var DomainEdit = React.createClass({
             'div',
             { className: 'col-xs-6' },
             React.createElement(
-              'label',
-              null,
-              'Last check'
-            ),
-            React.createElement(DateTimeField, {
-              ref: 'last_check',
-              defaultText: '',
-              onChange: this.handleChange,
-              format: 'X',
-              inputFormat: 'DD.MM.YYYY HH:mm',
-              dateTime: this.state.data.domain.last_check })
+              'div',
+              { className: 'form-group' },
+              React.createElement(
+                'div',
+                { className: 'input-group' },
+                React.createElement(
+                  'span',
+                  { className: 'input-group-addon' },
+                  'Last check'
+                ),
+                React.createElement(DateTimeField, {
+                  ref: 'last_check',
+                  defaultText: '',
+                  onChange: this.handleChange,
+                  format: 'X',
+                  inputFormat: 'DD.MM.YYYY HH:mm',
+                  dateTime: this.state.data.domain.last_check })
+              )
+            )
           ),
           React.createElement(
             'div',

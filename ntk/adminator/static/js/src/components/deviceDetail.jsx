@@ -26,24 +26,32 @@ var DateRangePicker = React.createClass({
   render(){
    return (
       <div>
-       <label>Valid since</label>
-       <DateTimeField
-         ref='valid_since'
-         format='YYYY-MM-DDTHH:mm:ss'
-         inputFormat='DD.MM.YYYY HH:mm'
-         maxDate={moment(this.state.range[1])}
-         onChange={this.handleValidSince}
-         dateTime={this.state.range[0]} />
+        <div className='form-group'>
+          <div className='input-group'>
+           <span className='input-group-addon'>Not valid before</span>
+           <DateTimeField
+             ref='valid_since'
+             format='YYYY-MM-DDTHH:mm:ss'
+             inputFormat='DD.MM.YYYY HH:mm'
+             maxDate={moment(this.state.range[1])}
+             onChange={this.handleValidSince}
+             dateTime={this.state.range[0]} />
+          </div>
+        </div>
 
-       <label>Valid until</label>
-       <DateTimeField
-         ref='valid_until'
-         onChange={this.handleValidUntil}
-         format='YYYY-MM-DDTHH:mm:ss'
-         inputFormat='DD.MM.YYYY HH:mm'
-         minDate={moment(this.state.range[0])}
-         dateTime={this.state.range[1]} />
-       </div>
+        <div className='form-group'>
+         <div className='input-group'>
+          <span className='input-group-addon'>Not valid after</span>
+          <DateTimeField
+            ref='valid_until'
+            onChange={this.handleValidUntil}
+            format='YYYY-MM-DDTHH:mm:ss'
+            inputFormat='DD.MM.YYYY HH:mm'
+            minDate={moment(this.state.range[0])}
+            dateTime={this.state.range[1]} />
+         </div>
+        </div>
+      </div>
     )
   }
 })
@@ -73,31 +81,31 @@ var InterfaceForm = React.createClass({
              <div>
               <Input
                 type='text'
-                label='MAC'
+                addonBefore='MAC'
                 ref='macaddr'
                 value={this.state.item.macaddr}
                 onChange={this.handleChange} />
               <Input
                 type='text'
-                label='Hostname'
+                addonBefore='Hostname'
                 ref='hostname'
                 value={this.state.item.hostname}
                 onChange={this.handleChange} />
               <Input
                 type='text'
-                label='IPv4 address'
+                addonBefore='IPv4 address'
                 ref='ip4addr'
                 value={this.state.item.ip4addr}
                 onChange={this.handleChange} />
                <Input
                 type='text'
-                label='IPv6 address'
+                addonBefore='IPv6 address'
                 ref='ip6addr'
                 value={this.state.item.ip6addr}
                 onChange={this.handleChange} />
                <Input
                 type='select'
-                label='Network'
+                addonBefore='Network'
                 ref='network'
                 value={this.state.item.network}
                 onChange={this.handleChange}>
@@ -241,13 +249,13 @@ var DeviceDetail = React.createClass({
             <Input
               type='text'
               ref='description'
-              label='Description'
+              addonBefore='Description'
               onChange={this.handleChange}
               value={this.state.data.device.description} />
             <Input
               type='select'
               ref='type'
-              label='Type'
+              addonBefore='Type'
               onChange={this.handleChange}
               value={this.state.data.device.type}>
                 <option value='visitor'>Visitor</option>
@@ -283,7 +291,7 @@ var DeviceDetail = React.createClass({
             }
 
             </div>
-          <Button className='btn-primary' onClick={this.handleSave}>Save</Button>
+          <Button bsStyle='primary' onClick={this.handleSave}>Save</Button>
         </div>
 
         <div className='col-sm-6 col-xs-12'>
@@ -292,7 +300,7 @@ var DeviceDetail = React.createClass({
             return (
               <div className='well'>
                 <InterfaceForm networks={this.state.networks} item={item} />
-                <Button className='btn-danger'
+                <Button bsStyle='danger'
                   onClick={this.removeInterface.bind(this, item)} value={item}>
                     <i className="fa fa-trash-o"></i>
                   </Button>
@@ -305,7 +313,7 @@ var DeviceDetail = React.createClass({
             return (
               <div className='well'>
                 <InterfaceForm networks={this.state.networks} item={item} />
-                <Button className='btn-danger'
+                <Button bsStyle='danger'
                   onClick={this.removeInterfaceToAdd.bind(this, key)} value={key}>
                     <i className="fa fa-trash-o"></i>
                   </Button>
@@ -314,7 +322,7 @@ var DeviceDetail = React.createClass({
             }
           )}
 
-          <Button className='btn-success'
+          <Button bsStyle='success'
             onClick={this.addInterface}>
                 <i className="fa fa-plus"></i>
           </Button>

@@ -32,7 +32,8 @@ var RecordCreate = React.createClass({
         name: this.refs.name.getValue(),
         content: content,
         type: this.state.record.type,
-        domain_id: this.refs.domain.getValue()
+        domain_id: this.refs.domain.getValue(),
+        priority: this.refs.priority.getValue() || 0
       },
       domainName: domainName
     });
@@ -52,7 +53,6 @@ var RecordCreate = React.createClass({
       case 'A':
       case 'AAAA':
       case 'CNAME':
-      case 'MX':
       case 'PTR':
       case 'NS':
       case 'SOA':
@@ -68,6 +68,41 @@ var RecordCreate = React.createClass({
               ref: 'name',
               onChange: this.handleChange,
               value: this.state.record.name })
+          ),
+          React.createElement(
+            'div',
+            { className: 'col-xs-8 col-sm-4' },
+            React.createElement(Input, {
+              type: 'text',
+              label: 'Value',
+              ref: 'content',
+              onChange: this.handleChange,
+              value: this.state.record.content })
+          )
+        );
+      case 'MX':
+        return React.createElement(
+          'div',
+          { className: 'form-group' },
+          React.createElement(
+            'div',
+            { className: 'col-xs-8 col-sm-4' },
+            React.createElement(Input, {
+              type: 'text',
+              label: 'Name',
+              ref: 'name',
+              onChange: this.handleChange,
+              value: this.state.record.name })
+          ),
+          React.createElement(
+            'div',
+            { className: 'col-xs-4 col-sm-2' },
+            React.createElement(Input, {
+              type: 'text',
+              label: 'Priority',
+              ref: 'priority',
+              onChange: this.handleChange,
+              value: priority })
           ),
           React.createElement(
             'div',
@@ -190,7 +225,7 @@ var RecordCreate = React.createClass({
     }
     return React.createElement(
       Input,
-      { type: 'select', ref: 'domain', onChange: this.handleChange, value: this.props.domain },
+      { type: 'select', ref: 'domain', addonBefore: 'Domain', onChange: this.handleChange, value: this.props.domain },
       rows
     );
   },
@@ -198,7 +233,7 @@ var RecordCreate = React.createClass({
   renderTypeButton: function renderTypeButton(type) {
     return React.createElement(
       Button,
-      { className: this.state.record.type == type ? 'btn-' + type.toLowerCase() : '',
+      { bsStyle: this.state.record.type == type ? 'btn-' + type.toLowerCase() : '',
         onClick: this.setType.bind(this, type),
         value: type },
       type
@@ -206,9 +241,12 @@ var RecordCreate = React.createClass({
   },
 
   render: function render() {
+    if (this.state.record.type && this.state.record.type != '') {
+      var submitbutton = React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' });
+    }
     return React.createElement(
       'div',
-      { className: 'col-xs-8 container well' },
+      { className: 'col-xs-12' },
       React.createElement(AlertSet, { alerts: this.state.alerts }),
       React.createElement(
         'h3',
@@ -220,7 +258,7 @@ var RecordCreate = React.createClass({
         { onSubmit: this.handleSubmit },
         React.createElement(
           'div',
-          { className: 'col-xs-12 col-sm-9' },
+          { className: 'col-xs-12 col-sm-8' },
           React.createElement(
             'div',
             { className: 'form-group' },
@@ -241,7 +279,7 @@ var RecordCreate = React.createClass({
         ),
         React.createElement(
           'div',
-          { className: 'col-xs-12 col-sm-3' },
+          { className: 'col-xs-12 col-sm-4' },
           this.renderDomainSelect()
         ),
         React.createElement(
@@ -255,7 +293,7 @@ var RecordCreate = React.createClass({
           React.createElement(
             'div',
             { className: 'col-xs-8 col-sm-4' },
-            React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
+            submitbutton
           )
         )
       )

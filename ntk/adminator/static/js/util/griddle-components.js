@@ -1,58 +1,67 @@
-'use strict';
+"use strict";
 
 var AdminNavbar = React.createClass({
-  displayName: 'AdminNavbar',
+  displayName: "AdminNavbar",
 
   render: function render() {
     return React.createElement(
-      Navbar,
-      null,
+      "div",
+      { className: "navbar navbar-pf" },
       React.createElement(
-        Nav,
+        Navbar.Header,
         null,
         React.createElement(
+          Navbar.Brand,
+          null,
+          React.createElement("img", { src: "/static/img/brand.svg", alt: "PatternFly Enterprise Application" })
+        )
+      ),
+      React.createElement(
+        Nav,
+        { className: "navbar-nav navbar-primary" },
+        React.createElement(
           LinkContainer,
-          { to: '/device/' },
+          { to: "/device/" },
           React.createElement(
             NavItem,
             { eventKey: 2 },
-            'Devices'
+            "Devices"
           )
         ),
         React.createElement(
           LinkContainer,
-          { to: '/network/' },
+          { to: "/network/" },
           React.createElement(
             NavItem,
             { eventKey: 2 },
-            'Networks'
+            "Networks"
           )
         ),
         React.createElement(
           LinkContainer,
-          { to: '/user/' },
+          { to: "/user/" },
           React.createElement(
             NavItem,
             { eventKey: 2 },
-            'Users'
+            "Users"
           )
         ),
         React.createElement(
           LinkContainer,
-          { to: '/domain/' },
+          { to: "/domain/" },
           React.createElement(
             NavItem,
             { eventKey: 2 },
-            'Domains'
+            "Domains"
           )
         ),
         React.createElement(
           LinkContainer,
-          { to: '/record/' },
+          { to: "/record/" },
           React.createElement(
             NavItem,
             { eventKey: 2 },
-            'Records'
+            "Records"
           )
         )
       )

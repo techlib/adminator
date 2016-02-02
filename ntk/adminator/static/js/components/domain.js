@@ -22,7 +22,7 @@ var DomainIdComponent = React.createClass({
             ) },
           React.createElement(
             Button,
-            { className: "btn-info" },
+            { bsStyle: "info" },
             React.createElement("i", { className: "fa fa-list-alt" })
           )
         )
@@ -39,7 +39,7 @@ var DomainIdComponent = React.createClass({
             ) },
           React.createElement(
             Button,
-            { className: "btn-primary" },
+            { bsStyle: "primary" },
             React.createElement("i", { className: "fa fa-pencil-square-o" })
           )
         )
@@ -56,7 +56,7 @@ var DomainIdComponent = React.createClass({
             ) },
           React.createElement(
             Button,
-            { className: "btn-danger", onClick: this.deleteDomain },
+            { bsStyle: "danger", onClick: this.deleteDomain },
             React.createElement("i", { className: "fa fa-trash-o" })
           )
         )
@@ -90,20 +90,18 @@ var Domain = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         "div",
-        { className: "col-xs-12 container well" },
+        { className: "col-xs-12 container" },
         React.createElement(
           "h3",
           null,
           "Domains"
         ),
         React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: "table table-striped table-hover",
+          tableClassName: "table table-bordered table-striped table-hover",
           useGriddleStyles: false,
           showFilter: false,
           useCustomPagerComponent: "true",
           customPagerComponent: Pager,
-          showSettings: true,
-          settingsToggleClassName: "btn pull-right",
           sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
           sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
           resultsPerPage: "20",

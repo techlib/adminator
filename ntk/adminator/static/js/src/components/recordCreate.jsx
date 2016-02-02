@@ -28,7 +28,8 @@ var RecordCreate = React.createClass({
         name: this.refs.name.getValue(),
         content: content,
         type: this.state.record.type,
-        domain_id: this.refs.domain.getValue()
+        domain_id: this.refs.domain.getValue(),
+        priority: (this.refs.priority.getValue() || 0)
       },
         domainName: domainName
     })
@@ -49,7 +50,6 @@ var RecordCreate = React.createClass({
       case 'A':
       case 'AAAA':
       case 'CNAME':
-      case 'MX':
       case 'PTR':
       case 'NS':
       case 'SOA':
@@ -62,6 +62,35 @@ var RecordCreate = React.createClass({
               ref='name'
               onChange={this.handleChange}
               value={this.state.record.name} />
+          </div>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='Value'
+              ref='content'
+              onChange={this.handleChange}
+              value={this.state.record.content} />
+          </div>
+        </div>
+      )
+      case 'MX':
+      return (
+        <div className='form-group'>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='Name'
+              ref='name'
+              onChange={this.handleChange}
+              value={this.state.record.name} />
+          </div>
+          <div className='col-xs-4 col-sm-2'>
+            <Input
+              type='text'
+              label='Priority'
+              ref='priority'
+              onChange={this.handleChange}
+              value={priority} />
           </div>
           <div className='col-xs-8 col-sm-4'>
             <Input
@@ -146,27 +175,30 @@ var RecordCreate = React.createClass({
       rows.push(<option value={domain.id} data-name={domain.name}>{domain.name}</option>)
     }
     return (
-          <Input type='select' ref='domain' onChange={this.handleChange} value={this.props.domain}>
-            {rows}
-          </Input>
+            <Input type='select' ref='domain' addonBefore='Domain' onChange={this.handleChange} value={this.props.domain}>
+              {rows}
+            </Input>
         )
   },
 
   renderTypeButton(type) {
     return (
-        <Button className={this.state.record.type==type ? 'btn-'+type.toLowerCase() : ''} 
+        <Button bsStyle={this.state.record.type==type ? 'btn-'+type.toLowerCase() : ''} 
             onClick={this.setType.bind(this, type)}
             value={type}>{type}</Button>
         )
   },
 
   render(){
+    if(this.state.record.type && this.state.record.type!=''){
+      var submitbutton = <ButtonInput type="submit" className='btn-primary' value="Save" />
+    }
    return (
-     <div className='col-xs-8 container well'>
+     <div className='col-xs-12'>
      <AlertSet alerts={this.state.alerts} />
      <h3>New record</h3>
         <form onSubmit={this.handleSubmit}>
-          <div className='col-xs-12 col-sm-9'>
+          <div className='col-xs-12 col-sm-8'>
             <div className='form-group'>
               <ButtonGroup>
                 {this.renderTypeButton('A')}
@@ -181,7 +213,7 @@ var RecordCreate = React.createClass({
               </ButtonGroup>
             </div>
           </div>
-          <div className='col-xs-12 col-sm-3'>
+          <div className='col-xs-12 col-sm-4'>
             {this.renderDomainSelect()}
           </div>
           <div className='col-xs-12 col-sm-12'>
@@ -189,7 +221,7 @@ var RecordCreate = React.createClass({
           </div>
           <div className='col-xs-12 col-sm-12'>
             <div className='col-xs-8 col-sm-4'>
-              <ButtonInput type="submit" className='btn-primary' value="Save" />
+              {submitbutton}
             </div>
           </div>
         </form>

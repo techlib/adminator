@@ -128,16 +128,14 @@ var Device = React.createClass({
     return (
       <div>
         <AdminNavbar/>
-        <div className='col-xs-12 container well'>
+        <div className='col-xs-12 container'>
         <h3>Devices</h3>
         <Griddle results={this.state.data.list}
-                 tableClassName='table table-striped table-hover'
+                 tableClassName='table table-bordered table-striped table-hover'
                  useGriddleStyles={false}
                  showFilter={true}
                  useCustomPagerComponent='true'
                  customPagerComponent={Pager}
-                 showSettings={true}
-                 settingsToggleClassName='btn pull-right'
                  sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                  sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                  columns={['interfaces', 'description', 'type', 'user', 'valid', 'uuid']}

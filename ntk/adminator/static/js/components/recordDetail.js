@@ -60,7 +60,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-8 col-sm-4' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Name',
+              addonBefore: 'Name',
               ref: 'name',
               onChange: this.handleChange,
               value: this.state.data.record.name })
@@ -70,7 +70,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-8 col-sm-4' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Value',
+              addonBefore: 'Value',
               ref: 'content',
               onChange: this.handleChange,
               value: this.state.data.record.content })
@@ -90,7 +90,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-8 col-sm-4' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Name',
+              addonBefore: 'Name',
               ref: 'name',
               onChange: this.handleSrvChange,
               value: this.state.data.record.name })
@@ -100,7 +100,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-4 col-sm-2' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Priority',
+              addonBefore: 'Priority',
               ref: 'priority',
               onChange: this.handleSrvChange,
               value: priority })
@@ -110,7 +110,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-4 col-sm-2' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Port',
+              addonBefore: 'Port',
               ref: 'port',
               onChange: this.handleSrvChange,
               value: port })
@@ -120,7 +120,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-8 col-sm-4' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Value',
+              addonBefore: 'Value',
               ref: 'value',
               onChange: this.handleSrvChange,
               value: value })
@@ -136,7 +136,7 @@ var RecordDetail = React.createClass({
             { className: 'col-xs-4' },
             React.createElement(Input, {
               type: 'text',
-              label: 'Name',
+              addonBefore: 'Name',
               ref: 'name',
               onChange: this.handleChange,
               value: this.state.data.record.name })
@@ -147,7 +147,7 @@ var RecordDetail = React.createClass({
             React.createElement(Input, {
               type: 'textarea',
               ref: 'content',
-              label: 'Content',
+              addonBefore: 'Content',
               onChange: this.handleChange,
               value: this.state.data.record.content })
           )
@@ -163,24 +163,19 @@ var RecordDetail = React.createClass({
       React.createElement(AlertSet, { alerts: this.state.alerts }),
       React.createElement(AdminNavbar, null),
       React.createElement(
-        'h3',
-        null,
-        'Record'
-      ),
-      React.createElement(
         'div',
-        { className: 'well col-xs-12' },
+        { className: 'container col-xs-12' },
+        React.createElement(
+          'h3',
+          null,
+          'Record'
+        ),
         React.createElement(
           'form',
           { onSubmit: this.handleSubmit },
           React.createElement(
             'div',
             { className: 'col-xs-2 col-sm-1' },
-            React.createElement(
-              'label',
-              null,
-              'Type'
-            ),
             React.createElement(
               'span',
               { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },

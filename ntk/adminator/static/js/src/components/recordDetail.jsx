@@ -53,7 +53,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-8 col-sm-4'>
             <Input
               type='text'
-              label='Name'
+              addonBefore='Name'
               ref='name'
               onChange={this.handleChange}
               value={this.state.data.record.name} />
@@ -61,7 +61,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-8 col-sm-4'>
             <Input
               type='text'
-              label='Value'
+              addonBefore='Value'
               ref='content'
               onChange={this.handleChange}
               value={this.state.data.record.content} />
@@ -75,7 +75,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-8 col-sm-4'>
             <Input
               type='text'
-              label='Name'
+              addonBefore='Name'
               ref='name'
               onChange={this.handleSrvChange}
               value={this.state.data.record.name} />
@@ -83,7 +83,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-4 col-sm-2'>
             <Input
               type='text'
-              label='Priority'
+              addonBefore='Priority'
               ref='priority'
               onChange={this.handleSrvChange}
               value={priority} />
@@ -91,7 +91,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-4 col-sm-2'>
             <Input
               type='text'
-              label='Port'
+              addonBefore='Port'
               ref='port'
               onChange={this.handleSrvChange}
               value={port} />
@@ -99,7 +99,7 @@ var RecordDetail = React.createClass({
           <div className='col-xs-8 col-sm-4'>
             <Input
               type='text'
-              label='Value'
+              addonBefore='Value'
               ref='value'
               onChange={this.handleSrvChange}
               value={value} />
@@ -113,7 +113,7 @@ var RecordDetail = React.createClass({
             <div className='col-xs-4'>
               <Input
                 type='text'
-                label='Name'
+                addonBefore='Name'
                 ref='name'
                 onChange={this.handleChange}
                 value={this.state.data.record.name} />
@@ -122,7 +122,7 @@ var RecordDetail = React.createClass({
               <Input
                 type='textarea'
                 ref='content'
-                label='Content'
+                addonBefore='Content'
                 onChange={this.handleChange}
                 value={this.state.data.record.content} />
             </div>
@@ -137,14 +137,14 @@ var RecordDetail = React.createClass({
      <div>
      <AlertSet alerts={this.state.alerts} />
         <AdminNavbar/>
-        <h3>Record</h3>
-        <div className='well col-xs-12'>
+        <div className='container col-xs-12'>
+          <h3>Record</h3>
           <form onSubmit={this.handleSubmit}>
             <div className='col-xs-2 col-sm-1'>
-              <label>Type</label>
-              <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
-               {this.state.data.record.type}
-              </span>
+                 <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
+                  {this.state.data.record.type}
+                </span>
+
             </div>
             <div className='col-xs-10 col-sm-11'>
               {this.renderInput()}

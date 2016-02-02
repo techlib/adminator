@@ -28,29 +28,45 @@ var DateRangePicker = React.createClass({
       'div',
       null,
       React.createElement(
-        'label',
-        null,
-        'Valid since'
+        'div',
+        { className: 'form-group' },
+        React.createElement(
+          'div',
+          { className: 'input-group' },
+          React.createElement(
+            'span',
+            { className: 'input-group-addon' },
+            'Not valid before'
+          ),
+          React.createElement(DateTimeField, {
+            ref: 'valid_since',
+            format: 'YYYY-MM-DDTHH:mm:ss',
+            inputFormat: 'DD.MM.YYYY HH:mm',
+            maxDate: moment(this.state.range[1]),
+            onChange: this.handleValidSince,
+            dateTime: this.state.range[0] })
+        )
       ),
-      React.createElement(DateTimeField, {
-        ref: 'valid_since',
-        format: 'YYYY-MM-DDTHH:mm:ss',
-        inputFormat: 'DD.MM.YYYY HH:mm',
-        maxDate: moment(this.state.range[1]),
-        onChange: this.handleValidSince,
-        dateTime: this.state.range[0] }),
       React.createElement(
-        'label',
-        null,
-        'Valid until'
-      ),
-      React.createElement(DateTimeField, {
-        ref: 'valid_until',
-        onChange: this.handleValidUntil,
-        format: 'YYYY-MM-DDTHH:mm:ss',
-        inputFormat: 'DD.MM.YYYY HH:mm',
-        minDate: moment(this.state.range[0]),
-        dateTime: this.state.range[1] })
+        'div',
+        { className: 'form-group' },
+        React.createElement(
+          'div',
+          { className: 'input-group' },
+          React.createElement(
+            'span',
+            { className: 'input-group-addon' },
+            'Not valid after'
+          ),
+          React.createElement(DateTimeField, {
+            ref: 'valid_until',
+            onChange: this.handleValidUntil,
+            format: 'YYYY-MM-DDTHH:mm:ss',
+            inputFormat: 'DD.MM.YYYY HH:mm',
+            minDate: moment(this.state.range[0]),
+            dateTime: this.state.range[1] })
+        )
+      )
     );
   }
 });
@@ -83,25 +99,25 @@ var InterfaceForm = React.createClass({
       null,
       React.createElement(Input, {
         type: 'text',
-        label: 'MAC',
+        addonBefore: 'MAC',
         ref: 'macaddr',
         value: this.state.item.macaddr,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        label: 'Hostname',
+        addonBefore: 'Hostname',
         ref: 'hostname',
         value: this.state.item.hostname,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        label: 'IPv4 address',
+        addonBefore: 'IPv4 address',
         ref: 'ip4addr',
         value: this.state.item.ip4addr,
         onChange: this.handleChange }),
       React.createElement(Input, {
         type: 'text',
-        label: 'IPv6 address',
+        addonBefore: 'IPv6 address',
         ref: 'ip6addr',
         value: this.state.item.ip6addr,
         onChange: this.handleChange }),
@@ -109,7 +125,7 @@ var InterfaceForm = React.createClass({
         Input,
         {
           type: 'select',
-          label: 'Network',
+          addonBefore: 'Network',
           ref: 'network',
           value: this.state.item.network,
           onChange: this.handleChange },
@@ -267,7 +283,7 @@ var DeviceDetail = React.createClass({
           React.createElement(Input, {
             type: 'text',
             ref: 'description',
-            label: 'Description',
+            addonBefore: 'Description',
             onChange: this.handleChange,
             value: this.state.data.device.description }),
           React.createElement(
@@ -275,7 +291,7 @@ var DeviceDetail = React.createClass({
             {
               type: 'select',
               ref: 'type',
-              label: 'Type',
+              addonBefore: 'Type',
               onChange: this.handleChange,
               value: this.state.data.device.type },
             React.createElement(
@@ -328,7 +344,7 @@ var DeviceDetail = React.createClass({
         ),
         React.createElement(
           Button,
-          { className: 'btn-primary', onClick: this.handleSave },
+          { bsStyle: 'primary', onClick: this.handleSave },
           'Save'
         )
       ),
@@ -347,7 +363,7 @@ var DeviceDetail = React.createClass({
             React.createElement(InterfaceForm, { networks: _this.state.networks, item: item }),
             React.createElement(
               Button,
-              { className: 'btn-danger',
+              { bsStyle: 'danger',
                 onClick: _this.removeInterface.bind(_this, item), value: item },
               React.createElement('i', { className: 'fa fa-trash-o' })
             )
@@ -360,7 +376,7 @@ var DeviceDetail = React.createClass({
             React.createElement(InterfaceForm, { networks: _this.state.networks, item: item }),
             React.createElement(
               Button,
-              { className: 'btn-danger',
+              { bsStyle: 'danger',
                 onClick: _this.removeInterfaceToAdd.bind(_this, key), value: key },
               React.createElement('i', { className: 'fa fa-trash-o' })
             )
@@ -368,7 +384,7 @@ var DeviceDetail = React.createClass({
         }),
         React.createElement(
           Button,
-          { className: 'btn-success',
+          { bsStyle: 'success',
             onClick: this.addInterface },
           React.createElement('i', { className: 'fa fa-plus' })
         )
