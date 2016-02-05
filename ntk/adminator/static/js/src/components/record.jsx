@@ -105,7 +105,6 @@ var Record = React.createClass({
       <div>
       <AdminNavbar/>
         <RecordCreate />
-
         <div className='col-xs-12 container'>
         <h3>Records</h3>
         <Griddle results={this.state.data['list']}

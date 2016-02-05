@@ -28,12 +28,14 @@ var RecordCreate = React.createClass({
     } else {
       var content = this.refs.content.getValue();
     }
+
+    var priority = this.refs.priority === undefined ? 0 : this.refs.priority.getValue();
     this.setState({ record: {
         name: this.refs.name.getValue(),
         content: content,
         type: this.state.record.type,
         domain_id: this.refs.domain.getValue(),
-        priority: this.refs.priority.getValue() || 0
+        prio: priority
       },
       domainName: domainName
     });
@@ -102,7 +104,7 @@ var RecordCreate = React.createClass({
               label: 'Priority',
               ref: 'priority',
               onChange: this.handleChange,
-              value: priority })
+              value: this.state.record.prio })
           ),
           React.createElement(
             'div',
@@ -224,8 +226,8 @@ var RecordCreate = React.createClass({
       ));
     }
     return React.createElement(
-      Input,
-      { type: 'select', ref: 'domain', addonBefore: 'Domain', onChange: this.handleChange, value: this.props.domain },
+      BootstrapSelect,
+      { ref: 'domain', addonBefore: 'Domain', onChange: this.handleChange, value: this.props.domain },
       rows
     );
   },
@@ -233,7 +235,7 @@ var RecordCreate = React.createClass({
   renderTypeButton: function renderTypeButton(type) {
     return React.createElement(
       Button,
-      { bsStyle: this.state.record.type == type ? 'btn-' + type.toLowerCase() : '',
+      { bsStyle: this.state.record.type == type ? 'btn-lg btn-' + type.toLowerCase() : 'btn-lg',
         onClick: this.setType.bind(this, type),
         value: type },
       type

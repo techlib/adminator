@@ -1,5 +1,9 @@
 /* Custom styles */
 
+.container {
+  padding-bottom: 20px;
+}
+
 a {
   cursor: pointer;
 }
@@ -471,4 +475,46 @@ fieldset[disabled] .btn-cname.active {
 .btn-cname .badge { 
   color: #525194; 
   background-color: #FFFFFF; 
+}
+
+
+/* Griddle */
+.table > thead:first-child > tr:first-child > th {
+  cursor: pointer
+}
+.table > thead:first-child > tr:first-child > th.sort-descending, .table > thead:first-child > tr:first-child > th.sort-ascending {
+  border-top: 2px solid #0099D3;
+  color: #0099D3;
+}
+.griddle .filter-container {
+  width: 25%
+}
+.griddle .griddle-filter {
+  background-color: #F6F6F6;
+  border-width: 1px 1px medium;
+  border-style: solid solid none;
+  border-color: #D1D1D1 #D1D1D1 -moz-use-text-color;
+  -moz-border-top-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  border-image: none;
+  padding: 5px;
+  position: relative;
+  text-align: center;
+}
+
+.griddle .pagination {
+  margin: -1px;
+}
+.griddle .footer-container {
+  padding: 0px;
+  border: 0;
+}
+
+.footer-container:hover {
+  background: #fff
+}
+.griddle-footer .row .col-md-12 {
+  line-height: 1;
 }

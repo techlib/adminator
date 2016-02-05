@@ -144,29 +144,46 @@ var RecordDetail = React.createClass({
     return React.createElement(
       'div',
       null,
-      React.createElement(AlertSet, { alerts: this.state.alerts }),
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
         { className: 'container' },
+        React.createElement(AlertSet, { alerts: this.state.alerts }),
         React.createElement(
           'h3',
           null,
           'Record'
         ),
         React.createElement(
-          'span',
-          { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
-          this.state.data.record.type
-        ),
-        React.createElement(
-          'form',
-          { className: 'form-horizontal', onSubmit: this.handleSubmit },
-          this.renderInput(),
+          'div',
+          { className: 'well' },
           React.createElement(
-            'div',
-            { className: 'col-xs-10 col-xs-offset-2' },
-            React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
+            'form',
+            { className: 'form-horizontal', onSubmit: this.handleSubmit },
+            React.createElement(
+              'div',
+              { className: 'form-group' },
+              React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                  'label',
+                  { className: 'control-label col-xs-2' },
+                  'Type'
+                ),
+                React.createElement(
+                  'div',
+                  { className: 'col-xs-8' },
+                  React.createElement(
+                    'span',
+                    { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
+                    this.state.data.record.type
+                  )
+                )
+              )
+            ),
+            this.renderInput(),
+            React.createElement(ButtonInput, { type: 'submit', className: 'col-xs-offset-2 btn-primary', value: 'Save' })
           )
         )
       )

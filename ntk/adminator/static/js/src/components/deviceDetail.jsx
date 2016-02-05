@@ -27,7 +27,7 @@ var DateRangePicker = React.createClass({
    return (
       <div>
         <div className='form-group'>
-           <label className='control-label col-xs-2'>Not valid before</label>
+           <label className='control-label col-xs-2'>Not before</label>
            <div className='col-xs-10'>
            <DateTimeField
              ref='valid_since'
@@ -40,7 +40,7 @@ var DateRangePicker = React.createClass({
         </div>
 
         <div className='form-group'>
-          <label className='control-label col-xs-2'>Not valid after</label>
+          <label className='control-label col-xs-2'>Not after</label>
           <div className='col-xs-10'>
           <DateTimeField
             ref='valid_until'
@@ -69,6 +69,13 @@ var InterfaceForm = React.createClass({
     return {item: {macaddr:'', hostname:'', ip4addr:'', ip6addr:'', network:''}}
   },
 
+  handleChangeNetwork(event){
+    this.state.item.network = event.target.value
+    this.setState({item: this.state.item})
+  },
+
+
+
   handleChange(){
     for (var key in this.refs){
       this.state.item[key] = this.refs[key].getValue()
@@ -78,7 +85,7 @@ var InterfaceForm = React.createClass({
 
   render() {
     return (
-             <div>
+             <div className='form-horizontal'>
               <Input
                 type='text'
                 label='MAC'
@@ -111,18 +118,17 @@ var InterfaceForm = React.createClass({
                 ref='ip6addr'
                 value={this.state.item.ip6addr}
                 onChange={this.handleChange} />
-               <Input
-                type='select'
+               <BootstrapSelect
                 label='Network'
                 labelClassName='col-xs-2'
                 wrapperClassName='col-xs-10'
                 ref='network'
                 value={this.state.item.network}
-                onChange={this.handleChange}>
+                onChange={this.handleChangeNetwork}>
                   {this.props.networks.list.map((network) => {
                     return <option value={network.uuid}>{network.description} (VLAN {network.vlan})</option>
                   })}
-               </Input>
+               </BootstrapSelect>
               </div>
       )
   }
@@ -207,16 +213,19 @@ var DeviceDetail = React.createClass({
     // TODO Handle create
   },
 
-  handleChange(){
-   var device = {
-    uuid: this.state.data.device.uuid,
-    description: this.refs.description.getValue(),
-    type: this.refs.type.getValue(),
-    user: this.state.data.device.user,
-    valid: this.state.data.device.valid,
-    interfaces: this.state.data.device.interfaces
-   }
-   this.setState({data:{device: device}})
+  handleChangeType(event){
+   this.state.data.device.type = event.target.value
+   this.setState({data:{device: this.state.data.device}})
+  },
+
+  handleChangeUser(event){
+   this.state.data.device.user = event.target.value
+   this.setState({data:{device: this.state.data.device}})
+  },
+
+  handleChangeDescription(event){
+   this.state.data.device.description = event.target.value
+   this.setState({data:{device: this.state.data.device}})
   },
 
   getDisplayOption(option, index){
@@ -262,40 +271,35 @@ var DeviceDetail = React.createClass({
               wrapperClassName='col-xs-10'
               ref='description'
               label='Description'
-              onChange={this.handleChange}
+              onChange={this.handleChangeDescription}
               value={this.state.data.device.description} />
-            <Input
-              type='select'
-              ref='type'
+            <BootstrapSelect
               labelClassName='col-xs-2'
               wrapperClassName='col-xs-10'
+              ref='type'
               label='Type'
-              onChange={this.handleChange}
+              onChange={this.handleChangeType}
               value={this.state.data.device.type}>
                 <option value='visitor'>Visitor</option>
                 <option value='staff'>Staff</option>
                 <option value='device'>Device</option>
-             </Input>
+            </BootstrapSelect>
             {() => {
               if(this.state.data.device.type == 'staff'){
                 return (
-                  <div className='form-group'>
-                    <label className='col-xs-2'>User ({(display_name)})</label>
-                    <Typeahead
-                      filterOption='display_name'
-                      displayOption={this.getDisplayOption}
-                      placeholder='Type to select user'
-                      options={this.state.users.list}
-                      onOptionSelected={this.setUser}
-                      className='col-xs-10'
-                      customClasses={
-                        {'input'   : 'form-control',
-                         'results' : 'list-group',
-                         'listItem': 'list-group-item'
-                        }
-                      }
-                    />
-                  </div>
+                    <BootstrapSelect
+                      labelClassName='col-xs-2'
+                      wrapperClassName='col-xs-10'
+                      label='User'
+                      onChange={this.handleChangeUser}
+                      data-live-search='true'
+                      value={this.state.data.device.user}
+                    >
+                    {this.state.users.list.map((item) => {
+                      return (
+                        <option value={item.cn}>{item.display_name}</option>
+                      )})}
+                    </BootstrapSelect>
                 )}}()
             }
             {() => {

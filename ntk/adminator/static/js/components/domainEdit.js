@@ -15,11 +15,16 @@ var DomainEdit = React.createClass({
     return { data: { domain: {} }, alerts: [] };
   },
 
+  handleChangeType: function handleChangeType(event) {
+    this.state.data.domain.type = event.target.value;
+    this.setState({ data: this.state.data });
+  },
+
   handleChange: function handleChange() {
     this.setState({ data: { domain: {
           name: this.refs.name.getValue(),
           master: this.refs.master.getValue(),
-          type: this.refs.type.getValue(),
+          type: this.state.data.domain.type,
           last_check: this.refs.last_check.getValue(),
           id: this.state.data.domain.id
         }
@@ -79,14 +84,13 @@ var DomainEdit = React.createClass({
               'div',
               { className: 'col-xs-6' },
               React.createElement(
-                Input,
+                BootstrapSelect,
                 {
-                  type: 'select',
                   label: 'Type',
                   labelClassName: 'col-xs-2',
                   wrapperClassName: 'col-xs-10',
                   ref: 'type',
-                  onChange: this.handleChange,
+                  onChange: this.handleChangeType,
                   value: this.state.data.domain.type },
                 React.createElement(
                   'option',

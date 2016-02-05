@@ -24,12 +24,14 @@ var RecordCreate = React.createClass({
     } else {
       var content = this.refs.content.getValue()
     }
+
+    var priority = (this.refs.priority === undefined) ? 0 : this.refs.priority.getValue()
     this.setState({record: {
         name: this.refs.name.getValue(),
         content: content,
         type: this.state.record.type,
         domain_id: this.refs.domain.getValue(),
-        priority: (this.refs.priority.getValue() || 0)
+        prio: priority
       },
         domainName: domainName
     })
@@ -90,7 +92,7 @@ var RecordCreate = React.createClass({
               label='Priority'
               ref='priority'
               onChange={this.handleChange}
-              value={priority} />
+              value={this.state.record.prio} />
           </div>
           <div className='col-xs-8 col-sm-4'>
             <Input
@@ -175,15 +177,15 @@ var RecordCreate = React.createClass({
       rows.push(<option value={domain.id} data-name={domain.name}>{domain.name}</option>)
     }
     return (
-            <Input type='select' ref='domain' addonBefore='Domain' onChange={this.handleChange} value={this.props.domain}>
+            <BootstrapSelect ref='domain' addonBefore='Domain' onChange={this.handleChange} value={this.props.domain}>
               {rows}
-            </Input>
+            </BootstrapSelect>
         )
   },
 
   renderTypeButton(type) {
     return (
-        <Button bsStyle={this.state.record.type==type ? 'btn-'+type.toLowerCase() : ''} 
+        <Button bsStyle={this.state.record.type==type ? 'btn-lg btn-'+type.toLowerCase() : 'btn-lg'} 
             onClick={this.setType.bind(this, type)}
             value={type}>{type}</Button>
         )

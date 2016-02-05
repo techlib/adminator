@@ -33,7 +33,7 @@ var DateRangePicker = React.createClass({
         React.createElement(
           'label',
           { className: 'control-label col-xs-2' },
-          'Not valid before'
+          'Not before'
         ),
         React.createElement(
           'div',
@@ -53,7 +53,7 @@ var DateRangePicker = React.createClass({
         React.createElement(
           'label',
           { className: 'control-label col-xs-2' },
-          'Not valid after'
+          'Not after'
         ),
         React.createElement(
           'div',
@@ -86,6 +86,11 @@ var InterfaceForm = React.createClass({
     return { item: { macaddr: '', hostname: '', ip4addr: '', ip6addr: '', network: '' } };
   },
 
+  handleChangeNetwork: function handleChangeNetwork(event) {
+    this.state.item.network = event.target.value;
+    this.setState({ item: this.state.item });
+  },
+
   handleChange: function handleChange() {
     for (var key in this.refs) {
       this.state.item[key] = this.refs[key].getValue();
@@ -96,7 +101,7 @@ var InterfaceForm = React.createClass({
   render: function render() {
     return React.createElement(
       'div',
-      null,
+      { className: 'form-horizontal' },
       React.createElement(Input, {
         type: 'text',
         label: 'MAC',
@@ -130,15 +135,14 @@ var InterfaceForm = React.createClass({
         value: this.state.item.ip6addr,
         onChange: this.handleChange }),
       React.createElement(
-        Input,
+        BootstrapSelect,
         {
-          type: 'select',
           label: 'Network',
           labelClassName: 'col-xs-2',
           wrapperClassName: 'col-xs-10',
           ref: 'network',
           value: this.state.item.network,
-          onChange: this.handleChange },
+          onChange: this.handleChangeNetwork },
         this.props.networks.list.map(function (network) {
           return React.createElement(
             'option',
@@ -233,16 +237,19 @@ var DeviceDetail = React.createClass({
     // TODO Handle create
   },
 
-  handleChange: function handleChange() {
-    var device = {
-      uuid: this.state.data.device.uuid,
-      description: this.refs.description.getValue(),
-      type: this.refs.type.getValue(),
-      user: this.state.data.device.user,
-      valid: this.state.data.device.valid,
-      interfaces: this.state.data.device.interfaces
-    };
-    this.setState({ data: { device: device } });
+  handleChangeType: function handleChangeType(event) {
+    this.state.data.device.type = event.target.value;
+    this.setState({ data: { device: this.state.data.device } });
+  },
+
+  handleChangeUser: function handleChangeUser(event) {
+    this.state.data.device.user = event.target.value;
+    this.setState({ data: { device: this.state.data.device } });
+  },
+
+  handleChangeDescription: function handleChangeDescription(event) {
+    this.state.data.device.description = event.target.value;
+    this.setState({ data: { device: this.state.data.device } });
   },
 
   getDisplayOption: function getDisplayOption(option, index) {
@@ -296,17 +303,16 @@ var DeviceDetail = React.createClass({
             wrapperClassName: 'col-xs-10',
             ref: 'description',
             label: 'Description',
-            onChange: this.handleChange,
+            onChange: this.handleChangeDescription,
             value: this.state.data.device.description }),
           React.createElement(
-            Input,
+            BootstrapSelect,
             {
-              type: 'select',
-              ref: 'type',
               labelClassName: 'col-xs-2',
               wrapperClassName: 'col-xs-10',
+              ref: 'type',
               label: 'Type',
-              onChange: this.handleChange,
+              onChange: this.handleChangeType,
               value: this.state.data.device.type },
             React.createElement(
               'option',
@@ -327,26 +333,21 @@ var DeviceDetail = React.createClass({
           (function () {
             if (_this.state.data.device.type == 'staff') {
               return React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                  'label',
-                  { className: 'col-xs-2' },
-                  'User (',
-                  display_name,
-                  ')'
-                ),
-                React.createElement(Typeahead, {
-                  filterOption: 'display_name',
-                  displayOption: _this.getDisplayOption,
-                  placeholder: 'Type to select user',
-                  options: _this.state.users.list,
-                  onOptionSelected: _this.setUser,
-                  className: 'col-xs-10',
-                  customClasses: { 'input': 'form-control',
-                    'results': 'list-group',
-                    'listItem': 'list-group-item'
-                  }
+                BootstrapSelect,
+                {
+                  labelClassName: 'col-xs-2',
+                  wrapperClassName: 'col-xs-10',
+                  label: 'User',
+                  onChange: _this.handleChangeUser,
+                  'data-live-search': 'true',
+                  value: _this.state.data.device.user
+                },
+                _this.state.users.list.map(function (item) {
+                  return React.createElement(
+                    'option',
+                    { value: item.cn },
+                    item.display_name
+                  );
                 })
               );
             }

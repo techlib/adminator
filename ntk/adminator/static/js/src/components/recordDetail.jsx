@@ -134,22 +134,31 @@ var RecordDetail = React.createClass({
 
   render(){
    return (
-     <div>
-     <AlertSet alerts={this.state.alerts} />
-        <AdminNavbar/>
-        <div className='container'>
-          <h3>Record</h3>
-            <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
-             {this.state.data.record.type}
-            </span>
-            <form className='form-horizontal' onSubmit={this.handleSubmit}>
-               {this.renderInput()}
-               <div className='col-xs-10 col-xs-offset-2'>
-                <ButtonInput type="submit" className='btn-primary' value="Save" />
+    <div>
+      <AdminNavbar/>
+      <div className='container'>
+        <AlertSet alerts={this.state.alerts} />
+        <h3>Record</h3>
+        <div className='well'>
+          <form className='form-horizontal' onSubmit={this.handleSubmit}>
+            <div className='form-group'>
+              <div className='form-group'>
+                <label className='control-label col-xs-2'>
+                  Type
+                </label>
+                <div className='col-xs-8'>
+                  <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
+                   {this.state.data.record.type}
+                  </span>
+                </div>
               </div>
-            </form>
-          </div>
+            </div>
+            {this.renderInput()}
+            <ButtonInput type="submit" className='col-xs-offset-2 btn-primary' value="Save" />
+          </form>
         </div>
+      </div>
+    </div>
     )
   },
 })
