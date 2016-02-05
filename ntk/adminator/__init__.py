@@ -43,6 +43,7 @@ class RangeType(UserDefinedType):
 
 ischema_names['tsrange'] = TSRangeType
 ischema_names['range'] = RangeType
+ischema_names['inetrange'] = RangeType
 
 # vim:set sw=4 ts=4 et:
 # -*- coding: utf-8 -*-
