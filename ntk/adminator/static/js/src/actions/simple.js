@@ -22,3 +22,8 @@ var InterfaceActions = Reflux.createActions([
 var UserActions = Reflux.createActions([
   'create', 'read', 'update', 'delete', 'list'
 ])
+
+var DhcpOptionActions = Reflux.createActions([
+    'list'
+])
+
