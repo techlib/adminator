@@ -10,6 +10,7 @@ var RecordActions = Reflux.createActions([
 var DeviceActions = Reflux.createActions([
   'create', 'read', 'update', 'delete', 'list'
 ])
+DeviceActions.read.preEmit = (args) => {console.log(args)}
 
 var NetworkActions = Reflux.createActions([
   'create', 'read', 'update', 'delete', 'list'

@@ -31,8 +31,8 @@ if __name__ == '__main__':
         # Prepare SQLSoup database connection.
         engine = create_engine(config.get('postgresql', 'url'),
                                isolation_level='SERIALIZABLE')
-        session = scoped_session(sessionmaker(autocommit=True,
-                                              autoflush=True))
+        session = scoped_session(sessionmaker(autocommit=False,
+                                              autoflush=False))
         conn = engine.connect()
 
         register_range('network.inetrange', 'InetRange', conn, True)

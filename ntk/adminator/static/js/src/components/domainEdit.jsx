@@ -26,9 +26,10 @@ var DomainEdit = React.createClass({
     }})
   },
 
-  handleSubmit(){
-    DomainActions.update(this.state.data.domain);
-    this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')])});
+  handleSubmit(e){
+    e.preventDefault()
+    DomainActions.update(this.state.data.domain)
+    this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')])})
   },
 
 
@@ -37,35 +38,35 @@ var DomainEdit = React.createClass({
      <div>
      <AlertSet alerts={this.state.alerts} />
         <AdminNavbar/>
-        <div className='container col-xs-12'>
+        <div className='container col-md-12'>
           <h3>Domain</h3>
-          <div className='col-xs-12 well'>
-          <form onSubmit={this.handleSubmit}>
-            <div className='col-xs-6'>
+          <div className='col-md-12 well'>
+          <form className='form-horizontal' onSubmit={this.handleSubmit}>
+            <div className='col-md-6'>
               <Input
                 type='text'
                 label='Name'
-                labelClassName='col-xs-2'
-                wrapperClassName='col-xs-10'
+                labelClassName='col-md-2'
+                wrapperClassName='col-md-10'
                 ref='name'
                 onChange={this.handleChange}
                 value={this.state.data.domain.name} />
             </div>
-            <div className='col-xs-6'>
+            <div className='col-md-6'>
               <Input
                 type='text'
                 label='Master'
-                labelClassName='col-xs-2'
-                wrapperClassName='col-xs-10'
+                labelClassName='col-md-2'
+                wrapperClassName='col-md-10'
                 ref='master'
                 onChange={this.handleChange}
                 value={this.state.data.domain.master} />
             </div>
-            <div className='col-xs-6'>
+            <div className='col-md-6'>
               <BootstrapSelect
                 label='Type'
-                labelClassName='col-xs-2'
-                wrapperClassName='col-xs-10'
+                labelClassName='col-md-2'
+                wrapperClassName='col-md-10'
                 ref='type'
                 onChange={this.handleChangeType}
                 value={this.state.data.domain.type}>
@@ -73,10 +74,10 @@ var DomainEdit = React.createClass({
                   <option value='SLAVE'>Slave</option>
               </BootstrapSelect>
             </div>
-            <div className='col-xs-6'>
+            <div className='col-md-6'>
               <div className='form-group'>
-                <label className='col-xs-2'>Last check</label>
-                <div className='col-xs-10'>
+                <label className='col-md-2'>Last check</label>
+                <div className='col-md-10'>
                 <DateTimeField
                   ref='last_check'
                   defaultText=''
@@ -88,8 +89,12 @@ var DomainEdit = React.createClass({
               </div>
             </div>
 
-            <div className='col-xs-12'>
-                <ButtonInput type="submit" className='btn-primary' value="Save" />
+            <div className='col-md-6'>
+              <div className='form-group'>
+                <div className='col-md-10 col-md-offset-2'>
+                  <ButtonInput type="submit" className='btn-primary' value="Save" />
+                </div>
+              </div>
             </div>
             </form>
             </div>

@@ -14,7 +14,8 @@ class TSRangeType(UserDefinedType):
 
     def bind_processor(self, dialect):
         def process(value):
-            return DateTimeRange(value[0], value[1])
+            if value:
+                return DateTimeRange(value[0], value[1])
         return process
 
     def result_processor(self, dialect, coltype):
@@ -32,7 +33,8 @@ class RangeType(UserDefinedType):
 
     def bind_processor(self, dialect):
         def process(value):
-            return Range(value[0], value[1])
+            if value:
+                return Range(value[0], value[1])
         return process
 
     def result_processor(self, dialect, coltype):

@@ -53,5 +53,3 @@ var BootstrapSelect = React.createClass({ displayName: 'BootstrapSelect',
     return React.createElement(Input, _extends({}, this.props, { type: 'select' }));
   }
 });
-
-module.exports = BootstrapSelect;

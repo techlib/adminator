@@ -27,6 +27,11 @@ var AlertDismissible = React.createClass({
         };
     },
 
+    icon: function icon() {
+        return ({ 'success': 'pficon pficon-ok',
+            'danger': 'pficon pficon-error-circle-o' })[this.props.level];
+    },
+
     render: function render() {
         if (!this.state.isVisible) return null;
 
@@ -34,12 +39,15 @@ var AlertDismissible = React.createClass({
         if (this.props.code !== null) message = message + '(Code ' + this.props.code + ')';
         return React.createElement(
             Alert,
-            { bsStyle: this.props.level, onDismiss: this.dismissAlert },
+            { className: 'toast-pf toast-pf-top-right alert alert-dismissable', bsStyle: this.props.level },
             React.createElement(
-                'p',
-                null,
-                message
-            )
+                'button',
+                { type: 'button', className: 'close', 'data-dismiss': 'alert', 'aria-hidden': 'true' },
+                React.createElement('span', { className: 'pficon pficon-close' })
+            ),
+            React.createElement('span', { className: this.icon() }),
+            ' ',
+            message
         );
     },
 

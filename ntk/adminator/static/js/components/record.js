@@ -59,7 +59,7 @@ var RecordActionsComponent = React.createClass({
   displayName: 'RecordActionsComponent',
 
   deleteRecord: function deleteRecord() {
-    RecordActions['delete'](this.props.data);
+    RecordActions['delete'](this.props.rowData.id);
   },
   render: function render() {
     return React.createElement(
@@ -120,28 +120,32 @@ var Record = React.createClass({
       'div',
       null,
       React.createElement(AdminNavbar, null),
-      React.createElement(RecordCreate, null),
       React.createElement(
         'div',
         { className: 'col-xs-12 container' },
+        React.createElement(RecordCreate, null),
         React.createElement(
-          'h3',
-          null,
-          'Records'
-        ),
-        React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
-          useGriddleStyles: false,
-          showFilter: true,
-          useCustomPagerComponent: 'true',
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['name', 'type', 'content', 'actions'],
-          resultsPerPage: '20',
-          customFilter: regexGridFilter,
-          columnMetadata: columnMeta
-        })
+          'div',
+          { className: 'container-fluid' },
+          React.createElement(
+            'h3',
+            null,
+            'Records'
+          ),
+          React.createElement(Griddle, { results: this.state.data['list'],
+            tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
+            useGriddleStyles: false,
+            showFilter: true,
+            useCustomPagerComponent: 'true',
+            customPagerComponent: Pager,
+            sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+            sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+            columns: ['name', 'type', 'content', 'actions'],
+            resultsPerPage: '20',
+            customFilter: regexGridFilter,
+            columnMetadata: columnMeta
+          })
+        )
       )
     );
   }

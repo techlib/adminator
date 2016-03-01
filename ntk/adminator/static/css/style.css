@@ -493,7 +493,7 @@ fieldset[disabled] .btn-cname.active {
   background-color: #F6F6F6;
   border-width: 1px 1px medium;
   border-style: solid solid none;
-  border-color: #D1D1D1 #D1D1D1 -moz-use-text-color;
+  border-color: #D1D1D1;
   -moz-border-top-colors: none;
   -moz-border-right-colors: none;
   -moz-border-bottom-colors: none;

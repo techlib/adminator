@@ -31,7 +31,8 @@ var DomainEdit = React.createClass({
       } });
   },
 
-  handleSubmit: function handleSubmit() {
+  handleSubmit: function handleSubmit(e) {
+    e.preventDefault();
     DomainActions.update(this.state.data.domain);
     this.setState({ alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')]) });
   },
@@ -44,7 +45,7 @@ var DomainEdit = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
-        { className: 'container col-xs-12' },
+        { className: 'container col-md-12' },
         React.createElement(
           'h3',
           null,
@@ -52,43 +53,43 @@ var DomainEdit = React.createClass({
         ),
         React.createElement(
           'div',
-          { className: 'col-xs-12 well' },
+          { className: 'col-md-12 well' },
           React.createElement(
             'form',
-            { onSubmit: this.handleSubmit },
+            { className: 'form-horizontal', onSubmit: this.handleSubmit },
             React.createElement(
               'div',
-              { className: 'col-xs-6' },
+              { className: 'col-md-6' },
               React.createElement(Input, {
                 type: 'text',
                 label: 'Name',
-                labelClassName: 'col-xs-2',
-                wrapperClassName: 'col-xs-10',
+                labelClassName: 'col-md-2',
+                wrapperClassName: 'col-md-10',
                 ref: 'name',
                 onChange: this.handleChange,
                 value: this.state.data.domain.name })
             ),
             React.createElement(
               'div',
-              { className: 'col-xs-6' },
+              { className: 'col-md-6' },
               React.createElement(Input, {
                 type: 'text',
                 label: 'Master',
-                labelClassName: 'col-xs-2',
-                wrapperClassName: 'col-xs-10',
+                labelClassName: 'col-md-2',
+                wrapperClassName: 'col-md-10',
                 ref: 'master',
                 onChange: this.handleChange,
                 value: this.state.data.domain.master })
             ),
             React.createElement(
               'div',
-              { className: 'col-xs-6' },
+              { className: 'col-md-6' },
               React.createElement(
                 BootstrapSelect,
                 {
                   label: 'Type',
-                  labelClassName: 'col-xs-2',
-                  wrapperClassName: 'col-xs-10',
+                  labelClassName: 'col-md-2',
+                  wrapperClassName: 'col-md-10',
                   ref: 'type',
                   onChange: this.handleChangeType,
                   value: this.state.data.domain.type },
@@ -106,18 +107,18 @@ var DomainEdit = React.createClass({
             ),
             React.createElement(
               'div',
-              { className: 'col-xs-6' },
+              { className: 'col-md-6' },
               React.createElement(
                 'div',
                 { className: 'form-group' },
                 React.createElement(
                   'label',
-                  { className: 'col-xs-2' },
+                  { className: 'col-md-2' },
                   'Last check'
                 ),
                 React.createElement(
                   'div',
-                  { className: 'col-xs-10' },
+                  { className: 'col-md-10' },
                   React.createElement(DateTimeField, {
                     ref: 'last_check',
                     defaultText: '',
@@ -130,8 +131,16 @@ var DomainEdit = React.createClass({
             ),
             React.createElement(
               'div',
-              { className: 'col-xs-12' },
-              React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
+              { className: 'col-md-6' },
+              React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                  'div',
+                  { className: 'col-md-10 col-md-offset-2' },
+                  React.createElement(ButtonInput, { type: 'submit', className: 'btn-primary', value: 'Save' })
+                )
+              )
             )
           )
         )

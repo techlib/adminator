@@ -94,25 +94,29 @@ var Domain = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         "div",
-        { className: "col-xs-12 container" },
+        { className: "col-xs-12" },
         React.createElement(
-          "h3",
-          null,
-          "Domains"
-        ),
-        React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: "table table-bordered table-striped table-hover",
-          useGriddleStyles: false,
-          showFilter: false,
-          useCustomPagerComponent: "true",
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
-          sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
-          resultsPerPage: "20",
-          columns: ['name', 'actions'],
-          changeFilter: this.setFilter,
-          columnMetadata: columnMeta
-        })
+          "div",
+          { className: "container-fluid" },
+          React.createElement(
+            "h3",
+            null,
+            "Domains"
+          ),
+          React.createElement(Griddle, { results: this.state.data['list'],
+            tableClassName: "table table-bordered table-striped table-hover",
+            useGriddleStyles: false,
+            showFilter: false,
+            useCustomPagerComponent: "true",
+            customPagerComponent: Pager,
+            sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
+            sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
+            resultsPerPage: "20",
+            columns: ['name', 'actions'],
+            changeFilter: this.setFilter,
+            columnMetadata: columnMeta
+          })
+        )
       )
     );
   },

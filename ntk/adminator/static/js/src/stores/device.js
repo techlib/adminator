@@ -2,12 +2,22 @@
 
 var deviceStore = Reflux.createStore({
   listenables: [DeviceActions],
-  data: {'device': [], 'list': []},
+  data: {'device': [], 'list': [], 'errors': []},
+
+  handleError(method, status, message){
+    this.data.errors = [{'method': method, 'status': status, 'message': message}]
+    this.trigger(this.data)
+  },
 
   onRead(id) {
-    $.ajax({url: `/device/${id}`, success: result => {
+    $.ajax({url: `/device/${id}`, 
+      success: result => {
+        this.data.errors = []
         this.data.device = result
         this.trigger(this.data)
+      },
+      error: result => {
+        this.handleError('onRead', result.status, result.responseJSON)
       }
     })
   },
@@ -21,6 +31,9 @@ var deviceStore = Reflux.createStore({
       contentType: 'application/json',
       success: result => {
         _this.onList()
+      },
+      error: result => {
+        this.handleError('onDelete', result.status, result.responseJSON)
       }
     })
   },
@@ -32,7 +45,10 @@ var deviceStore = Reflux.createStore({
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(device)
+      data: JSON.stringify(device),
+      error: result => {
+        this.handleError('onUpdate', result.status, result.responseJSON)
+      }
     })
   },
 
@@ -45,13 +61,19 @@ var deviceStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(device),
       success: result => {
-        _this.onList()
+        this.data.errors = []
+        this.data.device = result
+        this.trigger(this.data)
+      },
+      error: result => {
+        this.handleError('onCreate', result.status, result.responseJSON)
       }
     })
   },
 
   onList() {
     $.ajax({url: '/device', success: result => {
+        this.data.errors = []
         this.data.list = result.result
         this.trigger(this.data)
       }

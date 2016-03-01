@@ -16,7 +16,7 @@ var DeviceActionsComponent = React.createClass({
   displayName: "DeviceActionsComponent",
 
   deleteDevice: function deleteDevice() {
-    DeviceActions["delete"](this.props.data);
+    DeviceActions["delete"](this.props.rowData.uuid);
   },
   render: function render() {
     return React.createElement(
@@ -192,25 +192,38 @@ var Device = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         "div",
-        { className: "col-xs-12 container" },
+        { className: "col-xs-12" },
         React.createElement(
-          "h3",
-          null,
-          "Devices"
+          "div",
+          { className: "container-fluid" },
+          React.createElement(
+            "h3",
+            null,
+            "Devices"
+          ),
+          React.createElement(
+            "a",
+            { className: "btn btn-success pull-right", href: "#/device/new" },
+            React.createElement("i", { className: "fa fa-plus" })
+          )
         ),
-        React.createElement(Griddle, { results: this.state.data.list,
-          tableClassName: "table table-bordered table-striped table-hover",
-          useGriddleStyles: false,
-          showFilter: true,
-          useCustomPagerComponent: "true",
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
-          sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
-          columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
-          resultsPerPage: "20",
-          customFilter: regexGridFilter,
-          columnMetadata: columnMeta
-        })
+        React.createElement(
+          "div",
+          { className: "container-fluid" },
+          React.createElement(Griddle, { results: this.state.data.list,
+            tableClassName: "table table-bordered table-striped table-hover",
+            useGriddleStyles: false,
+            showFilter: true,
+            useCustomPagerComponent: "true",
+            customPagerComponent: Pager,
+            sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
+            sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
+            columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
+            resultsPerPage: "20",
+            customFilter: regexGridFilter,
+            columnMetadata: columnMeta
+          })
+        )
       )
     );
   }

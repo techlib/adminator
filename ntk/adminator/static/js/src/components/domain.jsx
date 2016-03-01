@@ -70,21 +70,23 @@ var Domain = React.createClass({
        <div>
        <AdminNavbar/>
 
-        <div className='col-xs-12 container'>
-        <h3>Domains</h3>
-        <Griddle results={this.state.data['list']}
-                 tableClassName='table table-bordered table-striped table-hover'
-                 useGriddleStyles={false}
-                 showFilter={false}
-                 useCustomPagerComponent='true'
-                 customPagerComponent={Pager}
-                 sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
-                 sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                 resultsPerPage='20'
-                 columns={['name', 'actions']}
-                 changeFilter={this.setFilter}
-                 columnMetadata={columnMeta}
-                 />
+        <div className='col-xs-12'>
+          <div className='container-fluid'>
+            <h3>Domains</h3>
+            <Griddle results={this.state.data['list']}
+                     tableClassName='table table-bordered table-striped table-hover'
+                     useGriddleStyles={false}
+                     showFilter={false}
+                     useCustomPagerComponent='true'
+                     customPagerComponent={Pager}
+                     sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
+                     sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
+                     resultsPerPage='20'
+                     columns={['name', 'actions']}
+                     changeFilter={this.setFilter}
+                     columnMetadata={columnMeta}
+                     />
+          </div>
         </div>
       </div>
     )

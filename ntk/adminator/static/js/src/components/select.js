@@ -54,4 +54,3 @@ var BootstrapSelect = React.createClass({displayName: 'BootstrapSelect',
   }
 });
 
-module.exports = BootstrapSelect;

@@ -23,6 +23,12 @@ var AlertDismissible = React.createClass({
         };
     },
 
+    icon: function(){
+      return {'success': 'pficon pficon-ok', 
+              'danger': 'pficon pficon-error-circle-o'}
+              [this.props.level]
+    },
+
     render: function() {
         if(!this.state.isVisible)
             return null;
@@ -31,9 +37,12 @@ var AlertDismissible = React.createClass({
         if(this.props.code !== null)
             message = message +'(Code '+ this.props.code +')';
         return (
-            <Alert bsStyle={this.props.level} onDismiss={this.dismissAlert}>
-                <p>{message}</p>
-            </Alert>
+          <Alert className="toast-pf toast-pf-top-right alert alert-dismissable" bsStyle={this.props.level}>
+            <button type="button" className="close" data-dismiss="alert" aria-hidden="true">
+              <span className="pficon pficon-close"></span>
+            </button>
+            <span className={this.icon()}></span> {message}
+          </Alert>
         );
     },
 

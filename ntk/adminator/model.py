@@ -6,7 +6,9 @@ __all__ = ['Model']
 
 def autoflush(func):
     def decorator(self, *args, **kwargs):
+        self.db.rollback()
         retval = func(self, *args, **kwargs)
+        self.db.commit()
         self.db.flush()
         return retval
     return decorator
@@ -29,6 +31,7 @@ class Model(object):
     def init(self):
         pass
 
+    @autoflush
     def list(self):
         items = []
         for item in self.e().all():
@@ -36,6 +39,7 @@ class Model(object):
             items.append(item)
         return items
 
+    @autoflush
     def get_item(self, key):
         item = self.e().filter_by(**{self.pkey: key}).one()
         item = object_to_dict(item, include=self.include_relations.get('item'))
@@ -44,14 +48,15 @@ class Model(object):
     @autoflush
     def update(self, item):
         assert item.get(self.pkey) is not None, 'Primary key is not set'
+        entity = self.e().filter_by(**{self.pkey: item.get(self.pkey)}).one()
         for k,v in item.iteritems():
-            if k in self.get_relationships():
+            if k in self.get_relationships() or k == self.pkey:
                 continue
-            entity = self.e().filter_by(**{self.pkey: item.get(self.pkey)}).one()
             setattr(entity, k, v)
+        self.db.commit()
+        self.db.flush()
         return object_to_dict(entity)
 
-    @autoflush
     def replace(self, item):
         if item.get(self.pkey) is not None:
             self.e().filter_by(**{self.pkey: item[self.pkey]}).delete()
@@ -59,7 +64,14 @@ class Model(object):
 
     @autoflush
     def insert(self, item):
-        return object_to_dict(self.e().insert(**item))
+        newVal = {}
+        for k,v in item.iteritems():
+            if k not in self.get_relationships() and v is not None:
+                newVal[k] = v
+        e = self.e().insert(**newVal)
+        self.db.commit()
+        self.db.flush()
+        return object_to_dict(e)
 
     @autoflush
     def delete(self, key):

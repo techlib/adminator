@@ -5,6 +5,9 @@ var DomainActions = Reflux.createActions(['create', 'read', 'update', 'delete', 
 var RecordActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
 
 var DeviceActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
+DeviceActions.read.preEmit = function (args) {
+  console.log(args);
+};
 
 var NetworkActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
 

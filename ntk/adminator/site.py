@@ -8,6 +8,7 @@ from functools import wraps
 from werkzeug.exceptions import Unauthorized, NotFound
 
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import DataError
 
 from simplejson import dumps
 import flask
@@ -15,7 +16,7 @@ import os
 from jinja2 import Undefined
 
 
-from flask.ext.cors import CORS 
+from flask.ext.cors import CORS
 
 class SilentUndefined(Undefined):
     '''
@@ -53,6 +54,20 @@ def make_website_app(manager, debug):
     @app.errorhandler(Unauthorized.code)
     def unauthorized(e):
         return flask.render_template('unauthorized.html')
+
+    @app.errorhandler(DataError)
+    def handle_data_error(error):
+        response = flask.jsonify({'message': error.message})
+        response.status_code = 500
+        return response
+
+
+    @app.errorhandler(NoResultFound)
+    def handle_not_found(error):
+        response = flask.jsonify({'message': 'Item not found'})
+        response.status_code = 404
+        return response
+
 
     @protected
     @app.route('/')
@@ -175,7 +190,6 @@ def make_website_app(manager, debug):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.record.list())
         if 'POST' == flask.request.method:
-            print flask.request.get_json(force=True)
             return flask.jsonify(manager.record.insert(flask.request.get_json(force=True)))
 
     @app.route('/record/<id>', methods=['GET', 'PUT', 'DELETE'])

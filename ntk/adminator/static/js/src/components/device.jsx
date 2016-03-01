@@ -10,7 +10,7 @@ var DeviceDescComponent = React.createClass({
 
 var DeviceActionsComponent = React.createClass({
   deleteDevice(){
-    DeviceActions.delete(this.props.data)
+    DeviceActions.delete(this.props.rowData.uuid)
   },
   render() {
     return (
@@ -145,21 +145,29 @@ var Device = React.createClass({
     return (
       <div>
         <AdminNavbar/>
-        <div className='col-xs-12 container'>
-        <h3>Devices</h3>
-        <Griddle results={this.state.data.list}
-                 tableClassName='table table-bordered table-striped table-hover'
-                 useGriddleStyles={false}
-                 showFilter={true}
-                 useCustomPagerComponent='true'
-                 customPagerComponent={Pager}
-                 sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
-                 sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                 columns={['interfaces', 'description', 'type', 'user', 'valid', 'actions']}
-                 resultsPerPage='20'
-                 customFilter={regexGridFilter}
-                 columnMetadata={columnMeta}
-                 />
+        <div className='col-xs-12'>
+          <div className='container-fluid'>
+            <h3>Devices</h3>
+            <a className='btn btn-success pull-right' href='#/device/new'>
+              <i className='fa fa-plus'></i>
+            </a>
+          </div>
+          <div className='container-fluid'>
+
+            <Griddle results={this.state.data.list}
+                     tableClassName='table table-bordered table-striped table-hover'
+                     useGriddleStyles={false}
+                     showFilter={true}
+                     useCustomPagerComponent='true'
+                     customPagerComponent={Pager}
+                     sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
+                     sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
+                     columns={['interfaces', 'description', 'type', 'user', 'valid', 'actions']}
+                     resultsPerPage='20'
+                     customFilter={regexGridFilter}
+                     columnMetadata={columnMeta}
+                     />
+          </div>
         </div>
       </div>
     )

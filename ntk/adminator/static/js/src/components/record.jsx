@@ -49,7 +49,7 @@ var RecordTypeComponent = React.createClass({
 
 var RecordActionsComponent = React.createClass({
   deleteRecord(){
-    RecordActions.delete(this.props.data)
+    RecordActions.delete(this.props.rowData.id)
   },
   render() {
     return (
@@ -104,22 +104,24 @@ var Record = React.createClass({
     return (
       <div>
       <AdminNavbar/>
-        <RecordCreate />
         <div className='col-xs-12 container'>
-        <h3>Records</h3>
-        <Griddle results={this.state.data['list']}
-                 tableClassName='datatable table table-striped table-hover table-bordered datatable'
-                 useGriddleStyles={false}
-                 showFilter={true}
-                 useCustomPagerComponent='true'
-                 customPagerComponent={Pager}
-                 sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
-                 sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                 columns={['name', 'type','content', 'actions']}
-                 resultsPerPage='20'
-                 customFilter={regexGridFilter}
-                 columnMetadata={columnMeta}
-                 />
+        <RecordCreate />
+          <div className='container-fluid'>
+            <h3>Records</h3>
+            <Griddle results={this.state.data['list']}
+                     tableClassName='datatable table table-striped table-hover table-bordered datatable'
+                     useGriddleStyles={false}
+                     showFilter={true}
+                     useCustomPagerComponent='true'
+                     customPagerComponent={Pager}
+                     sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
+                     sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
+                     columns={['name', 'type','content', 'actions']}
+                     resultsPerPage='20'
+                     customFilter={regexGridFilter}
+                     columnMetadata={columnMeta}
+                     />
+          </div>
         </div>
       </div>
     )
