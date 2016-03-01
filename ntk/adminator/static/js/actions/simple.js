@@ -14,3 +14,5 @@ var NetworkActions = Reflux.createActions(['create', 'read', 'update', 'delete',
 var InterfaceActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
 
 var UserActions = Reflux.createActions(['create', 'read', 'update', 'delete', 'list']);
+
+var DhcpOptionActions = Reflux.createActions(['list']);

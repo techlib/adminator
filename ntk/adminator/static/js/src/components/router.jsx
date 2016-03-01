@@ -4,6 +4,7 @@ ReactDOM.render((
     <Route path="/domain/:id" component={DomainDetail} />
     <Route path="/domainEdit/:id" component={DomainEdit} />
     <Route path="/network" component={Network} />
+    <Route path="/network/:id" component={NetworkEdit} />
     <Route path="/device" component={Device} />
     <Route path="/device/:id" component={DeviceDetail} />
     <Route path="/record/:id" component={RecordDetail} />
