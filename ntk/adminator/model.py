@@ -34,7 +34,7 @@ class Model(object):
     @autoflush
     def list(self):
         items = []
-        for item in self.e().all():
+        for item in self.e().order_by(self.pkey).all():
             item = object_to_dict(item, include=self.include_relations.get('list'))
             items.append(item)
         return items
