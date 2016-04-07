@@ -1,13 +1,24 @@
 var DomainEdit = React.createClass({
-  mixins: [Reflux.connect(domainStore, 'data')],
+  mixins: [
+    Reflux.connect(domainStore, 'data'),
+    Reflux.listenTo(domainStore, 'handleErrors')
+  ],
 
   componentDidMount(){
     let { id } = this.props.params
-    DomainActions.read(id)
+    if(id != 'new'){
+      DomainActions.read(id)
+    }
   },
 
   getInitialState() {
-    return {data: {domain: {}}, alerts: []}
+    return {data: {domain: {type: 'MASTER', last_check: moment().format('X')}}, alerts: []}
+  },
+
+  handleErrors(data){
+    data.errors.map((item) => {
+      this.setState({alerts: this.state.alerts.concat([new ErrorAlert(item.message.message)])})
+    })
   },
 
   handleChangeType(event){
@@ -28,8 +39,14 @@ var DomainEdit = React.createClass({
 
   handleSubmit(e){
     e.preventDefault()
-    DomainActions.update(this.state.data.domain)
-    this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')])})
+    if(_.isUndefined(this.state.data.domain.id)){
+      console.log(this.state.data.domain)
+      DomainActions.create(this.state.data.domain)
+      this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain created')])})
+    } else {
+      DomainActions.update(this.state.data.domain)
+      this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')])})
+    }
   },
 
 
@@ -49,6 +66,7 @@ var DomainEdit = React.createClass({
                 labelClassName='col-md-2'
                 wrapperClassName='col-md-10'
                 ref='name'
+                required
                 onChange={this.handleChange}
                 value={this.state.data.domain.name} />
             </div>
@@ -76,11 +94,10 @@ var DomainEdit = React.createClass({
             </div>
             <div className='col-md-6'>
               <div className='form-group'>
-                <label className='col-md-2'>Last check</label>
+                <label className='control-label col-md-2'>Last check</label>
                 <div className='col-md-10'>
                 <DateTimeField
                   ref='last_check'
-                  defaultText=''
                   onChange={this.handleChange}
                   format='X'
                   inputFormat='DD.MM.YYYY HH:mm'

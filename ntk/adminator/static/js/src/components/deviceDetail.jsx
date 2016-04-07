@@ -3,7 +3,6 @@ var DateRangePicker = React.createClass({
   componentWillReceiveProps(){
      if(this.props.range){
        this.setState({range: this.props.range})
-       this.props.onChange(this.state.range)
      }
   },
 
@@ -117,6 +116,7 @@ var InterfaceForm = React.createClass({
                 label='IPv4 address'
                 labelClassName='col-xs-2'
                 wrapperClassName='col-xs-10'
+                placeholder='Dynamic'
                 ref='ip4addr'
                 name='ip4addr'
                 pattern='^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
@@ -126,6 +126,7 @@ var InterfaceForm = React.createClass({
                 type='text'
                 label='IPv6 address'
                 labelClassName='col-xs-2'
+                placeholder='Dynamic'
                 wrapperClassName='col-xs-10'
                 ref='ip6addr'
                 name='ip6addr'
@@ -153,6 +154,7 @@ var InterfaceForm = React.createClass({
 var DeviceDetail = React.createClass({
   mixins: [
     Reflux.listenTo(deviceStore, 'handleErrors'),
+    Reflux.listenTo(interfaceStore, 'handleErrors'),
     Reflux.connect(deviceStore, 'data'), 
     Reflux.connect(networkStore, 'networks'), 
     Reflux.connect(userStore, 'users'),
@@ -160,7 +162,6 @@ var DeviceDetail = React.createClass({
 
   handleErrors(data){
     data.errors.map((item) => {
-      console.log(item)
       this.setState({alerts: this.state.alerts.concat([new ErrorAlert(item.message.message)])})
     })
   },
@@ -174,15 +175,17 @@ var DeviceDetail = React.createClass({
     UserActions.list()
   },
 
+  componentWillUnmount(){
+    this.state.deleteInterfaces = []
+    this.state.createInterfaces = []
+  },
+
   getInitialState() {
     return {
       data: {
         device: {
           interfaces: [],
-          valid: [
-            moment().format('YYYY-MM-DDTHH:mm:ss'),
-            moment().add(1, 'y').format('YYYY-MM-DDTHH:mm:ss')
-          ],
+          valid: [],
           type: 'visitor'
         },
       },

@@ -31,7 +31,12 @@ var DeviceInterfacesComponent = React.createClass({
       {this.props.data.map((item) => {
         return (
           <div>
-            <OverlayTrigger placement="right" overlay=<Tooltip>{item.hostname} <br/> {item.ip4addr} <br/> {item.ip6addr}</Tooltip>>
+            <OverlayTrigger placement="right" overlay=
+              <Tooltip>
+                {item.hostname? item.hostname: 'No hostname'} <br/> 
+                {item.ip4addr? item.ip4addr: 'Dynamic IPv4'} <br/> 
+                {item.ip6addr? item.ip6addr: 'Dynamic IPv6'}
+              </Tooltip>>
                 <span className='label label-warning'>
                   {item.macaddr}
                 </span>
@@ -149,7 +154,7 @@ var Device = React.createClass({
           <div className='container-fluid'>
             <h3>Devices</h3>
             <a className='btn btn-success pull-right' href='#/device/new'>
-              <i className='fa fa-plus'></i>
+              <i className='fa fa-plus'></i> New device
             </a>
           </div>
           <div className='container-fluid'>

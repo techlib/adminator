@@ -55,15 +55,13 @@ var DeviceInterfacesComponent = React.createClass({
             { placement: "right", overlay: React.createElement(
                 Tooltip,
                 null,
-                item.hostname,
+                item.hostname ? item.hostname : 'No hostname',
                 " ",
                 React.createElement("br", null),
-                " ",
-                item.ip4addr,
+                item.ip4addr ? item.ip4addr : 'Dynamic IPv4',
                 " ",
                 React.createElement("br", null),
-                " ",
-                item.ip6addr
+                item.ip6addr ? item.ip6addr : 'Dynamic IPv6'
               ) },
             React.createElement(
               "span",
@@ -204,7 +202,8 @@ var Device = React.createClass({
           React.createElement(
             "a",
             { className: "btn btn-success pull-right", href: "#/device/new" },
-            React.createElement("i", { className: "fa fa-plus" })
+            React.createElement("i", { className: "fa fa-plus" }),
+            " New device"
           )
         ),
         React.createElement(

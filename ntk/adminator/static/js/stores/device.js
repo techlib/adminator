@@ -1,13 +1,9 @@
 'use strict';
 
 var deviceStore = Reflux.createStore({
+  mixins: [ErrorMixin],
   listenables: [DeviceActions],
   data: { 'device': [], 'list': [], 'errors': [] },
-
-  handleError: function handleError(method, status, message) {
-    this.data.errors = [{ 'method': method, 'status': status, 'message': message }];
-    this.trigger(this.data);
-  },
 
   onRead: function onRead(id) {
     var _this2 = this;

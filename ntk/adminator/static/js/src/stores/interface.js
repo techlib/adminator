@@ -2,12 +2,16 @@
 
 var interfaceStore = Reflux.createStore({
   listenables: [InterfaceActions],
+  mixins: [ErrorMixin],
   data: {'interface': [], 'list': []},
 
   onRead(id) {
     $.ajax({url: `/interface/${id}`, success: result => {
         this.data['interface'] = result
         this.trigger(this.data)
+      },
+      error: result => {
+        this.handleError('onRead', result.status, result.responseJSON)
       }
     })
   },
@@ -21,6 +25,9 @@ var interfaceStore = Reflux.createStore({
       contentType: 'application/json',
       success: result => {
         _this.onList()
+      },
+      error: result => {
+        this.handleError('onDelete', result.status, result.responseJSON)
       }
     })
   },
@@ -32,7 +39,10 @@ var interfaceStore = Reflux.createStore({
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(item)
+      data: JSON.stringify(item),
+      error: result => {
+        this.handleError('onUpdate', result.status, result.responseJSON)
+      }
     })
   },
 
@@ -46,6 +56,9 @@ var interfaceStore = Reflux.createStore({
       data: JSON.stringify(item),
       success: result => {
         _this.onList()
+      },
+      error: result => {
+        this.handleError('onCreate', result.status, result.responseJSON)
       }
     })
   },

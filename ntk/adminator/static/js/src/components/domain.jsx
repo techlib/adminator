@@ -14,7 +14,7 @@ var DomainNameComponent = React.createClass({
 
 var DomainActionsComponent = React.createClass({
   deleteDomain(){
-    DomainActions.delete(this.props.data)
+    DomainActions.delete(this.props.rowData.id)
   },
   render() {
     return (
@@ -27,13 +27,11 @@ var DomainActionsComponent = React.createClass({
             </OverlayTrigger>
           </LinkContainer>
 
-          <LinkContainer to={`/domainEdit/${this.props.rowData.id}`}>
             <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
               <Button bsStyle='danger' onClick={this.deleteDomain}>
                 <i className="fa fa-trash-o"></i>
               </Button>
             </OverlayTrigger>
-          </LinkContainer>
         </ButtonGroup>
         )
   }
@@ -68,11 +66,16 @@ var Domain = React.createClass({
 
      return (
        <div>
-       <AdminNavbar/>
-
+        <AdminNavbar/>
+        <div className='container-fluid'>
+          <AlertSet alerts={this.state.alerts} />
+        </div>
         <div className='col-xs-12'>
           <div className='container-fluid'>
             <h3>Domains</h3>
+            <a className='btn btn-success pull-right' href='#/domainEdit/new'>
+              <i className='fa fa-plus'></i> New domain
+            </a>
             <Griddle results={this.state.data['list']}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}

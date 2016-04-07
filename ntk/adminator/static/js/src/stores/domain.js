@@ -28,6 +28,20 @@ var domainStore = Reflux.createStore({
     })
   },
 
+  onDelete(id){
+    var _this = this;
+    $.ajax({
+      url: `/domain/${id}`,
+      method: 'DELETE',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: result => {
+        _this.onList()
+      }
+    })
+  },
+
+
   onRead(id) {
     $.ajax({url: `/domain/${id}`, success: result => {
         this.data['domain'] = result

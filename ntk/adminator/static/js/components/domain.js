@@ -20,7 +20,7 @@ var DomainActionsComponent = React.createClass({
   displayName: "DomainActionsComponent",
 
   deleteDomain: function deleteDomain() {
-    DomainActions["delete"](this.props.data);
+    DomainActions["delete"](this.props.rowData.id);
   },
   render: function render() {
     return React.createElement(
@@ -44,20 +44,16 @@ var DomainActionsComponent = React.createClass({
         )
       ),
       React.createElement(
-        LinkContainer,
-        { to: "/domainEdit/" + this.props.rowData.id },
+        OverlayTrigger,
+        { placement: "top", overlay: React.createElement(
+            Tooltip,
+            null,
+            "Delete"
+          ) },
         React.createElement(
-          OverlayTrigger,
-          { placement: "top", overlay: React.createElement(
-              Tooltip,
-              null,
-              "Delete"
-            ) },
-          React.createElement(
-            Button,
-            { bsStyle: "danger", onClick: this.deleteDomain },
-            React.createElement("i", { className: "fa fa-trash-o" })
-          )
+          Button,
+          { bsStyle: "danger", onClick: this.deleteDomain },
+          React.createElement("i", { className: "fa fa-trash-o" })
         )
       )
     );
@@ -94,6 +90,11 @@ var Domain = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         "div",
+        { className: "container-fluid" },
+        React.createElement(AlertSet, { alerts: this.state.alerts })
+      ),
+      React.createElement(
+        "div",
         { className: "col-xs-12" },
         React.createElement(
           "div",
@@ -102,6 +103,12 @@ var Domain = React.createClass({
             "h3",
             null,
             "Domains"
+          ),
+          React.createElement(
+            "a",
+            { className: "btn btn-success pull-right", href: "#/domainEdit/new" },
+            React.createElement("i", { className: "fa fa-plus" }),
+            " New domain"
           ),
           React.createElement(Griddle, { results: this.state.data['list'],
             tableClassName: "table table-bordered table-striped table-hover",

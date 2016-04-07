@@ -3,16 +3,26 @@
 var DomainEdit = React.createClass({
   displayName: 'DomainEdit',
 
-  mixins: [Reflux.connect(domainStore, 'data')],
+  mixins: [Reflux.connect(domainStore, 'data'), Reflux.listenTo(domainStore, 'handleErrors')],
 
   componentDidMount: function componentDidMount() {
     var id = this.props.params.id;
 
-    DomainActions.read(id);
+    if (id != 'new') {
+      DomainActions.read(id);
+    }
   },
 
   getInitialState: function getInitialState() {
-    return { data: { domain: {} }, alerts: [] };
+    return { data: { domain: { type: 'MASTER', last_check: moment().format('X') } }, alerts: [] };
+  },
+
+  handleErrors: function handleErrors(data) {
+    var _this = this;
+
+    data.errors.map(function (item) {
+      _this.setState({ alerts: _this.state.alerts.concat([new ErrorAlert(item.message.message)]) });
+    });
   },
 
   handleChangeType: function handleChangeType(event) {
@@ -33,8 +43,14 @@ var DomainEdit = React.createClass({
 
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
-    DomainActions.update(this.state.data.domain);
-    this.setState({ alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')]) });
+    if (_.isUndefined(this.state.data.domain.id)) {
+      console.log(this.state.data.domain);
+      DomainActions.create(this.state.data.domain);
+      this.setState({ alerts: this.state.alerts.concat([new SuccessAlert('Domain created')]) });
+    } else {
+      DomainActions.update(this.state.data.domain);
+      this.setState({ alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')]) });
+    }
   },
 
   render: function render() {
@@ -66,6 +82,7 @@ var DomainEdit = React.createClass({
                 labelClassName: 'col-md-2',
                 wrapperClassName: 'col-md-10',
                 ref: 'name',
+                required: true,
                 onChange: this.handleChange,
                 value: this.state.data.domain.name })
             ),
@@ -113,7 +130,7 @@ var DomainEdit = React.createClass({
                 { className: 'form-group' },
                 React.createElement(
                   'label',
-                  { className: 'col-md-2' },
+                  { className: 'control-label col-md-2' },
                   'Last check'
                 ),
                 React.createElement(
@@ -121,7 +138,6 @@ var DomainEdit = React.createClass({
                   { className: 'col-md-10' },
                   React.createElement(DateTimeField, {
                     ref: 'last_check',
-                    defaultText: '',
                     onChange: this.handleChange,
                     format: 'X',
                     inputFormat: 'DD.MM.YYYY HH:mm',

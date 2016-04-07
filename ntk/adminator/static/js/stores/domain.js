@@ -28,6 +28,19 @@ var domainStore = Reflux.createStore({
     });
   },
 
+  onDelete: function onDelete(id) {
+    var _this = this;
+    $.ajax({
+      url: '/domain/' + id,
+      method: 'DELETE',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function success(result) {
+        _this.onList();
+      }
+    });
+  },
+
   onRead: function onRead(id) {
     var _this2 = this;
 

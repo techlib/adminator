@@ -1,13 +1,9 @@
 'use strict';
 
 var deviceStore = Reflux.createStore({
+  mixins: [ErrorMixin],
   listenables: [DeviceActions],
   data: {'device': [], 'list': [], 'errors': []},
-
-  handleError(method, status, message){
-    this.data.errors = [{'method': method, 'status': status, 'message': message}]
-    this.trigger(this.data)
-  },
 
   onRead(id) {
     $.ajax({url: `/device/${id}`, 
