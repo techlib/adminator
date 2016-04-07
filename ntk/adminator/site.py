@@ -9,6 +9,7 @@ from werkzeug.exceptions import Unauthorized, NotFound
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import DataError
+from sqlalchemy.exc import SQLAlchemyError
 
 from simplejson import dumps
 import flask
@@ -55,8 +56,8 @@ def make_website_app(manager, debug):
     def unauthorized(e):
         return flask.render_template('unauthorized.html')
 
-    @app.errorhandler(DataError)
-    def handle_data_error(error):
+    @app.errorhandler(SQLAlchemyError)
+    def handle_sqlalchemy_error(error):
         response = flask.jsonify({'message': error.message})
         response.status_code = 500
         return response
