@@ -178,6 +178,7 @@ def make_site(db, manager, access_model, debug=False):
     @app.route('/network/<uuid>', methods=['GET', 'PUT', 'DELETE'])
     def network_item_handler(uuid):
         if 'GET' == flask.request.method:
+            print(manager.network.get_item(uuid))
             return flask.jsonify(manager.network.get_item(uuid))
         if 'DELETE' == flask.request.method:
             return flask.jsonify(manager.network.delete(uuid))

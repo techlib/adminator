@@ -39,7 +39,7 @@ class RangeType(UserDefinedType):
 
     def result_processor(self, dialect, coltype):
         def process(value):
-            return (value.lower, value.upper)
+            return (value.lower(), value.upper())
         return process
 
 
