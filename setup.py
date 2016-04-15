@@ -1,22 +1,27 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
 
 from setuptools import setup
+import os.path
 
 setup(
-    name = 'python-adminator',
+    name = 'adminator',
     version = '1',
     author = 'NTK',
-    description = ('example application for NTK'),
+    description = ('PDNS, Kea and FreeRADIUS Configuration Tool'),
     license = 'MIT',
-    keywords = 'example NTK',
-    url = 'http://redmine.ntkcz.cz/',
-    packages=['ntk',
-              'ntk.common',
-              'ntk.adminator'],
-    classifiers=[
+    keywords = 'pdns DNS DHCP Kea FreeRADIUS configuration',
+    url = 'http://github.com/techlib/adminator',
+    include_package_data = True,
+    package_data = {
+        '': ['*.png', '*.js', '*.html'],
+    },
+    packages = [
+        'adminator',
+    ],
+    classifiers = [
         'License :: OSI Approved :: MIT License',
     ],
-    scripts=['adminator']
+    scripts = ['adminator-daemon']
 )
 
 

@@ -1,9 +1,5 @@
-flask
-pyopenssl
-psycopg2
-requests
-simplejson
-sqlalchemy
-sqlsoup
-twisted
-urllib3
+Twisted
+Werkzeug
+Flask
+SQLAlchemy
+SQLSoup
