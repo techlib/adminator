@@ -86,7 +86,6 @@ var Domain = React.createClass({
                      sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                      resultsPerPage='20'
                      columns={['name', 'actions']}
-                     changeFilter={this.setFilter}
                      columnMetadata={columnMeta}
                      />
           </div>

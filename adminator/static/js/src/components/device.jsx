@@ -169,7 +169,8 @@ var Device = React.createClass({
                      sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                      columns={['interfaces', 'description', 'type', 'user', 'valid', 'actions']}
                      resultsPerPage='20'
-                     customFilter={regexGridFilter}
+                     customFilterer={regexGridFilter}
+                     useCustomFilterer='true'
                      columnMetadata={columnMeta}
                      />
           </div>

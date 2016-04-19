@@ -59,7 +59,8 @@ var DomainDetail = React.createClass({
           sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
           columns: ['name', 'type', 'content', 'actions'],
           resultsPerPage: '20',
-          customFilter: regexGridFilter,
+          customFilterer: regexGridFilter,
+          useCustomFilterer: 'true',
           columnMetadata: columnMeta
         })
       )
