@@ -51,7 +51,7 @@ var userStore = Reflux.createStore({
   },
 
   onList() {
-    $.ajax({url: '/user', success: result => {
+    $.ajax({url: '/user/', success: result => {
         this.data.list = result.result
         this.trigger(this.data)
       }

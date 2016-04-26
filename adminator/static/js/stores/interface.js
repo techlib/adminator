@@ -73,7 +73,7 @@ var interfaceStore = Reflux.createStore({
   onList: function onList() {
     var _this6 = this;
 
-    $.ajax({ url: '/interface', success: function success(result) {
+    $.ajax({ url: '/interface/', success: function success(result) {
         _this6.data['list'] = result.result;
         _this6.trigger(_this6.data);
       }
