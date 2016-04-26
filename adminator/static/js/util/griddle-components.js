@@ -7,6 +7,12 @@ function regexGridFilter(rows, filter) {
   _.each(filterArr, function (match) {
     _.each(rows, function (row, row_id) {
       _.each(row, function (v, k) {
+        if (_.isArray(v)) {
+          v = _.map(v, _.values).toString();
+        }
+        if (_.isObject(v)) {
+          v = _.values(v).toString();
+        }
         if (match.substr(0, 1) == '/') {
           var re = new RegExp(match.substr(1, match.length - 1));
           if ((v || "").toString().search(re) >= 0) {
