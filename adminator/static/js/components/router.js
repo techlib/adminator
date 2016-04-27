@@ -11,5 +11,6 @@ ReactDOM.render(React.createElement(
   React.createElement(Route, { path: "/device", component: Device }),
   React.createElement(Route, { path: "/device/:id", component: DeviceDetail }),
   React.createElement(Route, { path: "/record/:id", component: RecordDetail }),
-  React.createElement(Route, { path: "/record/", component: Record })
+  React.createElement(Route, { path: "/record/", component: Record }),
+  React.createElement(Route, { path: "/lease/", component: Lease })
 ), document.getElementById("AdminatorApp"));

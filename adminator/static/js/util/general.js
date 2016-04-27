@@ -66,6 +66,15 @@ var AdminNavbar = React.createClass({
             { eventKey: 2 },
             "Records"
           )
+        ),
+        React.createElement(
+          LinkContainer,
+          { to: "/lease/" },
+          React.createElement(
+            NavItem,
+            { eventKey: 2 },
+            "Leases"
+          )
         )
       )
     );
