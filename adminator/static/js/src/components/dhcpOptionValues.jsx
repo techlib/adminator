@@ -1,17 +1,18 @@
 var DhcpOptionValues = React.createClass({
 
     componentWillReceiveProps(p) {
-        this.setState({'values': this.props.values});
+        this.setState(p);
     },
 
     getInitialState() {
-        return {'values': []}
+        this.state = {'values': []}
+        return this.state;
     },
 
     handleAdd() {
         let option = this.refs.newType.value;
         this.state.values.push({
-            'type': 'string', 
+            'type': 'string',
             'array': false,
             'value': '',
             'option': option
@@ -21,9 +22,6 @@ var DhcpOptionValues = React.createClass({
 
     handleRemove(index) {
         let removed = this.state.values.splice(index, 1);
-        if (_.has(removed, 'uuid')) {
-            this.state.removed.push(removed.uuid);
-        }
         this.setState(this.state);
     },
 
@@ -34,8 +32,12 @@ var DhcpOptionValues = React.createClass({
         return _.omit(this.props.options, excluded);
     },
 
-    getFormResult() {
-        return {};
+    getValues() {
+        var results = {};
+        this.state.values.map((item, key) => {
+            results[item.option] = this.refs[item.option].getValue();
+        })
+        return results;
     },
 
     render() {
@@ -48,7 +50,8 @@ var DhcpOptionValues = React.createClass({
                                 <DhcpRow
                                     optionDesc={option}
                                     value={item}
-                                    key={option.uuid} 
+                                    key={option.uuid}
+                                    ref={option.uuid}
                                     deleteHandler={this.handleRemove.bind(null,i)}/>
                            </div>
                 }
@@ -78,9 +81,6 @@ var DhcpOptionValues = React.createClass({
                   </div>
            </div>
            </form>
-
-
-
         </div>)
     }
 })
@@ -97,15 +97,27 @@ let DhcpRow = React.createClass({
         this.setState(this.state);
     },
 
+    changeHandler(value) {
+        this.state.value = value;
+    },
+
+    getValue() {
+        return this.refs[this.state.name].getValue();
+    },
+
     getEdit(type, array, values, name) {
         if (array) {
             let typeFactory = this.getEditControl(type)
             return <ArrayControl type={type}
                                  t={typeFactory}
                                  name={name}
+                                 ref={name}
                                  values={values} />
         } else {
-            return this.getEditControl(type)({'value': values, 'id': name})
+            return this.getEditControl(type)({
+                'value': values,
+                'id': name,
+                'ref': name})
         }
     },
 
@@ -116,19 +128,19 @@ let DhcpRow = React.createClass({
         else if (type == 'boolean')
             return React.createFactory(DhcpTypeBool)
         else if (type == 'ipv4-address')
-            return React.createFactory(DhcpTypeString)
+            return React.createFactory(DhcpTypeIpv4)
         else if (type == 'ipv6-address')
-            return React.createFactory(DhcpTypeString)
+            return React.createFactory(DhcpTypeIpv6)
         else if (type == 'fqdn')
-            return React.createFactory(DhcpTypeString)
+            return React.createFactory(DhcpTypeFqdn)
         else if (type == 'binary')
-            return React.createFactory(DhcpTypeString)
+            return React.createFactory(DhcpTypeBinary)
         else if (type == 'empty')
             return React.createFactory(DhcpTypeEmpty)
         else if (type == 'record')
             return React.createFactory(DhcpTypeString)
         else if (type.indexOf('int') != -1)
-            return React.createFactory(DhcpTypeString)
+            return React.createFactory(DhcpTypeInt)
         else
             return React.createFactory(DhcpTypeEmpty)
 
@@ -155,7 +167,6 @@ let DhcpRow = React.createClass({
           </div>)
     }
 })
-
 
 let ArrayControl = React.createClass({
 
@@ -186,6 +197,10 @@ let ArrayControl = React.createClass({
         }).join(',');
     },
 
+    getValue() {
+        return this.state.value;
+    },
+
     handleAdd() {
         this.state.counter++;
         this.state.values.push({'c': this.state.counter, 'val': ''});
@@ -199,8 +214,9 @@ let ArrayControl = React.createClass({
         this.setState(this.state);
     },
 
-    handleChildChange(i, evt) {
+    handleChildChange(i, id, evt) {
         this.state.values[i].val = evt.target.value;
+        this.refs[id].setValue(evt.target.value);
         this.updateValue();
         this.setState(this.state);
     },
@@ -211,11 +227,13 @@ let ArrayControl = React.createClass({
             <div>
             {
                 this.state.values.map((item, i) => {
-                return <div key={item.c}>
+                    var id = this.props.name + ((i==0) ? '' : '-' + i);
+                    return <div key={item.c}>
                     <div className="input-group">
                         {t({
-                            changeHandler: this.handleChildChange.bind(null, i),
-                            id: this.props.name + ((i==0) ? '' : '-' + i),
+                            changeHandler: this.handleChildChange.bind(null, i, id),
+                            id: id,
+                            ref: id,
                             value: this.state.values[i].val})}
                         <span className="input-group-addon" 
                               onClick={this.handleRemove.bind(null, i)}>
