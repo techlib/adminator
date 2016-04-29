@@ -23,6 +23,14 @@ var UserActions = Reflux.createActions([
   'create', 'read', 'update', 'delete', 'list'
 ])
 
+var Lease6Actions = Reflux.createActions([
+  'read', 'delete', 'list'
+])
+
+var Lease4Actions = Reflux.createActions([
+  'read', 'delete', 'list'
+])
+
 var DhcpOptionActions = Reflux.createActions([
     'list'
 ])

@@ -227,6 +227,27 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.record.update(record))
 
 
+    # Leases
+    @app.route('/lease4/', methods=['GET'])
+    def lease4_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.lease4.list())
+
+    @app.route('/lease4/<cn>', methods=['DELETE'])
+    def lease4_item_handler(cn):
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.lease4.delete(cn))
+
+    @app.route('/lease6/', methods=['GET'])
+    def lease6_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.lease6.list())
+
+    @app.route('/lease6/<cn>', methods=['DELETE'])
+    def lease6_item_handler(cn):
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.lease6.delete(cn))
+
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         manager.db.rollback()
@@ -236,4 +257,3 @@ def make_site(db, manager, access_model, debug=False):
 
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-

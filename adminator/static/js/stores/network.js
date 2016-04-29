@@ -54,7 +54,7 @@ var networkStore = Reflux.createStore({
   onList: function onList() {
     var _this3 = this;
 
-    $.ajax({ url: '/network', success: function success(result) {
+    $.ajax({ url: '/network/', success: function success(result) {
         _this3.data.list = result.result;
         _this3.trigger(_this3.data);
       }

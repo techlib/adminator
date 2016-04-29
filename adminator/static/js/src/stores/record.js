@@ -51,7 +51,7 @@ var recordStore = Reflux.createStore({
   },
 
   onList() {
-    $.ajax({url: '/record', success: result => {
+    $.ajax({url: '/record/', success: result => {
         this.data['list'] = result.result
         this.trigger(this.data)
       }

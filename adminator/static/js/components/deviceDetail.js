@@ -101,6 +101,11 @@ var InterfaceForm = React.createClass({
     this.setState({ item: this.state.item });
   },
 
+  handleChangeMacaddr: function handleChangeMacaddr(e) {
+    this.state.item.macaddr = e.target.value.replace(/-/gi, ':');
+    this.setState({ item: this.state.item });
+  },
+
   handleChange: function handleChange(e) {
     this.state.item[e.target.name] = e.target.value;
     this.setState({ item: this.state.item });
@@ -120,7 +125,7 @@ var InterfaceForm = React.createClass({
         wrapperClassName: 'col-xs-10',
         required: true,
         value: this.state.item.macaddr,
-        onChange: this.handleChange }),
+        onChange: this.handleChangeMacaddr }),
       React.createElement(Input, {
         type: 'text',
         label: 'Hostname',

@@ -1,36 +1,32 @@
-
-
-
-function regexGridFilter(filter, item, deep) {
-  if(typeof deep !== 'object'){
-    var deep = this.deep;
-  }
-  var arr = deep.keys(item);
+function regexGridFilter(rows, filter) {
   var filterArr = s.trim(filter).split(' ');
-  var c = 0;
-  for (var j = 0; j < filterArr.length; j++){
-   for (var i = 0; i < arr.length; i++) {
-    if(filterArr[j][0] == '/'){
-      var re = new RegExp(filterArr[j].substring(1))
-      if ((deep.getAt(item, arr[i]) || "").toString().search(re) >= 0) {
-        c++;
-        break;
-      }
-    } else {
-      if(typeof(deep.getAt(item, arr[i])) == 'object' && deep.getAt(item, arr[i]) !== null){
-        for (var k in deep.getAt(item, arr[i])){
-          return regexGridFilter(filter, deep.getAt(item, arr[i])[k], deep)
+  var results = []
+
+  _.each(filterArr, (match) => {
+    _.each(rows, (row,row_id) => {
+      _.each(row, (v,k) => {
+        if(_.isArray(v)){
+                v = _.map(v, _.values).toString()
         }
-      }
-      if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filterArr[j].toLowerCase()) >= 0) {
-       c++;
-       break;
-      }
-    }
-   }
-  }
-  if(c == filterArr.length){
-     return true;
-  }
-  return false;
+        if(_.isObject(v)){
+                v = _.values(v).toString()
+        }
+        if(match.substr(0,1) == '/'){
+          var re = new RegExp(match.substr(1, match.length-1))
+          if( ( v || "").toString().search(re) >= 0 ){
+            results.push(row)
+            return
+          }
+        } else {
+          if( (v || "").toString().toLowerCase().indexOf(match.toLowerCase()) >= 0 ){
+            results.push(row)
+            return
+          }
+        }
+      })
+    })
+    rows = results
+    results = []
+  })
+  return rows
 }

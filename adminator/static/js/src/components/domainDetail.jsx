@@ -50,7 +50,8 @@ var DomainDetail = React.createClass({
                    sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
                    columns={['name', 'type','content', 'actions']}
                    resultsPerPage='20'
-                   customFilter={regexGridFilter}
+                   customFilterer={regexGridFilter}
+                   useCustomFilterer='true'
                    columnMetadata={columnMeta}
                    />
        </div>

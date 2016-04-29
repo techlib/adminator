@@ -40,6 +40,11 @@ var AdminNavbar = React.createClass({
                   Records
                 </NavItem>
               </LinkContainer>
+              <LinkContainer to='/lease/'>
+                <NavItem eventKey={2}>
+                  Leases
+                </NavItem>
+              </LinkContainer>
             </Nav>
     </div>
     )

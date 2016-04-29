@@ -51,7 +51,7 @@ var domainStore = Reflux.createStore({
   },
 
   onList() {
-    $.ajax({url: '/domain', success: result => {
+    $.ajax({url: '/domain/', success: result => {
         this.data['list'] = result.result
         this.trigger(this.data)
       }

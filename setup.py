@@ -1,4 +1,5 @@
 #!/usr/bin/python3 -tt
+# -*- coding: utf-8 -*-
 
 from setuptools import setup
 import os.path
@@ -26,4 +27,3 @@ setup(
 
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-

@@ -3,3 +3,4 @@ Werkzeug
 Flask
 SQLAlchemy
 SQLSoup
+psycopg2

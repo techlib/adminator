@@ -77,7 +77,7 @@ var deviceStore = Reflux.createStore({
   onList: function onList() {
     var _this6 = this;
 
-    $.ajax({ url: '/device', success: function success(result) {
+    $.ajax({ url: '/device/', success: function success(result) {
         _this6.data.errors = [];
         _this6.data.list = result.result;
         _this6.trigger(_this6.data);

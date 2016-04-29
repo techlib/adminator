@@ -9,6 +9,7 @@ ReactDOM.render((
     <Route path="/device/:id" component={DeviceDetail} />
     <Route path="/record/:id" component={RecordDetail} />
     <Route path="/record/" component={Record} />
+    <Route path="/lease/" component={Lease} />
   </Router>
  ), document.getElementById("AdminatorApp")
 )

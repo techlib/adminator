@@ -1,4 +1,6 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
+# -*- coding: utf-8 -*-
+
 from adminator.utils import object_to_dict
 from sqlalchemy.orm import class_mapper
 
@@ -76,4 +78,3 @@ class Model(object):
         return mapper.relationships.keys()
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-
