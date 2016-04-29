@@ -1,4 +1,6 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 from pprint import pprint as pp
 import inspect
@@ -32,4 +34,3 @@ def object_to_dict(obj, found=None, include=[]):
     return out
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-

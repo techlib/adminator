@@ -1,4 +1,6 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
+# -*- coding: utf-8 -*-
+
 from adminator.model import Model
 
 __all__ = ['Record']
@@ -11,4 +13,3 @@ class Record(Model):
         self.pkey = 'id'
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-

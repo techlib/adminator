@@ -1,4 +1,6 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
+# -*- coding: utf-8 -*-
+
 from adminator.model import Model
 
 __all__ = ['Device']
@@ -15,4 +17,3 @@ class Device(Model):
         self.include_relations = {'item': ['interfaces', 'dhcp_options', 'users'], 'list': ['users', 'interfaces']}
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-

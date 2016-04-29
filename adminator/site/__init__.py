@@ -257,4 +257,3 @@ def make_site(db, manager, access_model, debug=False):
 
 
 # vim:set sw=4 ts=4 et:
-# -*- coding: utf-8 -*-
