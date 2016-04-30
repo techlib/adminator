@@ -1,11 +1,11 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
-
 from adminator.site import *
 from adminator.rbac import *
 from adminator.manager import *
 
 from psycopg2.extras import DateTimeRange, Range, RangeCaster
+from psycopg2.extensions import AsIs
 from sqlalchemy.types import UserDefinedType
 from sqlalchemy.dialects.postgresql.base import ischema_names
 
@@ -42,6 +42,7 @@ class RangeType(UserDefinedType):
             return (value.lower(), value.upper())
         return process
 
+
 class InetRangeType(UserDefinedType):
     def __init__(self):
         self.caster = RangeCaster('inetrange', 'InetRange', None, None)
@@ -52,7 +53,7 @@ class InetRangeType(UserDefinedType):
     def bind_processor(self, dialect):
         def process(value):
             if value:
-                return Range(value[0], value[1])
+                return AsIs(self.caster.range(value[0], value[1], '[]'))
         return process
 
     def result_processor(self, dialect, coltype):
