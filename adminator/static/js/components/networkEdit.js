@@ -1,75 +1,27 @@
 'use strict';
 
 var NetworkEdit = React.createClass({
-    displayName: 'NetworkEdit',
+  displayName: 'NetworkEdit',
 
-    mixins: [Reflux.connect(networkStore, 'data'), Reflux.connect(dhcpOptionsStore, 'options')],
+  mixins: [Reflux.connect(networkStore, 'network')],
 
-    componentDidMount: function componentDidMount() {
-        NetworkActions.read(this.props.params.id);
-        DhcpOptionActions.list();
-    },
+  componentDidMount: function componentDidMount() {
+    NetworkActions.read(this.props.params.id);
+  },
 
-    getInitialState: function getInitialState() {
-        this.state = { 'data': { 'network': { 'dhcp_options': [] } }, 'options': [] };
-        return this.state;
-    },
+  save: function save(data) {
+    NetworkActions.update(data);
+  },
 
-    render: function render() {
-        return React.createElement(
-            'div',
-            null,
-            React.createElement(AdminNavbar, null),
-            React.createElement(
-                'div',
-                { className: 'col-xs-12 container' },
-                React.createElement(
-                    'h1',
-                    null,
-                    this.state.data.network.description
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'row' },
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(
-                            'h2',
-                            null,
-                            'Basic settings'
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'well' },
-                            React.createElement(NetworkEditForm, { values: this.state.data.network })
-                        )
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(
-                            'h2',
-                            null,
-                            'DHCP options'
-                        ),
-                        React.createElement(DhcpOptionValues, { values: this.state.data.network.dhcp_options,
-                            options: this.state.options,
-                            network: this.state.data.network.uuid })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(
-                            'h2',
-                            null,
-                            'IP pools'
-                        ),
-                        React.createElement(IPPools, { values: this.state.data.network.pools,
-                            network: this.state.data.network.uuid })
-                    )
-                )
-            )
-        );
-    }
+  getInitialState: function getInitialState() {
+    return { network: { network: {} } };
+  },
+
+  render: function render() {
+    return React.createElement(Network, {
+      title: this.state.network.network.description,
+      save_handler: this.save,
+      network_data: this.state.network.network
+    });
+  }
 });

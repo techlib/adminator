@@ -1,76 +1,99 @@
-"use strict";
-
-var NetLink = React.createClass({
-    displayName: "NetLink",
-
-    render: function render() {
-        return React.createElement(
-            Link,
-            { to: "/network/" + this.props.rowData.uuid },
-            this.props.data
-        );
-    }
-});
-
-var NetActions = React.createClass({
-    displayName: "NetActions",
-
-    render: function render() {
-        return React.createElement(
-            OverlayTrigger,
-            { placement: "top", overlay: React.createElement(
-                    Tooltip,
-                    null,
-                    "Delete"
-                ) },
-            React.createElement(
-                Button,
-                { bsStyle: "danger" },
-                React.createElement("i", { className: "fa fa-trash-o" })
-            )
-        );
-    }
-});
+'use strict';
 
 var Network = React.createClass({
-    displayName: "Network",
+    displayName: 'Network',
 
-    mixins: [Reflux.connect(networkStore, 'data')],
+    mixins: [Reflux.connect(dhcpOptionsStore, 'options')],
 
     componentDidMount: function componentDidMount() {
-        NetworkActions.list();
+        DhcpOptionActions.list();
+    },
+
+    validateData: function validateData(data) {
+        var errors = [];
+        if (!data['description']) {
+            errors.push('Description is missing');
+        };
+        if (!data['vlan']) {
+            errors.push('Vlan is missing');
+        };
+        if (!data['prefix4']) {
+            errors.push('IPv4 prefix is missing');
+        };
+        if (!data['prefix6']) {
+            errors.push('IPv6 prefix is missing');
+        };
+        return errors;
+    },
+
+    save: function save() {
+        var net = this.refs['network'].getValue();
+        var data = {
+            uuid: this.state.network['uuid'],
+            vlan: net['vlan'],
+            description: net['description'],
+            max_lease: net['max_lease'],
+            prefix4: net['prefix4'],
+            prefix6: net['prefix6'],
+            dhcp_options: this.refs.dhcp_options.getValues(),
+            pools: this.refs.pools.getValues()
+        };
+        // validate here
+        this.props.save_handler(data);
     },
 
     getInitialState: function getInitialState() {
-        this.state = { 'data': { 'list': [], 'network': {} } };
-        return this.state;
+        return { 'network': {
+                'dhcp_options': [],
+                'pools': [] },
+            'options': [] };
     },
 
-    colMetadata: [{ columnName: 'description', displayName: 'Description',
-        customComponent: NetLink }, { columnName: 'vlan', displayName: 'VLAN' }, { columnName: 'prefix', displayName: 'Prefix' }, { columnName: 'max_lease', displayName: 'Max. lease' }, { columnName: 'controls', displayName: 'Actions',
-        customComponent: NetActions }],
+    componentWillReceiveProps: function componentWillReceiveProps(p) {
+        if (p) {
+            this.setState({ 'network': p.network_data });
+        }
+    },
 
     render: function render() {
         return React.createElement(
-            "div",
+            'div',
             null,
             React.createElement(AdminNavbar, null),
             React.createElement(
-                "div",
-                { className: "col-xs-12 container" },
+                'div',
+                { className: 'col-xs-12 container' },
                 React.createElement(
-                    "h3",
+                    'h1',
                     null,
-                    "Networks"
+                    this.props.title
                 ),
-                React.createElement(Griddle, { results: this.state.data['list'],
-                    tableClassName: "table table-striped table-hover",
-                    columnMetadata: this.colMetadata,
-                    useGriddleStyles: false,
-                    showFilter: true,
-                    columns: ['description', 'vlan', 'prefix', 'max_lease', 'controls'],
-                    showPager: false
-                })
+                React.createElement(Feedback, null),
+                React.createElement(
+                    'div',
+                    { className: 'row' },
+                    React.createElement(
+                        'div',
+                        { className: 'col-xs-12 col-md-4' },
+                        React.createElement(NetworkForm, { ref: 'network',
+                            values: this.state.network,
+                            saveHandler: this.save })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'col-xs-12 col-md-4' },
+                        React.createElement(IPPools, { ref: 'pools',
+                            values: this.state.network.pools,
+                            network: this.state.network.uuid })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'col-xs-12 col-md-4' },
+                        React.createElement(DhcpOptionValues, { ref: 'dhcp_options',
+                            values: this.state.network.dhcp_options,
+                            options: this.state.options })
+                    )
+                )
             )
         );
     }

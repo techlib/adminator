@@ -55,7 +55,7 @@ var Pager = React.createClass({
       var selected = this.props.currentPage == i ? 'active' : '';
       options.push(React.createElement(
         "li",
-        { className: selected },
+        { key: i, className: selected },
         React.createElement(
           "a",
           { onClick: this.pageChange, "data-value": i },

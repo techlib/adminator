@@ -1,12 +1,16 @@
 "use strict";
 
+function onRouterUpdate(a, b) {
+  FeedbackActions.clear();
+};
 ReactDOM.render(React.createElement(
   Router,
-  null,
+  { onUpdate: onRouterUpdate, history: BrowserHistory },
   React.createElement(Route, { path: "/domain", component: Domain }),
   React.createElement(Route, { path: "/domain/:id", component: DomainDetail }),
   React.createElement(Route, { path: "/domainEdit/:id", component: DomainEdit }),
-  React.createElement(Route, { path: "/network", component: Network }),
+  React.createElement(Route, { path: "/network", component: NetworkList }),
+  React.createElement(Route, { path: "/network/new", component: NetworkNew }),
   React.createElement(Route, { path: "/network/:id", component: NetworkEdit }),
   React.createElement(Route, { path: "/device", component: Device }),
   React.createElement(Route, { path: "/device/:id", component: DeviceDetail }),

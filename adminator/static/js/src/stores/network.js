@@ -2,42 +2,64 @@
 
 var networkStore = Reflux.createStore({
   listenables: [NetworkActions],
-  data: {'network': [], 'list': []},
+  data: {network: [], list: []},
+
+  ajaxSuccess(message) {
+    FeedbackActions.set('success', message);
+  },
+
+  ajaxError(result) {
+    FeedbackActions.set('error', result.responseJSON.message)
+  },
 
   onRead(id) {
-    $.ajax({url: `/network/${id}`, success: result => {
-        this.data.network = result
-        this.trigger(this.data)
-      }
+    var me = this;
+    $.ajax({url: `/network/${id}`,
+        success: result => {
+            this.data.network = result
+            this.trigger(this.data)
+        },
+        error: result => {
+            BrowserHistory.push('/network/')
+            me.ajaxError(result)
+        }
     })
   },
 
   onDelete(id){
-    var _this = this;
+    var me = this;
     $.ajax({
       url: `/network/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
       success: result => {
-        _this.onList()
-      }
+          BrowserHistory.push('/network/')
+          me.ajaxSuccess('Network deleted')
+      },
+      error: me.ajaxError
     })
   },
 
 
   onUpdate(network){
+    var me = this;
     $.ajax({
-      url: `/network/${network.id}`,
-      method: 'PUT',
+      url: `/network/${network.uuid}`,
+      method: 'PATCH',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(network)
+      data: JSON.stringify(network),
+      success: result => {
+          BrowserHistory.push('/network/')
+          me.ajaxSuccess('Network updated')
+      },
+      error: me.ajaxError
     })
   },
 
   onCreate(network){
-    var _this = this;
+    var me = this;
     $.ajax({
       url: '/network/',
       method: 'POST',
@@ -45,8 +67,10 @@ var networkStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(network),
       success: result => {
-        _this.onList()
-      }
+          BrowserHistory.push(`/network/${result.uuid}`)
+          me.ajaxSuccess('Network created')
+      },
+      error: me.ajaxError
     })
   },
 

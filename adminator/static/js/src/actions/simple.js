@@ -35,3 +35,6 @@ var DhcpOptionActions = Reflux.createActions([
     'list'
 ])
 
+var FeedbackActions = Reflux.createActions([
+    'clear', 'set'
+])

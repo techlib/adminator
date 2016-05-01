@@ -17,3 +17,5 @@ var Lease6Actions = Reflux.createActions(['read', 'delete', 'list']);
 var Lease4Actions = Reflux.createActions(['read', 'delete', 'list']);
 
 var DhcpOptionActions = Reflux.createActions(['list']);
+
+var FeedbackActions = Reflux.createActions(['clear', 'set']);

@@ -1,63 +1,79 @@
-let NetLink = React.createClass({
-  render: function(){
-    return  <Link to={`/network/${this.props.rowData.uuid}`}>
-                {this.props.data}
-            </Link>
+var Network = React.createClass({
+
+    mixins: [Reflux.connect(dhcpOptionsStore, 'options')],
+
+    componentDidMount() {
+        DhcpOptionActions.list();
+    },
+
+    validateData(data) {
+        var errors = []
+        if (!data['description']) {errors.push('Description is missing')};
+        if (!data['vlan']) {errors.push('Vlan is missing')};
+        if (!data['prefix4']) {errors.push('IPv4 prefix is missing')};
+        if (!data['prefix6']) {errors.push('IPv6 prefix is missing')};
+        return errors;
+    },
+
+    save() {
+        var net = this.refs['network'].getValue();
+        var data = {
+            uuid: this.state.network['uuid'],
+            vlan: net['vlan'],
+            description: net['description'],
+            max_lease: net['max_lease'],
+            prefix4: net['prefix4'],
+            prefix6: net['prefix6'],
+            dhcp_options: this.refs.dhcp_options.getValues(),
+            pools: this.refs.pools.getValues(),
+        }
+        // validate here
+        this.props.save_handler(data);
+    },
+
+    getInitialState() {
+        return {'network': {
+                    'dhcp_options': [],
+                    'pools': []},
+                'options': []}
+    },
+
+    componentWillReceiveProps(p) {
+        if (p) {
+            this.setState({'network': p.network_data});
+        }
+    },
+
+    render() {
+        return (
+        <div>
+            <AdminNavbar />
+            <div className="col-xs-12 container">
+                <h1>{this.props.title}</h1>
+                <Feedback />
+                <div className="row">
+                    <div className="col-xs-12 col-md-4">
+                        <NetworkForm ref="network"
+                                     values={this.state.network}
+                                     saveHandler={this.save}/>
+                    </div>
+
+                    <div className="col-xs-12 col-md-4">
+                        <IPPools ref="pools"
+                                 values={this.state.network.pools}
+                                 network={this.state.network.uuid} />
+                    </div>
+
+                    <div className="col-xs-12 col-md-4">
+                        <DhcpOptionValues ref="dhcp_options"
+                                          values={this.state.network.dhcp_options}
+                                          options={this.state.options} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
   }
 });
 
-let NetActions = React.createClass({
-    render() {
-        return (
-        <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-              <Button bsStyle="danger">
-                <i className="fa fa-trash-o"></i>
-              </Button>
-        </OverlayTrigger>
-        )
-    }
-})
-
-var Network = React.createClass({
-
-  mixins: [Reflux.connect(networkStore, 'data')],
-
-  componentDidMount() {
-    NetworkActions.list();
-  },
-
-  getInitialState() {
-    this.state = {'data': {'list': [], 'network': {}}}
-    return this.state;
-  },
-
-  colMetadata: [
-        {columnName: 'description', displayName: 'Description',
-            customComponent: NetLink},
-        {columnName: 'vlan', displayName: 'VLAN'},
-        {columnName: 'prefix', displayName: 'Prefix'},
-        {columnName: 'max_lease', displayName: 'Max. lease'},
-        {columnName: 'controls', displayName: 'Actions',
-            customComponent: NetActions},
-  ],
-
-   render() {
-    return (
-    <div>
-        <AdminNavbar />
-        <div className="col-xs-12 container">
-        <h3>Networks</h3>
-            <Griddle results={this.state.data['list']}
-                tableClassName='table table-striped table-hover'
-                columnMetadata={this.colMetadata}
-                useGriddleStyles={false}
-                showFilter={true}
-                columns={['description', 'vlan', 'prefix', 'max_lease', 'controls']}
-                showPager={false}
-            />
-        </div>
-    </div>
-         )
-   }
-});
 

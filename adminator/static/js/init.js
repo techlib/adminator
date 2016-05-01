@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 var React = window.React;
 var Reflux = window.Reflux;
 var ReactRouter = window.ReactRouter;
@@ -19,3 +20,4 @@ var Tooltip = ReactBootstrap.Tooltip;
 var Alert = ReactBootstrap.Alert;
 var DateTimeField = window.ReactBootstrapDatetimepicker;
 var Typeahead = window.ReactTypeahead.Typeahead;
+var BrowserHistory = window.History.createHashHistory()

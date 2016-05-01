@@ -8,7 +8,7 @@ var dhcpOptionsStore = Reflux.createStore({
     $.ajax({url: '/dhcp-options/', success: result => {
         let res = {};
         _.each(result.result, (item) => {
-            res[item.uuid] = item
+            res[item.name] = item
         });
         this.trigger(res);
       }

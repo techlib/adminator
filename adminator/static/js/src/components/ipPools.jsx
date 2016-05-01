@@ -7,8 +7,7 @@ var IPPools = React.createClass({
     },
 
     getInitialState() {
-        this.state = {'values': []}
-        return this.state;
+        return {'values': []}
     },
 
     handleAdd() {
@@ -22,52 +21,59 @@ var IPPools = React.createClass({
         this.setState(this.state);
     },
 
-    handleChange(index, rangeIndex, event) {
-        this.state.values[index].range[rangeIndex] = event.target.value;
-        this.setState(this.state);
-    },
-
     getValues() {
-        return this.state.values;
+        return this.state.values.map((item, index) => {
+            var result = {
+                'range': [this.refs[item.uuid + '-0'].value,
+                          this.refs[item.uuid + '-1'].value]
+            };
+            if (item.uuid.indexOf('new-') !== 0) {
+                result.uuid = item.uuid;
+            }
+            return result;
+        });
     },
 
     render() {
         return (
-            <div className="well">
+            <div className="panel panel-default">
+            <div className="panel-heading">
+                <h3 className="panel-title">IP pools</h3>
+            </div>
+            <div className="panel-body">
+
             {this.state.values.map((item, i) => {
                 return <div className="row" key={item.uuid}>
                     <div className="col-xs-6">
                         <input className="form-control"
-                               type="text"
-                               onChange={this.handleChange.bind(null, i, 0)}
-                               value={item.range[0]}/>
+                            type="text"
+                            ref={item.uuid + '-0'}
+                            defaultValue={item.range[0]}/>
                     </div>
                     <div className="col-xs-6">
                         <div className="input-group">
-                            <input type="text" 
-                                   className="form-control" 
-                                   onChange={this.handleChange.bind(null, i, 1)}
-                                   value={item.range[1]}/>
+                            <input type="text"
+                                className="form-control"
+                                ref={item.uuid + '-1'}
+                                defaultValue={item.range[1]}/>
 
-                            <span className="input-group-addon">
-                                <a onClick={this.handleRemove.bind(null,i)}>
+                            <span className="input-group-addon"
+                                onClick={this.handleRemove.bind(null,i)}>
                                     <i className="fa fa-trash"></i>
-                                </a>
                             </span>
                         </div>
                         </div>
                     </div>
                 })
             }
-            <div className="row">
-                <div className="col-xs-12">
+        </div>
+            <div className="panel-footer">
                 <a onClick={this.handleAdd}
                     className="btn button btn-success">
                     <i className="fa fa-plus"></i> Add</a>
-                </div>
             </div>
 
-            </div>
+        </div>
         );
     }
 

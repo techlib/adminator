@@ -33,54 +33,63 @@ var DhcpOptionValues = React.createClass({
     },
 
     getValues() {
-        var results = {};
-        this.state.values.map((item, key) => {
-            results[item.option] = this.refs[item.option].getValue();
+        return this.state.values.map((item, key) => {
+            return {'option': item.option,
+                    'value':  this.refs[item.option].getValue()};
         })
-        return results;
     },
 
     render() {
-        return (<div className='col-xs-12 container well'>
-            <form className='form-horizontal'>
-            {this.state.values.map((item, i) => {
-                if (_.has(this.props.options, item.option)) {
-                    let option = this.props.options[item.option];
-                    return <div className="form-group" key={item.option}>
-                                <DhcpRow
-                                    optionDesc={option}
-                                    value={item}
-                                    key={option.uuid}
-                                    ref={option.uuid}
-                                    deleteHandler={this.handleRemove.bind(null,i)}/>
-                           </div>
-                }
-              })
-            }
-           <div className="row form-group">
-                <div className="form-group">
-                    <label className="col-xs-4 control-label">
-                        <i className="">new option</i>
-                    </label>
-                        <div className="col-xs-5">
-                     <select
-                        ref='newType'
-                        className="form-control">
-                        {
-                            _.map(this.getAvailableOptions(), (item, key) => {
-                                return <option value={item.uuid}
-                                    key={item.uuid}>{item.name}</option>
-                            })
+        return (
+            <div className='panel panel-default'>
+                <div className='panel-heading'>
+                    <h3 className='panel-title'>DHCP options</h3>
+                </div>
+                <div className='panel-body'>
+                    <form className='form-horizontal'>
+                    {this.state.values.map((item, i) => {
+                        if (_.has(this.props.options, item.option)) {
+                            let option = this.props.options[item.option];
+                            return <div className="form-group" key={option.name}>
+                                        <DhcpRow
+                                            optionDesc={option}
+                                            value={item}
+                                            key={option.name}
+                                            ref={option.name}
+                                            index={i}
+                                            deleteHandler={this.handleRemove}/>
+                                   </div>
                         }
-                    </select>
+                      })
+                    }
+               </form>
+           </div>
+           <div className='panel-footer'>
+              <div className="row">
+                    <label className="col-xs-5 text-right">new option</label>
+                    <div className="col-xs-5">
+                         <select
+                            ref='newType'
+                            className="form-control">
+                            {
+                                _.map(this.getAvailableOptions(), (item, key) => {
+                                    return <option value={item.name}
+                                                    key={item.name}>
+                                                    {item.name}
+                                           </option>
+                                })
+                            }
+                        </select>
                     </div>
 
                     <div className="col-xs-1">
-        <a onClick={this.handleAdd} className="btn button btn-success"> <i className="fa fa-plus"></i> Add</a>
-                        </div>
-                  </div>
-           </div>
-           </form>
+                        <a onClick={this.handleAdd} 
+                            className="btn button btn-success">
+                            <i className="fa fa-plus"></i> Add
+                        </a>
+                    </div>
+            </div>
+          </div>
         </div>)
     }
 })
@@ -95,10 +104,6 @@ let DhcpRow = React.createClass({
         _.extend(this.state, this.props.optionDesc);
         this.state.value = this.props.value.value;
         this.setState(this.state);
-    },
-
-    changeHandler(value) {
-        this.state.value = value;
     },
 
     getValue() {
@@ -119,6 +124,10 @@ let DhcpRow = React.createClass({
                 'id': name,
                 'ref': name})
         }
+    },
+
+    handleRemove() {
+        this.props.deleteHandler(this.props.index);
     },
 
     getEditControl(type) {
@@ -157,7 +166,7 @@ let DhcpRow = React.createClass({
                 <label htmlFor={this.props.optionDesc.name} 
                        className="col-xs-5 control-label">
                     {this.props.optionDesc.name}&nbsp;
-                    <a onClick={this.props.deleteHandler}>
+                    <a onClick={this.handleRemove}>
                         <i className="fa fa-trash"></i>
                     </a>
                 </label>
@@ -192,12 +201,13 @@ let ArrayControl = React.createClass({
     },
 
     updateValue() {
-        this.state.value = _.map(this.state.values, item => {
-            return item.val;
+        this.state.value = _.map(this.refs, item => {
+            return item.getValue();
         }).join(',');
     },
 
     getValue() {
+        this.updateValue();
         return this.state.value;
     },
 
@@ -214,13 +224,6 @@ let ArrayControl = React.createClass({
         this.setState(this.state);
     },
 
-    handleChildChange(i, id, evt) {
-        this.state.values[i].val = evt.target.value;
-        this.refs[id].setValue(evt.target.value);
-        this.updateValue();
-        this.setState(this.state);
-    },
-
     render() {
         let t = this.props.t
         return (
@@ -231,7 +234,6 @@ let ArrayControl = React.createClass({
                     return <div key={item.c}>
                     <div className="input-group">
                         {t({
-                            changeHandler: this.handleChildChange.bind(null, i, id),
                             id: id,
                             ref: id,
                             value: this.state.values[i].val})}
@@ -249,5 +251,4 @@ let ArrayControl = React.createClass({
         </div>
         )
     }
-
 })

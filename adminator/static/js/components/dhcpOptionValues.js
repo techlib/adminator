@@ -4,11 +4,12 @@ var DhcpOptionValues = React.createClass({
     displayName: 'DhcpOptionValues',
 
     componentWillReceiveProps: function componentWillReceiveProps(p) {
-        this.setState({ 'values': this.props.values });
+        this.setState(p);
     },
 
     getInitialState: function getInitialState() {
-        return { 'values': [] };
+        this.state = { 'values': [] };
+        return this.state;
     },
 
     handleAdd: function handleAdd() {
@@ -24,9 +25,6 @@ var DhcpOptionValues = React.createClass({
 
     handleRemove: function handleRemove(index) {
         var removed = this.state.values.splice(index, 1);
-        if (_.has(removed, 'uuid')) {
-            this.state.removed.push(removed.uuid);
-        }
         this.setState(this.state);
     },
 
@@ -37,76 +35,92 @@ var DhcpOptionValues = React.createClass({
         return _.omit(this.props.options, excluded);
     },
 
-    getFormResult: function getFormResult() {
-        return {};
+    getValues: function getValues() {
+        var _this = this;
+
+        return this.state.values.map(function (item, key) {
+            return { 'option': item.option,
+                'value': _this.refs[item.option].getValue() };
+        });
     },
 
     render: function render() {
-        var _this = this;
+        var _this2 = this;
 
         return React.createElement(
             'div',
-            { className: 'col-xs-12 container well' },
+            { className: 'panel panel-default' },
             React.createElement(
-                'form',
-                { className: 'form-horizontal' },
-                this.state.values.map(function (item, i) {
-                    if (_.has(_this.props.options, item.option)) {
-                        var option = _this.props.options[item.option];
-                        return React.createElement(
-                            'div',
-                            { className: 'form-group', key: item.option },
-                            React.createElement(DhcpRow, {
-                                optionDesc: option,
-                                value: item,
-                                key: option.uuid,
-                                deleteHandler: _this.handleRemove.bind(null, i) })
-                        );
-                    }
-                }),
+                'div',
+                { className: 'panel-heading' },
+                React.createElement(
+                    'h3',
+                    { className: 'panel-title' },
+                    'DHCP options'
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'panel-body' },
+                React.createElement(
+                    'form',
+                    { className: 'form-horizontal' },
+                    this.state.values.map(function (item, i) {
+                        if (_.has(_this2.props.options, item.option)) {
+                            var option = _this2.props.options[item.option];
+                            return React.createElement(
+                                'div',
+                                { className: 'form-group', key: option.name },
+                                React.createElement(DhcpRow, {
+                                    optionDesc: option,
+                                    value: item,
+                                    key: option.name,
+                                    ref: option.name,
+                                    index: i,
+                                    deleteHandler: _this2.handleRemove })
+                            );
+                        }
+                    })
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'panel-footer' },
                 React.createElement(
                     'div',
-                    { className: 'row form-group' },
+                    { className: 'row' },
+                    React.createElement(
+                        'label',
+                        { className: 'col-xs-5 text-right' },
+                        'new option'
+                    ),
                     React.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'col-xs-5' },
                         React.createElement(
-                            'label',
-                            { className: 'col-xs-4 control-label' },
-                            React.createElement(
-                                'i',
-                                { className: '' },
-                                'new option'
-                            )
-                        ),
+                            'select',
+                            {
+                                ref: 'newType',
+                                className: 'form-control' },
+                            _.map(this.getAvailableOptions(), function (item, key) {
+                                return React.createElement(
+                                    'option',
+                                    { value: item.name,
+                                        key: item.name },
+                                    item.name
+                                );
+                            })
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'col-xs-1' },
                         React.createElement(
-                            'div',
-                            { className: 'col-xs-5' },
-                            React.createElement(
-                                'select',
-                                {
-                                    ref: 'newType',
-                                    className: 'form-control' },
-                                _.map(this.getAvailableOptions(), function (item, key) {
-                                    return React.createElement(
-                                        'option',
-                                        { value: item.uuid,
-                                            key: item.uuid },
-                                        item.name
-                                    );
-                                })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'col-xs-1' },
-                            React.createElement(
-                                'a',
-                                { onClick: this.handleAdd, className: 'btn button btn-success' },
-                                ' ',
-                                React.createElement('i', { className: 'fa fa-plus' }),
-                                ' Add'
-                            )
+                            'a',
+                            { onClick: this.handleAdd,
+                                className: 'btn button btn-success' },
+                            React.createElement('i', { className: 'fa fa-plus' }),
+                            ' Add'
                         )
                     )
                 )
@@ -128,21 +142,33 @@ var DhcpRow = React.createClass({
         this.setState(this.state);
     },
 
+    getValue: function getValue() {
+        return this.refs[this.state.name].getValue();
+    },
+
     getEdit: function getEdit(type, array, values, name) {
         if (array) {
             var typeFactory = this.getEditControl(type);
             return React.createElement(ArrayControl, { type: type,
                 t: typeFactory,
                 name: name,
+                ref: name,
                 values: values });
         } else {
-            return this.getEditControl(type)({ 'value': values, 'id': name });
+            return this.getEditControl(type)({
+                'value': values,
+                'id': name,
+                'ref': name });
         }
+    },
+
+    handleRemove: function handleRemove() {
+        this.props.deleteHandler(this.props.index);
     },
 
     getEditControl: function getEditControl(type) {
 
-        if (type == 'string') return React.createFactory(DhcpTypeString);else if (type == 'boolean') return React.createFactory(DhcpTypeBool);else if (type == 'ipv4-address') return React.createFactory(DhcpTypeString);else if (type == 'ipv6-address') return React.createFactory(DhcpTypeString);else if (type == 'fqdn') return React.createFactory(DhcpTypeString);else if (type == 'binary') return React.createFactory(DhcpTypeString);else if (type == 'empty') return React.createFactory(DhcpTypeEmpty);else if (type == 'record') return React.createFactory(DhcpTypeString);else if (type.indexOf('int') != -1) return React.createFactory(DhcpTypeString);else return React.createFactory(DhcpTypeEmpty);
+        if (type == 'string') return React.createFactory(DhcpTypeString);else if (type == 'boolean') return React.createFactory(DhcpTypeBool);else if (type == 'ipv4-address') return React.createFactory(DhcpTypeIpv4);else if (type == 'ipv6-address') return React.createFactory(DhcpTypeIpv6);else if (type == 'fqdn') return React.createFactory(DhcpTypeFqdn);else if (type == 'binary') return React.createFactory(DhcpTypeBinary);else if (type == 'empty') return React.createFactory(DhcpTypeEmpty);else if (type == 'record') return React.createFactory(DhcpTypeString);else if (type.indexOf('int') != -1) return React.createFactory(DhcpTypeInt);else return React.createFactory(DhcpTypeEmpty);
     },
 
     render: function render() {
@@ -159,7 +185,7 @@ var DhcpRow = React.createClass({
                 ' ',
                 React.createElement(
                     'a',
-                    { onClick: this.props.deleteHandler },
+                    { onClick: this.handleRemove },
                     React.createElement('i', { className: 'fa fa-trash' })
                 )
             ),
@@ -176,14 +202,14 @@ var ArrayControl = React.createClass({
     displayName: 'ArrayControl',
 
     componentDidMount: function componentDidMount() {
-        var _this2 = this;
+        var _this3 = this;
 
         var v = this.props.values.split(',');
         v.map(function (item, key) {
             var val = item.trim();
-            _this2.state.values.push({ 'c': _this2.state.counter,
+            _this3.state.values.push({ 'c': _this3.state.counter,
                 'val': val });
-            _this2.state.counter++;
+            _this3.state.counter++;
         });
 
         if (v.length == 0) {
@@ -199,9 +225,14 @@ var ArrayControl = React.createClass({
     },
 
     updateValue: function updateValue() {
-        this.state.value = _.map(this.state.values, function (item) {
-            return item.val;
+        this.state.value = _.map(this.refs, function (item) {
+            return item.getValue();
         }).join(',');
+    },
+
+    getValue: function getValue() {
+        this.updateValue();
+        return this.state.value;
     },
 
     handleAdd: function handleAdd() {
@@ -217,20 +248,15 @@ var ArrayControl = React.createClass({
         this.setState(this.state);
     },
 
-    handleChildChange: function handleChildChange(i, evt) {
-        this.state.values[i].val = evt.target.value;
-        this.updateValue();
-        this.setState(this.state);
-    },
-
     render: function render() {
-        var _this3 = this;
+        var _this4 = this;
 
         var t = this.props.t;
         return React.createElement(
             'div',
             null,
             this.state.values.map(function (item, i) {
+                var id = _this4.props.name + (i == 0 ? '' : '-' + i);
                 return React.createElement(
                     'div',
                     { key: item.c },
@@ -238,13 +264,13 @@ var ArrayControl = React.createClass({
                         'div',
                         { className: 'input-group' },
                         t({
-                            changeHandler: _this3.handleChildChange.bind(null, i),
-                            id: _this3.props.name + (i == 0 ? '' : '-' + i),
-                            value: _this3.state.values[i].val }),
+                            id: id,
+                            ref: id,
+                            value: _this4.state.values[i].val }),
                         React.createElement(
                             'span',
                             { className: 'input-group-addon',
-                                onClick: _this3.handleRemove.bind(null, i) },
+                                onClick: _this4.handleRemove.bind(null, i) },
                             React.createElement('i', { className: 'fa fa-trash' })
                         )
                     )
@@ -263,5 +289,4 @@ var ArrayControl = React.createClass({
             )
         );
     }
-
 });
