@@ -48,3 +48,7 @@ function isIPSameFamily(val1, val2) {
 
     return ip1.kind() == ip2.kind();
 }
+
+function notEmpty(val) {
+    return !!val;
+}
