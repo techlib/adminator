@@ -29,7 +29,7 @@ var Pager = React.createClass({
 
         for(var i = startIndex; i < endIndex ; i++){
           var selected = this.props.currentPage == i ? 'active' : '';
-            options.push(<li className={selected}><a onClick={this.pageChange} data-value={i}>{i + 1}</a></li>);
+            options.push(<li key={i} className={selected}><a onClick={this.pageChange} data-value={i}>{i + 1}</a></li>);
         }
 
         return (
