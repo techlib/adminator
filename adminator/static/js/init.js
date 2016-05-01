@@ -21,3 +21,4 @@ var Alert = ReactBootstrap.Alert;
 var DateTimeField = window.ReactBootstrapDatetimepicker;
 var Typeahead = window.ReactTypeahead.Typeahead;
 var BrowserHistory = window.History.createHashHistory()
+var ipaddr = window.ipaddr;
