@@ -14,7 +14,7 @@ var Feedback = React.createClass({
 
         return React.createElement(Message, { type: this.state.data.type,
             message: this.state.data.message,
-            extr: this.state.data.extra });
+            extra: this.state.data.extra });
     }
 
 });

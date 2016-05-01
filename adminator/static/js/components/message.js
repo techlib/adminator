@@ -3,6 +3,28 @@
 var Message = React.createClass({
     displayName: 'Message',
 
+    renderExtra: function renderExtra() {
+        if (!this.props.extra) {
+            return null;
+        }
+
+        if (Array.isArray(this.props.extra)) {
+            return React.createElement(
+                'ul',
+                null,
+                this.props.extra.map(function (item) {
+                    return React.createElement(
+                        'li',
+                        null,
+                        item
+                    );
+                })
+            );
+        } else {
+            return this.props.extra;
+        }
+    },
+
     render: function render() {
         if (this.props.type == 'success') {
             var cls = 'alert-success';
@@ -28,7 +50,8 @@ var Message = React.createClass({
                 ': '
             ),
             ' ',
-            this.props.message
+            this.props.message,
+            this.renderExtra()
         );
     }
 

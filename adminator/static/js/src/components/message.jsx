@@ -1,5 +1,22 @@
 var Message = React.createClass({
 
+    renderExtra() {
+        if (!this.props.extra) {
+            return null;
+        }
+
+        if (Array.isArray(this.props.extra)) {
+            return <ul>
+                {this.props.extra.map(item => {
+                    return <li>{item}</li>
+                })}
+            </ul>
+
+        } else {
+            return this.props.extra;
+        }
+    },
+
     render() {
         if (this.props.type == 'success') {
             var cls = 'alert-success';
@@ -18,6 +35,8 @@ var Message = React.createClass({
             <div className={clsAlert}>
                 <span className={clsIco}></span>
                 <strong>{title}: </strong> {this.props.message}
+
+                {this.renderExtra()}
             </div>
         )
     }
