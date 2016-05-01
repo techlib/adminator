@@ -12,10 +12,10 @@ var Message = React.createClass({
             return React.createElement(
                 'ul',
                 null,
-                this.props.extra.map(function (item) {
+                this.props.extra.map(function (item, index) {
                     return React.createElement(
                         'li',
-                        null,
+                        { key: index },
                         item
                     );
                 })

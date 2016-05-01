@@ -7,8 +7,8 @@ var Message = React.createClass({
 
         if (Array.isArray(this.props.extra)) {
             return <ul>
-                {this.props.extra.map(item => {
-                    return <li>{item}</li>
+                {this.props.extra.map((item, index) => {
+                    return <li key={index}>{item}</li>
                 })}
             </ul>
 
