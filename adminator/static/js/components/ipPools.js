@@ -24,12 +24,43 @@ var IPPools = React.createClass({
         this.setState(this.state);
     },
 
-    getValues: function getValues() {
+    validate: function validate() {
         var _this = this;
+
+        return _.flatten(this.state.values.map(function (item, index) {
+            var result = [];
+
+            var ip1 = _this.refs[item.uuid + '-0'].value;
+            var ip2 = _this.refs[item.uuid + '-1'].value;
+
+            if (!isIP(ip1)) {
+                result.push(ip1 + ' is not valid ip address (pools)');
+            }
+            if (!isIP(ip2)) {
+                result.push(ip2 + ' is not valid ip address (pools)');
+            }
+
+            if (result.length != 0) {
+                return result;
+            }
+
+            if (!isIPSameFamily(ip1, ip2)) {
+                result.push(ip1 + ' and ' + ip2 + ' are not the same kind');
+                return result;
+            }
+
+            return true;
+        })).filter(function (item) {
+            return item !== true;
+        });
+    },
+
+    getValues: function getValues() {
+        var _this2 = this;
 
         return this.state.values.map(function (item, index) {
             var result = {
-                'range': [_this.refs[item.uuid + '-0'].value, _this.refs[item.uuid + '-1'].value]
+                'range': [_this2.refs[item.uuid + '-0'].value, _this2.refs[item.uuid + '-1'].value]
             };
             if (item.uuid.indexOf('new-') !== 0) {
                 result.uuid = item.uuid;
@@ -39,7 +70,7 @@ var IPPools = React.createClass({
     },
 
     render: function render() {
-        var _this2 = this;
+        var _this3 = this;
 
         return React.createElement(
             'div',
@@ -81,7 +112,7 @@ var IPPools = React.createClass({
                                 React.createElement(
                                     'span',
                                     { className: 'input-group-addon',
-                                        onClick: _this2.handleRemove.bind(null, i) },
+                                        onClick: _this3.handleRemove.bind(null, i) },
                                     React.createElement('i', { className: 'fa fa-trash' })
                                 )
                             )

@@ -21,6 +21,34 @@ var IPPools = React.createClass({
         this.setState(this.state);
     },
 
+    validate() {
+        return _.flatten(this.state.values.map((item, index) => {
+            var result = []
+
+            var ip1 = this.refs[item.uuid + '-0'].value;
+            var ip2 = this.refs[item.uuid + '-1'].value;
+
+            if (!isIP(ip1)) {
+                result.push(`${ip1} is not valid ip address (pools)`);
+            }
+            if (!isIP(ip2)) {
+                result.push(`${ip2} is not valid ip address (pools)`);
+            }
+
+            if (result.length != 0) {
+                return result;
+            }
+
+            if (!isIPSameFamily(ip1, ip2)) {
+                result.push(`${ip1} and ${ip2} are not the same kind`);
+                return result;
+            }
+
+            return true;
+
+        })).filter(item => {return item !== true})
+    },
+
     getValues() {
         return this.state.values.map((item, index) => {
             var result = {

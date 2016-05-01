@@ -18,6 +18,7 @@ var Network = React.createClass({
 
         errors = errors.concat(net.validate());
         errors = errors.concat(dhcp.validate());
+        errors = errors.concat(pools.validate());
 
         if (errors.length > 0) {
             FeedbackActions.set('error', 'Form contains invalid data', errors);
