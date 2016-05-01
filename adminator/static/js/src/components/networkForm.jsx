@@ -1,7 +1,29 @@
 var NetworkForm = React.createClass({
 
-    getValue() {
+    getValues() {
         return this.state;
+    },
+
+    validate() {
+        var errors = [];
+        var data = this.state
+        if (!data['description']) {errors.push('Description is missing')};
+        if (!data['vlan']) {errors.push('Vlan is missing')};
+        if (data['vlan'] && !inRange(data['vlan'], 0, 4096)) {
+            errors.push('Vlan must be a number 0-4096')
+        };
+        if (data['prefix4'] && !isIP4Cidr(data['prefix4'])) {
+            errors.push('IPv4 prefix is invalid')
+        };
+        if (data['prefix6'] && !isIP6Cidr(data['prefix6'])) {
+            errors.push('IPv6 prefix is invalid')
+        };
+        if (!data['max_lease']) {errors.push('Max. lease is missing')};
+        if (data['max_lease'] && !isInt(data['max_lease'])) {
+            errors.push('Max. lease must be a number')
+        }
+        return errors;
+
     },
 
     componentWillReceiveProps(p) {

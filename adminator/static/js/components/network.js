@@ -9,37 +9,23 @@ var Network = React.createClass({
         DhcpOptionActions.list();
     },
 
-    validateData: function validateData(data) {
-        var errors = [];
-        if (!data['description']) {
-            errors.push('Description is missing');
-        };
-        if (!data['vlan']) {
-            errors.push('Vlan is missing');
-        };
-        if (!data['prefix4']) {
-            errors.push('IPv4 prefix is missing');
-        };
-        if (!data['prefix6']) {
-            errors.push('IPv6 prefix is missing');
-        };
-        return errors;
-    },
-
     save: function save() {
-        var net = this.refs['network'].getValue();
-        var data = {
-            uuid: this.state.network['uuid'],
-            vlan: net['vlan'],
-            description: net['description'],
-            max_lease: net['max_lease'],
-            prefix4: net['prefix4'],
-            prefix6: net['prefix6'],
-            dhcp_options: this.refs.dhcp_options.getValues(),
-            pools: this.refs.pools.getValues()
-        };
-        // validate here
-        this.props.save_handler(data);
+        var errors = [];
+
+        var net = this.refs.network;
+        var dhcp = this.refs.dhcp_options;
+        var pools = this.refs.pools;
+
+        errors = errors.concat(net.validate());
+
+        if (errors.length > 0) {
+            FeedbackActions.set('error', 'Form contains invalid data', errors);
+        } else {
+            var data = net.getValues();
+            data['dhcp_options'] = dhcp.getValues();
+            data['pools'] = pools.getValues();
+            this.props.save_handler(data);
+        }
     },
 
     getInitialState: function getInitialState() {
