@@ -39,7 +39,7 @@ function isIP6Cidr(val) {
 }
 
 function isIPSameFamily(val1, val2) {
-    if (!ipaddr.isValid(val1) || ipaddr.isValid(val2)) {
+    if (!ipaddr.isValid(val1) || !ipaddr.isValid(val2)) {
         return false;
     }
 
