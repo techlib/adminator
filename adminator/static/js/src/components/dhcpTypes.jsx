@@ -1,9 +1,25 @@
 
-var createFieldWithPattern = function(pattern) {
+var createFieldWithValidator = function(validator) {
     return React.createClass({
+
+        _validate: validator,
 
         getValue: function() {
             return this.refs[this.props.id].value;
+        },
+
+        validate: function() {
+            var value = this.getValue();
+
+            if (!notEmpty(value)) {
+                return this.props.id + ' is empty';
+            }
+
+            if (!this._validate(value)) {
+               return this.props.id + ' is invalid'
+            }
+
+            return true;
         },
 
         getInitialState: function() {
@@ -16,25 +32,25 @@ var createFieldWithPattern = function(pattern) {
                     className="form-control"
                     ref={this.props.id}
                     defaultValue={this.props.value}
-                    pattern={pattern}
                     id={this.props.id}/>
         }
     })
 
 }
 
-var DhcpTypeString = createFieldWithPattern('.*');
-var DhcpTypeInt = createFieldWithPattern('-?[0-9]+');
+var DhcpTypeString = createFieldWithValidator(notEmpty);
+var DhcpTypeInt = createFieldWithValidator(isInt);
 
-var DhcpTypeIpv4 = createFieldWithPattern('.*');
-var DhcpTypeIpv6 = createFieldWithPattern('.*');
-var DhcpTypeFqdn = createFieldWithPattern('.*');
-var DhcpTypeBinary = createFieldWithPattern('.*');
-var DhcpTypeRecord = createFieldWithPattern('.*');
-var DhcpTypeNetbios = createFieldWithPattern('.*');
+var DhcpTypeIpv4 = createFieldWithValidator(isIP4);
+var DhcpTypeIpv6 = createFieldWithValidator(isIP6);
+var DhcpTypeFqdn = createFieldWithValidator(notEmpty);
+var DhcpTypeBinary = createFieldWithValidator(notEmpty);
+var DhcpTypeRecord = createFieldWithValidator(notEmpty);
+var DhcpTypeNetbios = createFieldWithValidator(notEmpty);
 
 var DhcpTypeEmpty = React.createClass({
     getValue() {return '';},
+    validate() {return true},
     render() {return <div className="form-control-static"><i>no value</i></div> }
 })
 
@@ -46,6 +62,10 @@ var DhcpTypeBool = React.createClass({
 
     getInitialState: function() {
         return {value: ''};
+    },
+
+    validate() {
+        return this.getValue() !== undefined;
     },
 
     render() {

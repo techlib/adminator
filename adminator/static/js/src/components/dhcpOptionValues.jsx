@@ -39,6 +39,12 @@ var DhcpOptionValues = React.createClass({
         })
     },
 
+    validate() {
+        return _.flatten(this.state.values.map((item, key) => {
+            return this.refs[item.option].validate();
+        })).filter(item => {return item !== true})
+    },
+
     render() {
         return (
             <div className='panel panel-default'>
@@ -108,6 +114,10 @@ let DhcpRow = React.createClass({
 
     getValue() {
         return this.refs[this.state.name].getValue();
+    },
+
+    validate() {
+        return this.refs[this.state.name].validate();
     },
 
     getEdit(type, array, values, name) {
@@ -209,6 +219,12 @@ let ArrayControl = React.createClass({
     getValue() {
         this.updateValue();
         return this.state.value;
+    },
+
+    validate() {
+        return _.map(this.refs, item => {
+            return item.validate()
+        })
     },
 
     handleAdd() {

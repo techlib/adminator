@@ -44,8 +44,18 @@ var DhcpOptionValues = React.createClass({
         });
     },
 
-    render: function render() {
+    validate: function validate() {
         var _this2 = this;
+
+        return _.flatten(this.state.values.map(function (item, key) {
+            return _this2.refs[item.option].validate();
+        })).filter(function (item) {
+            return item !== true;
+        });
+    },
+
+    render: function render() {
+        var _this3 = this;
 
         return React.createElement(
             'div',
@@ -66,8 +76,8 @@ var DhcpOptionValues = React.createClass({
                     'form',
                     { className: 'form-horizontal' },
                     this.state.values.map(function (item, i) {
-                        if (_.has(_this2.props.options, item.option)) {
-                            var option = _this2.props.options[item.option];
+                        if (_.has(_this3.props.options, item.option)) {
+                            var option = _this3.props.options[item.option];
                             return React.createElement(
                                 'div',
                                 { className: 'form-group', key: option.name },
@@ -77,7 +87,7 @@ var DhcpOptionValues = React.createClass({
                                     key: option.name,
                                     ref: option.name,
                                     index: i,
-                                    deleteHandler: _this2.handleRemove })
+                                    deleteHandler: _this3.handleRemove })
                             );
                         }
                     })
@@ -146,6 +156,10 @@ var DhcpRow = React.createClass({
         return this.refs[this.state.name].getValue();
     },
 
+    validate: function validate() {
+        return this.refs[this.state.name].validate();
+    },
+
     getEdit: function getEdit(type, array, values, name) {
         if (array) {
             var typeFactory = this.getEditControl(type);
@@ -202,14 +216,14 @@ var ArrayControl = React.createClass({
     displayName: 'ArrayControl',
 
     componentDidMount: function componentDidMount() {
-        var _this3 = this;
+        var _this4 = this;
 
         var v = this.props.values.split(',');
         v.map(function (item, key) {
             var val = item.trim();
-            _this3.state.values.push({ 'c': _this3.state.counter,
+            _this4.state.values.push({ 'c': _this4.state.counter,
                 'val': val });
-            _this3.state.counter++;
+            _this4.state.counter++;
         });
 
         if (v.length == 0) {
@@ -235,6 +249,12 @@ var ArrayControl = React.createClass({
         return this.state.value;
     },
 
+    validate: function validate() {
+        return _.map(this.refs, function (item) {
+            return item.validate();
+        });
+    },
+
     handleAdd: function handleAdd() {
         this.state.counter++;
         this.state.values.push({ 'c': this.state.counter, 'val': '' });
@@ -249,14 +269,14 @@ var ArrayControl = React.createClass({
     },
 
     render: function render() {
-        var _this4 = this;
+        var _this5 = this;
 
         var t = this.props.t;
         return React.createElement(
             'div',
             null,
             this.state.values.map(function (item, i) {
-                var id = _this4.props.name + (i == 0 ? '' : '-' + i);
+                var id = _this5.props.name + (i == 0 ? '' : '-' + i);
                 return React.createElement(
                     'div',
                     { key: item.c },
@@ -266,11 +286,11 @@ var ArrayControl = React.createClass({
                         t({
                             id: id,
                             ref: id,
-                            value: _this4.state.values[i].val }),
+                            value: _this5.state.values[i].val }),
                         React.createElement(
                             'span',
                             { className: 'input-group-addon',
-                                onClick: _this4.handleRemove.bind(null, i) },
+                                onClick: _this5.handleRemove.bind(null, i) },
                             React.createElement('i', { className: 'fa fa-trash' })
                         )
                     )
