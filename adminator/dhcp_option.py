@@ -9,7 +9,7 @@ class DhcpOption(Model):
     def init(self):
         self.table_name = 'option'
         # Primary key
-        self.pkey = 'uuid'
+        self.pkey = 'name'
         # Relations
         self.relate('values', self.e('option_value'))
         self.include_relations = {'item': ['values'], 'list': []}

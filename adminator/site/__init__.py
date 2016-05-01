@@ -175,7 +175,7 @@ def make_site(db, manager, access_model, debug=False):
         if 'POST' == flask.request.method:
             return flask.jsonify(manager.network.insert(flask.request.get_json(force=True)))
 
-    @app.route('/network/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @app.route('/network/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
     def network_item_handler(uuid):
         if 'GET' == flask.request.method:
             print(manager.network.get_item(uuid))
@@ -186,6 +186,10 @@ def make_site(db, manager, access_model, debug=False):
             network = flask.request.get_json(force=True)
             network['uuid'] = uuid
             return flask.jsonify(manager.network.update(network))
+        if 'PATCH' == flask.request.method:
+            network = flask.request.get_json(force=True)
+            network['uuid'] = uuid
+            return flask.jsonify(manager.network.patch(network))
 
 
     # DNS
