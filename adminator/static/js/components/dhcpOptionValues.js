@@ -66,7 +66,7 @@ var DhcpOptionValues = React.createClass({
                 React.createElement(
                     'h3',
                     { className: 'panel-title' },
-                    'DHCP options'
+                    this.props.title
                 )
             ),
             React.createElement(
