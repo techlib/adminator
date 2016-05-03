@@ -8,8 +8,15 @@ let NetLink = React.createClass({
 
 let NetActions = React.createClass({
 
+    mixins: [ModalConfirmMixin],
+
     handleDelete() {
-        NetworkActions.delete(this.props.rowData.uuid);
+        var name = this.props.rowData.description;
+        this.modalConfirm('Confirm delete', `Delete ${name}?`,
+                            {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
+        .then(() => {
+            NetworkActions.delete(this.props.rowData.uuid);
+        })
     },
 
     render() {
@@ -50,7 +57,7 @@ var NetworkList = React.createClass({
 
    render() {
     return (
-    <div>
+        <div>
         <AdminNavbar />
         <div className="col-xs-12 container">
             <h3>Networks</h3>
