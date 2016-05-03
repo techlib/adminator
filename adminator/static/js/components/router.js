@@ -6,6 +6,7 @@ function onRouterUpdate(a, b) {
 ReactDOM.render(React.createElement(
   Router,
   { onUpdate: onRouterUpdate, history: BrowserHistory },
+  React.createElement(Route, { path: "/dhcp", component: Dhcp }),
   React.createElement(Route, { path: "/domain", component: Domain }),
   React.createElement(Route, { path: "/domain/:id", component: DomainDetail }),
   React.createElement(Route, { path: "/domainEdit/:id", component: DomainEdit }),

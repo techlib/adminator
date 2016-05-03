@@ -1,12 +1,12 @@
-sortDhcpOptions(options) {
+function sortDhcpOptions(options) {
     var result = {'inet': {}, 'inet6': {}};
     _.map(options, (val, key) => {
         result[val.family][key] = val
     });
     return result;
-},
+}
 
-sortDchpValues(values, options) {
+function sortDhcpValues(values, options) {
     var result = {'inet': [], 'inet6': []};
 
     _.map(values, val => {

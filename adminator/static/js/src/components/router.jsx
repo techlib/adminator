@@ -3,6 +3,7 @@ function onRouterUpdate(a,b,) {
 };
 ReactDOM.render((
   <Router onUpdate={onRouterUpdate} history={BrowserHistory}>
+    <Route path="/dhcp" component={Dhcp} />
     <Route path="/domain" component={Domain} />
     <Route path="/domain/:id" component={DomainDetail} />
     <Route path="/domainEdit/:id" component={DomainEdit} />
