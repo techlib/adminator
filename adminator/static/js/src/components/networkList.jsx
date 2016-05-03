@@ -53,11 +53,13 @@ var NetworkList = React.createClass({
     <div>
         <AdminNavbar />
         <div className="col-xs-12 container">
-        <h3>Networks</h3>
-          <a className='btn btn-success' href='#/network/new'>
-              <i className='fa fa-plus'></i> New network
-          </a>
-          <Feedback />
+            <h3>Networks</h3>
+            <Feedback />
+            <p><Link to='/dhcp/'>Global DHCP options</Link>
+              <a className='btn btn-success pull-right' href='#/network/new'>
+                  <i className='fa fa-plus'></i> New network
+              </a>
+            </p>
             <Griddle results={this.state.data['list']}
                 tableClassName='table table-striped table-hover'
                 columnMetadata={this.colMetadata}

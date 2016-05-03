@@ -68,13 +68,22 @@ var NetworkList = React.createClass({
                     null,
                     "Networks"
                 ),
-                React.createElement(
-                    "a",
-                    { className: "btn btn-success", href: "#/network/new" },
-                    React.createElement("i", { className: "fa fa-plus" }),
-                    " New network"
-                ),
                 React.createElement(Feedback, null),
+                React.createElement(
+                    "p",
+                    null,
+                    React.createElement(
+                        Link,
+                        { to: "/dhcp/" },
+                        "Global DHCP options"
+                    ),
+                    React.createElement(
+                        "a",
+                        { className: "btn btn-success pull-right", href: "#/network/new" },
+                        React.createElement("i", { className: "fa fa-plus" }),
+                        " New network"
+                    )
+                ),
                 React.createElement(Griddle, { results: this.state.data['list'],
                     tableClassName: "table table-striped table-hover",
                     columnMetadata: this.colMetadata,
