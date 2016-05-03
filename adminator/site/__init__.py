@@ -137,9 +137,13 @@ def make_site(db, manager, access_model, debug=False):
 
 
     # DHCP option values
-    @app.route('/dhcp-option-values/', methods=['GET'])
-    def list_dhpc_option_values():
-        return flask.jsonify(result=manager.dhcp_option_value.list())
+    @app.route('/dhcp-global/', methods=['GET', 'POST'])
+    def global_dhcp():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.dhcp_option_value.list_global())
+        if 'POST' == flask.request.method:
+            d = flask.request.get_json(force=True)
+            return flask.jsonify(result=manager.dhcp_option_value.set_global(d))
 
     # Available DHCP options
     @app.route('/dhcp-options/', methods=['GET'])

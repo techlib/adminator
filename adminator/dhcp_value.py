@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from adminator.model import Model
+from adminator.utils import object_to_dict
+from sqlalchemy import and_
 
 __all__ = ['DhcpOptionValue']
 
@@ -14,6 +16,15 @@ class DhcpOptionValue(Model):
         self.relate('type', self.e('option'))
         self.include_relations = {'item': ['type'], 'list': ['type']}
 
+    def list_global(self):
+        items = []
+        query = self.e().filter_by(**{'network': None, 'device': None}).all()
+
+        for item in query:
+            item = object_to_dict(item, include=self.include_relations.get('list'))
+            items.append(item)
+        return items
+
     def set_device(self, device, data):
         return self.set_options(data, 'device', device)
 
@@ -21,9 +32,11 @@ class DhcpOptionValue(Model):
         return self.set_options(data, 'network', network)
 
     def set_global(self, data):
-        return self.set_options(data);
+        res = self.set_options(data);
+        self.db.commit()
+        return list(map(object_to_dict, res))
 
-    def set_options(self, data, kind, uuid):
+    def set_options(self, data, kind=None, uuid=None):
         assert kind in ('network', 'device', None), 'Invalid kind'
 
         if kind is not None:
