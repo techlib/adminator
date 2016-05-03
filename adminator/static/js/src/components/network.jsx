@@ -43,22 +43,9 @@ var Network = React.createClass({
     },
 
     render() {
-
-        var options4 = _.pick(this.state.options, function(val) {
-            return val.family == 'inet';
-        });
-        var options6 = _.pick(this.state.options, function(val) {
-              return val.family == 'inet6';
-        });
-
-        var values4 = _.filter(this.state.network.dhcp_options, val => {
-            return _.has(this.state.options, val.option) &&
-                   this.state.options[val.option].family == 'inet';
-        });
-        var values6 = _.filter(this.state.network.dhcp_options, val => {
-             return _.has(this.state.options, val.option) &&
-                    this.state.options[val.option].family == 'inet6';
-        });
+        var values = sortDhcpValues(this.state.network.dhcp_options,
+                                     this.state.options);
+        var options = sortDhcpOptions(this.state.options);
 
         return (
         <div>
@@ -81,13 +68,13 @@ var Network = React.createClass({
 
                     <div className="col-xs-12 col-md-4">
                         <DhcpOptionValues ref="dhcp_options"
-                                          values={values4}
-                                          options={options4}
+                                          values={values.inet}
+                                          options={options.inet}
                                           title="DHCP options"/>
 
                         <DhcpOptionValues ref="dhcp_options6"
-                                          values={values6}
-                                          options={options6}
+                                          values={values.inet6}
+                                          options={options.inet6}
                                           title="DHCP options v6"/>
 
                     </div>
