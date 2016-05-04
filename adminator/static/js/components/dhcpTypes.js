@@ -97,7 +97,7 @@ var DhcpTypeBool = React.createClass({
                     name: this.props.id,
                     ref: this.props.id + '0',
                     onChange: this.handleChange,
-                    defaultChecked: this.props.value == 1
+                    defaultChecked: this.props.value == 'true'
                 }),
                 ' True'
             ),
@@ -108,7 +108,7 @@ var DhcpTypeBool = React.createClass({
                     value: '0',
                     name: this.props.id,
                     onChange: this.handleChange,
-                    defaultChecked: this.props.value == 0
+                    defaultChecked: this.props.value == 'false'
                 }),
                 ' False'
             )

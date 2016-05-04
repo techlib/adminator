@@ -72,20 +72,20 @@ var DhcpTypeBool = React.createClass({
         return (
             <div>
                 <label className="radio-inline">
-                    <input type="radio" 
-                           value="1" 
+                    <input type="radio"
+                           value="1"
                            name={this.props.id}
                            ref={this.props.id + '0'}
                            onChange={this.handleChange}
-                           defaultChecked={this.props.value==1} 
+                           defaultChecked={this.props.value=='true'}
                            /> True
                 </label>
                 <label className="radio-inline">
-                    <input type="radio" 
-                           value="0" 
-                           name={this.props.id} 
+                    <input type="radio"
+                           value="0"
+                           name={this.props.id}
                            onChange={this.handleChange}
-                           defaultChecked={this.props.value==0}
+                           defaultChecked={this.props.value=='false'}
                             /> False
                 </label>
             </div>
