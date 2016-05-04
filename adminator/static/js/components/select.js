@@ -41,7 +41,7 @@ var BootstrapSelect = React.createClass({ displayName: 'BootstrapSelect',
 
     button.click(function (e) {
       e.stopPropagation();
-      self.setState({ open: !self.state.open });
+      self.setState({ open: true });
     });
 
     items.click(function () {
