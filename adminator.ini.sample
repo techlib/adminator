@@ -1,0 +1,25 @@
+; Begin terminator configuration
+
+[http]
+; Address of HTTP server for our website.
+host = 0.0.0.0
+port = 8082
+
+; Enable Flask debugging facilities.
+debug = 1
+
+[manager]
+; Size of the thread pool dedicated to background operations.
+pool_size = 2
+
+[database]
+; PostgreSQL database access credentials.
+url = postgresql://user:password@localhost/network
+
+[access]
+; Only omnipotent users can alter the configuratiron.
+admin = +omnipotent
+
+user = +* -impotent
+
+; End adminator configuration
