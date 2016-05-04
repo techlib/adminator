@@ -59,16 +59,19 @@ var NetworkList = React.createClass({
     return (
         <div>
         <AdminNavbar />
-        <div className="col-xs-12 container">
-            <h3>Networks</h3>
-            <Feedback />
-            <p><Link to='/dhcp/'>Global DHCP options</Link>
-              <a className='btn btn-success pull-right' href='#/network/new'>
-                  <i className='fa fa-plus'></i> New network
-              </a>
-            </p>
+        <div className='col-xs-12'>
+            <div className="container-fluid">
+                <h3>Networks</h3>
+                <Feedback />
+                <p><Link to='/dhcp/'>Global DHCP options</Link>
+                    <a className='btn btn-success pull-right' href='#/network/new'>
+                        <i className='fa fa-plus'></i> New network
+                    </a>
+                </p>
+            </div>
+            <div className='container-fluid'>
             <Griddle results={this.state.data['list']}
-                tableClassName='table table-striped table-hover'
+                tableClassName='table table-bordered table-striped table-hover'
                 columnMetadata={this.colMetadata}
                 useGriddleStyles={false}
                 showFilter={true}
@@ -80,6 +83,7 @@ var NetworkList = React.createClass({
                 customPagerComponent={Pager}
                 initialSort="description"
             />
+        </div>
         </div>
     </div>
          )
