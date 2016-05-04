@@ -69,40 +69,48 @@ var NetworkList = React.createClass({
             React.createElement(AdminNavbar, null),
             React.createElement(
                 'div',
-                { className: 'col-xs-12 container' },
+                { className: 'col-xs-12' },
                 React.createElement(
-                    'h3',
-                    null,
-                    'Networks'
-                ),
-                React.createElement(Feedback, null),
-                React.createElement(
-                    'p',
-                    null,
+                    'div',
+                    { className: 'container-fluid' },
                     React.createElement(
-                        Link,
-                        { to: '/dhcp/' },
-                        'Global DHCP options'
+                        'h3',
+                        null,
+                        'Networks'
                     ),
+                    React.createElement(Feedback, null),
                     React.createElement(
-                        'a',
-                        { className: 'btn btn-success pull-right', href: '#/network/new' },
-                        React.createElement('i', { className: 'fa fa-plus' }),
-                        ' New network'
+                        'p',
+                        null,
+                        React.createElement(
+                            Link,
+                            { to: '/dhcp/' },
+                            'Global DHCP options'
+                        ),
+                        React.createElement(
+                            'a',
+                            { className: 'btn btn-success pull-right', href: '#/network/new' },
+                            React.createElement('i', { className: 'fa fa-plus' }),
+                            ' New network'
+                        )
                     )
                 ),
-                React.createElement(Griddle, { results: this.state.data['list'],
-                    tableClassName: 'table table-striped table-hover',
-                    columnMetadata: this.colMetadata,
-                    useGriddleStyles: false,
-                    showFilter: true,
-                    columns: ['description', 'vlan', 'prefix4', 'prefix6', 'max_lease', 'controls'],
-                    showPager: true,
-                    resultsPerPage: '50',
-                    useCustomPagerComponent: true,
-                    customPagerComponent: Pager,
-                    initialSort: 'description'
-                })
+                React.createElement(
+                    'div',
+                    { className: 'container-fluid' },
+                    React.createElement(Griddle, { results: this.state.data['list'],
+                        tableClassName: 'table table-bordered table-striped table-hover',
+                        columnMetadata: this.colMetadata,
+                        useGriddleStyles: false,
+                        showFilter: true,
+                        columns: ['description', 'vlan', 'prefix4', 'prefix6', 'max_lease', 'controls'],
+                        showPager: true,
+                        resultsPerPage: '50',
+                        useCustomPagerComponent: true,
+                        customPagerComponent: Pager,
+                        initialSort: 'description'
+                    })
+                )
             )
         );
     }
