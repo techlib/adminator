@@ -4,3 +4,4 @@ Flask
 SQLAlchemy
 SQLSoup
 psycopg2
+txpostgres
