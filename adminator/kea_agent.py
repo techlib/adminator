@@ -12,10 +12,12 @@ from adminator.kea import generate_kea_config, DEFAULTS
 
 class KeaAgent(object):
     def __init__(self, db, template=None, output=None, signal=None):
+        """Read template and store the DB connection for later use."""
+
         self.db = db
 
         if template is not None:
-            log.msg('Reading Template {}'.format(template))
+            log.msg('Reading template {0!r}.'.format(template))
             with open(template) as fp:
                 self.template = load(fp)
         else:
@@ -26,13 +28,15 @@ class KeaAgent(object):
         self.last = {}
 
     def start(self):
+        """Start the periodic checking."""
+
         self.periodic = task.LoopingCall(self.update)
         self.periodic.start(60)
 
-        self.update()
-
     def notify(self, event):
-        log.msg('Database Notification: {}'.format(event.channel))
+        """Process a database notification."""
+
+        log.msg('Received {0!r} database notification.'.format(event.channel))
 
         if event.channel == 'dhcp':
             self.update()
@@ -43,11 +47,11 @@ class KeaAgent(object):
         if self.last == config:
             return
 
-        log.msg('Writing: {}'.format(self.output))
+        log.msg('Writing {0!r}.'.format(self.output))
         with open(self.output, 'w') as fp:
             dump(config, fp, indent=2, sort_keys=True, ensure_ascii=False)
 
-        log.msg('Executing: {}'.format(self.signal))
+        log.msg('Executing {0!r}.'.format(self.signal))
         system(self.signal)
 
         self.last = config
