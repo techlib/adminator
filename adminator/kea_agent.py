@@ -5,7 +5,7 @@ __all__ = ['KeaAgent']
 
 from os import system
 from twisted.python import log
-from simplejson import dump, load
+from json import dump, load
 from adminator.kea import generate_kea_config, DEFAULTS
 
 
