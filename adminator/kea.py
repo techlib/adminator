@@ -1,6 +1,8 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 
+__all__ = ['generate_kea_config', 'DEFAULTS']
+
 from copy import deepcopy
 from collections import Mapping
 

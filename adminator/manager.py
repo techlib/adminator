@@ -39,8 +39,5 @@ class Manager(object):
         self.lease4 = Lease4(self)
         self.lease6 = Lease6(self)
 
-    def notify(self, event):
-        log.msg('Notification: {}'.format(event.channel))
-
 
 # vim:set sw=4 ts=4 et:

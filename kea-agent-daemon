@@ -4,15 +4,17 @@
 # The application threads are structured in the following way:
 #
 #  reactor
-#   `-- manager (1 thread)
+#   `-- agent (1 thread)
 #   `-- workers (2 threads)
-#   `-- website (4 threads)
 #
 from twisted.internet import reactor
 from twisted.web.wsgi import WSGIResource
 from twisted.web.server import Site
 from twisted.python.threadpool import ThreadPool
 from twisted.python import log
+
+# For database async notifications.
+from txpostgres import txpostgres
 
 # Data are accessed through SQLSoup, using SQLAlchemy.
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -27,7 +29,7 @@ from sys import argv, stderr
 from configparser import ConfigParser
 
 # Import all the application handles.
-from adminator import make_site, Manager, AccessModel
+from adminator import KeaAgent
 
 
 if __name__ == '__main__':
@@ -38,15 +40,6 @@ if __name__ == '__main__':
         # Read database configuration options.
         db_url = config.get('database', 'url')
 
-        # Read website configuration options.
-        http_debug = config.getboolean('http', 'debug', fallback=False)
-        http_host = config.get('http', 'host', fallback='localhost')
-        http_port = config.getint('http', 'port', fallback=5000)
-        http_pool = config.getint('http', 'pool_size', fallback=4)
-
-        # Read role mappings.
-        access_model = AccessModel(config.items('access'))
-
         # Default to much saner database query defaults and always
         # commit and/or flush statements explicitly.
         factory = sessionmaker(autocommit=False, autoflush=False)
@@ -56,37 +49,34 @@ if __name__ == '__main__':
         session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
         db = SQLSoup(engine, session=session)
 
-        # Extract manager options, sans the pool_size we handle here.
-        manager_opts = dict(config.items('manager'))
-        manager_pool = int(manager_opts.pop('pool_size', 2))
+        # Extract agent options, sans the pool_size we handle here.
+        agent_opts = dict(config.items('kea'))
+        agent_pool = int(agent_opts.pop('pool_size', 2))
 
-        # Set the correct thread pool size for the manager.
-        reactor.suggestThreadPoolSize(manager_pool)
+        # Set the correct thread pool size for the agent.
+        reactor.suggestThreadPoolSize(agent_pool)
 
-        # Prepare the manager that runs in an exclusive thread.
-        manager = Manager(db, **manager_opts)
+        # Prepare the agent that runs in an exclusive thread.
+        agent = KeaAgent(db, **agent_opts)
 
-        # Prepare the website that will get exposed to the users.
-        site = make_site(db, manager, access_model, debug=http_debug)
-
-        # Prepare WSGI site with a separate thread pool.
-        pool = ThreadPool(http_pool, http_pool, 'http')
-        site = Site(WSGIResource(reactor, pool, site))
-        pool.start()
-
-        # Bind the website to it's address.
-        reactor.listenTCP(http_port, site, interface=http_host)
+        # Prepare async notification listener.
+        txpg = txpostgres.Connection()
+        db = txpg.connect(db_url)
+        txpg.addNotifyObserver(agent.notify)
+        db.addCallback(lambda _: txpg.runOperation('listen dhcp'))
+        db.addCallback(lambda _: log.msg('Listening For dhcp Notifications'))
 
         # Run the Twisted reactor until the user terminates us.
         reactor.run()
 
-        # Kill the HTTP ThreadPool.
-        pool.stop()
-
 
     def do_help(*args, **kwargs):
-        print('Usage: adminator-daemon [--config=/etc/adminator.ini]')
-        print('Runs the adminator-daemon with given configuration.')
+        print('Usage: kea-agent-daemon [--config=/etc/adminator.ini]')
+        print('Runs the database->kea configuration agent.')
+        print('')
+        print('The agent listens to database notifications and constructs a')
+        print('configuration file on every change. It then instructs the')
+        print('kea service to pick up this configuration file.')
         print('')
         print('OPTIONS:')
         print('  --help, -h          Display this help.')
@@ -97,7 +87,7 @@ if __name__ == '__main__':
         print('Report bugs at <http://github.com/techlib/adminator>.')
 
     def do_version(*args, **kwargs):
-        print('adminator-daemon (NTK) 1')
+        print('kea-agent-daemon (NTK) 1')
 
     # Parse command line arguments.
     opts, args = gnu_getopt(argv, 'hVc:', ['help', 'version', 'config='])

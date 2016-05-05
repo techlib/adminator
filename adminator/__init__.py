@@ -5,5 +5,6 @@ from adminator.site import *
 from adminator.rbac import *
 from adminator.manager import *
 from adminator.db import *
+from adminator.kea_agent import *
 
 # vim:set sw=4 ts=4 et:
