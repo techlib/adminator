@@ -38,7 +38,7 @@ class KeaAgent(object):
 
         log.msg('Writing: {}'.format(self.output))
         with open(self.output, 'w') as fp:
-            dump(config, fp)
+            dump(config, fp, indent=2, sort_keys=True, ensure_ascii=False)
 
         log.msg('Executing: {}'.format(self.signal))
         system(self.signal)
