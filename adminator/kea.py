@@ -55,13 +55,13 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
     def dhcp4_config():
         return {
-            'option-data': list(options(None, None, 'inet')),
+            'option-data': list(options(None, None, 4)),
             'subnet4': list(subnets(4)),
         }
 
     def dhcp6_config():
         return {
-            'option-data': list(options(None, None, 'inet6')),
+            'option-data': list(options(None, None, 6)),
             'subnet6': list(subnets(6)),
         }
 
