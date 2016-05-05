@@ -104,7 +104,6 @@ def generate_kea_config(db, tpl=DEFAULTS):
                 'code': otype.code,
                 'space': 'dhcp4' if family == 4 else 'dhcp6',
                 'csv-format': True,
-                'array': otype.array,
                 'data': v.value,
             }
 
