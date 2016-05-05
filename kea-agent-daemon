@@ -66,6 +66,9 @@ if __name__ == '__main__':
         db.addCallback(lambda _: txpg.runOperation('listen dhcp'))
         db.addCallback(lambda _: log.msg('Listening For dhcp Notifications'))
 
+        # Run the startup code as the first thing.
+        reactor.callLater(0, agent.start)
+
         # Run the Twisted reactor until the user terminates us.
         reactor.run()
 
