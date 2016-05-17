@@ -10,6 +10,7 @@ ReactDOM.render((
     <Route path="/network" component={NetworkList} />
     <Route path="/network/new" component={NetworkNew} />
     <Route path="/network/:id" component={NetworkEdit} />
+    <Route path="/" component={Device} />
     <Route path="/device" component={Device} />
     <Route path="/device/:id" component={DeviceDetail} />
     <Route path="/record/:id" component={RecordDetail} />

@@ -13,6 +13,7 @@ ReactDOM.render(React.createElement(
   React.createElement(Route, { path: "/network", component: NetworkList }),
   React.createElement(Route, { path: "/network/new", component: NetworkNew }),
   React.createElement(Route, { path: "/network/:id", component: NetworkEdit }),
+  React.createElement(Route, { path: "/", component: Device }),
   React.createElement(Route, { path: "/device", component: Device }),
   React.createElement(Route, { path: "/device/:id", component: DeviceDetail }),
   React.createElement(Route, { path: "/record/:id", component: RecordDetail }),
