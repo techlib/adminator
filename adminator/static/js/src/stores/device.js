@@ -26,10 +26,11 @@ var deviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       success: result => {
-        _this.onList()
+        BrowserHistory.push('/device/');
+        FeedbackActions.set('success', 'Device deleted');
       },
       error: result => {
-        this.handleError('onDelete', result.status, result.responseJSON)
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -42,8 +43,12 @@ var deviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(device),
+      success: function success(result) {
+        BrowserHistory.push('/device/');
+        FeedbackActions.set('success', 'Device updated');
+      },
       error: result => {
-        this.handleError('onUpdate', result.status, result.responseJSON)
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -56,15 +61,16 @@ var deviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(device),
-      success: result => {
-        this.data.errors = []
-        this.data.device = result
-        this.trigger(this.data)
+      success: function success(result) {
+        BrowserHistory.push('/device/' + result.uuid);
+        FeedbackActions.set('success', 'Device created');
       },
       error: result => {
-        this.handleError('onCreate', result.status, result.responseJSON)
+        FeedbackActions.set('error', result.responseJSON.message)
       }
-    })
+
+
+      })
   },
 
   onList() {

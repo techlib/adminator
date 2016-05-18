@@ -104,7 +104,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.device.insert(flask.request.get_json(force=True)))
 
 
-    @app.route('/device/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @app.route('/device/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
     def device_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.device.get_item(uuid))
@@ -114,6 +114,10 @@ def make_site(db, manager, access_model, debug=False):
             device = flask.request.get_json(force=True)
             device['uuid'] = uuid
             return flask.jsonify(manager.device.update(device))
+        if 'PATCH' == flask.request.method:
+            device = flask.request.get_json(force=True)
+            device['uuid'] = uuid
+            return flask.jsonify(manager.device.patch(device))
 
     # Interfaces
     @app.route('/interface/', methods=['GET', 'POST'])

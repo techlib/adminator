@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function isInt(val) {
     return !isNaN(parseFloat(val)) && isFinite(val);
@@ -51,4 +51,22 @@ function isIPSameFamily(val1, val2) {
 
 function notEmpty(val) {
     return !!val;
+}
+
+function isMAC(val) {
+    val = formatMac(val);
+    var test = new RegExp("^([0-9a-f]{2}:){5}[0-9a-f]{2}$");
+    return test.test(val);
+}
+
+function minLen(val, len) {
+    return val && val.length > len;
+}
+
+function formatMac(val) {
+    if (!val) val = '';
+    val = val.toLowerCase();
+    val = val.replace(/[^a-f0-9]/g, '');
+    val = val.replace(/([a-f0-9]{2})/g, '$1:').substring(0, 17);
+    return val;
 }

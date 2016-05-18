@@ -21,8 +21,6 @@ var deviceStore = Reflux.createStore({
   },
 
   onDelete: function onDelete(id) {
-    var _this3 = this;
-
     var _this = this;
     $.ajax({
       url: '/device/' + id,
@@ -30,32 +28,33 @@ var deviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       success: function success(result) {
-        _this.onList();
+        BrowserHistory.push('/device/');
+        FeedbackActions.set('success', 'Device deleted');
       },
       error: function error(result) {
-        _this3.handleError('onDelete', result.status, result.responseJSON);
+        FeedbackActions.set('error', result.responseJSON.message);
       }
     });
   },
 
   onUpdate: function onUpdate(device) {
-    var _this4 = this;
-
     $.ajax({
       url: '/device/' + device.uuid,
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(device),
+      success: function success(result) {
+        BrowserHistory.push('/device/');
+        FeedbackActions.set('success', 'Device updated');
+      },
       error: function error(result) {
-        _this4.handleError('onUpdate', result.status, result.responseJSON);
+        FeedbackActions.set('error', result.responseJSON.message);
       }
     });
   },
 
   onCreate: function onCreate(device) {
-    var _this5 = this;
-
     var _this = this;
     $.ajax({
       url: '/device/',
@@ -64,23 +63,23 @@ var deviceStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(device),
       success: function success(result) {
-        _this5.data.errors = [];
-        _this5.data.device = result;
-        _this5.trigger(_this5.data);
+        BrowserHistory.push('/device/' + result.uuid);
+        FeedbackActions.set('success', 'Device created');
       },
       error: function error(result) {
-        _this5.handleError('onCreate', result.status, result.responseJSON);
+        FeedbackActions.set('error', result.responseJSON.message);
       }
+
     });
   },
 
   onList: function onList() {
-    var _this6 = this;
+    var _this3 = this;
 
     $.ajax({ url: '/device/', success: function success(result) {
-        _this6.data.errors = [];
-        _this6.data.list = result.result;
-        _this6.trigger(_this6.data);
+        _this3.data.errors = [];
+        _this3.data.list = result.result;
+        _this3.trigger(_this3.data);
       }
     });
   }

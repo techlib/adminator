@@ -1,230 +1,136 @@
-"use strict";
-
-var DeviceDescComponent = React.createClass({
-  displayName: "DeviceDescComponent",
-
-  render: function render() {
-    return React.createElement(
-      Link,
-      { to: "/device/" + this.props.rowData.uuid },
-      this.props.data
-    );
-  }
-});
-
-var DeviceActionsComponent = React.createClass({
-  displayName: "DeviceActionsComponent",
-
-  deleteDevice: function deleteDevice() {
-    DeviceActions["delete"](this.props.rowData.uuid);
-  },
-  render: function render() {
-    return React.createElement(
-      ButtonGroup,
-      null,
-      React.createElement(
-        OverlayTrigger,
-        { placement: "top", overlay: React.createElement(
-            Tooltip,
-            null,
-            "Delete"
-          ) },
-        React.createElement(
-          Button,
-          { bsStyle: "danger", onClick: this.deleteDevice },
-          React.createElement("i", { className: "fa fa-trash-o" })
-        )
-      )
-    );
-  }
-});
-
-var DeviceInterfacesComponent = React.createClass({
-  displayName: "DeviceInterfacesComponent",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      null,
-      this.props.data.map(function (item) {
-        return React.createElement(
-          "div",
-          null,
-          React.createElement(
-            OverlayTrigger,
-            { placement: "right", overlay: React.createElement(
-                Tooltip,
-                null,
-                item.hostname ? item.hostname : 'No hostname',
-                " ",
-                React.createElement("br", null),
-                item.ip4addr ? item.ip4addr : 'Dynamic IPv4',
-                " ",
-                React.createElement("br", null),
-                item.ip6addr ? item.ip6addr : 'Dynamic IPv6'
-              ) },
-            React.createElement(
-              "span",
-              { className: "label label-warning" },
-              item.macaddr
-            )
-          )
-        );
-      })
-    );
-  }
-
-});
-
-var DeviceValidComponent = React.createClass({
-  displayName: "DeviceValidComponent",
-
-  getInitialState: function getInitialState() {
-    if (this.props.data == null) {
-      return { 'start': '', 'end': '' };
-    }
-    if (this.props.data[0] != null) {
-      var start = moment(this.props.data[0]).format('DD. MM. YYYY');
-    }
-    if (this.props.data[1] != null) {
-      var end = moment(this.props.data[1]).format('DD. MM. YYYY');
-    }
-    return { 'start': start, 'end': end };
-  },
-  render: function render() {
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "span",
-          { className: "label label-primary" },
-          this.state.start
-        ),
-        React.createElement(
-          "span",
-          { className: "label label-success" },
-          this.state.end
-        )
-      )
-    );
-  }
-});
-
-var DeviceUserComponent = React.createClass({
-  displayName: "DeviceUserComponent",
-
-  getInitialState: function getInitialState() {
-    if (this.props.data == null) {
-      return {};
-    } else {
-      return { 'id': this.props.data, 'name': this.props.rowData.users.display_name };
-    }
-    this.props.rowData;
-  },
-  render: function render() {
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        OverlayTrigger,
-        { placement: "left", overlay: React.createElement(
-            Tooltip,
-            null,
-            this.state.id
-          ) },
-        React.createElement(
-          "div",
-          null,
-          this.state.name
-        )
-      )
-    );
-  }
-});
+'use strict';
 
 var Device = React.createClass({
-  displayName: "Device",
+    displayName: 'Device',
 
-  mixins: [Reflux.connect(deviceStore, 'data')],
+    mixins: [Reflux.connect(networkStore, 'networks'), Reflux.connect(userStore, 'users')],
 
-  componentDidMount: function componentDidMount() {
-    DeviceActions.list();
-  },
+    componentDidMount: function componentDidMount() {
+        NetworkActions.list();
+        UserActions.list();
+    },
 
-  getInitialState: function getInitialState() {
-    return { data: { list: [] } };
-  },
+    getInitialState: function getInitialState() {
+        return { networks: {}, users: {} };
+    },
 
-  render: function render() {
-    var columnMeta = [{
-      columnName: 'actions',
-      displayName: 'Actions',
-      customComponent: DeviceActionsComponent
-    }, {
-      columnName: 'description',
-      displayName: 'Description',
-      customComponent: DeviceDescComponent
-    }, {
-      columnName: 'valid',
-      displayName: 'Valid',
-      customComponent: DeviceValidComponent
-    }, {
-      columnName: 'user',
-      displayName: 'User',
-      customComponent: DeviceUserComponent
-    }, {
-      columnName: 'type',
-      displayName: 'Type'
-    }, {
-      columnName: 'interfaces',
-      displayName: 'Interfaces',
-      customComponent: DeviceInterfacesComponent
-    }];
+    addInterface: function addInterface() {
+        this.refs.interfaceList.addInterface();
+    },
 
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(AdminNavbar, null),
-      React.createElement(
-        "div",
-        { className: "col-xs-12" },
-        React.createElement(
-          "div",
-          { className: "container-fluid" },
-          React.createElement(
-            "h3",
+    validate: function validate() {
+        var r = [];
+        r = r.concat(this.refs.device.validate());
+        r = r.concat(this.refs.interfaceList.validate());
+        return r.filter(function (item) {
+            return notEmpty(item);
+        });
+    },
+
+    getValues: function getValues() {
+        var data = this.refs.device.getValues();
+        data.interfaces = this.refs.interfaceList.getValues();
+
+        return data;
+    },
+
+    save: function save() {
+        var errors = this.validate();
+
+        if (errors.length > 0) {
+            FeedbackActions.set('error', 'Form contains invalid data:', errors);
+        } else {
+            this.props.saveHandler(this.getValues());
+        }
+    },
+
+    render: function render() {
+        return React.createElement(
+            'div',
             null,
-            "Devices"
-          ),
-          React.createElement(
-            "a",
-            { className: "btn btn-success pull-right", href: "#/device/new" },
-            React.createElement("i", { className: "fa fa-plus" }),
-            " New device"
-          )
-        ),
-        React.createElement(
-          "div",
-          { className: "container-fluid" },
-          React.createElement(Griddle, { results: this.state.data.list,
-            tableClassName: "table table-bordered table-striped table-hover",
-            useGriddleStyles: false,
-            showFilter: true,
-            useCustomPagerComponent: "true",
-            customPagerComponent: Pager,
-            sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
-            sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
-            columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
-            resultsPerPage: "20",
-            customFilterer: regexGridFilter,
-            useCustomFilterer: "true",
-            columnMetadata: columnMeta
-          })
-        )
-      )
-    );
-  }
+            React.createElement(AdminNavbar, null),
+            React.createElement(
+                'div',
+                { className: 'container-fluid' },
+                React.createElement(
+                    'h2',
+                    null,
+                    this.props.title
+                ),
+                React.createElement(Feedback, null)
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-xs-12 col-md-6' },
+                React.createElement(
+                    'div',
+                    { className: 'panel panel-default' },
+                    React.createElement(
+                        'div',
+                        { className: 'panel-heading' },
+                        React.createElement(
+                            'h3',
+                            { className: 'panel-title' },
+                            'Device'
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'panel-body' },
+                        React.createElement(DeviceForm, { device: this.props.device,
+                            users: this.state.users.list,
+                            ref: 'device' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'panel-footer' },
+                        React.createElement(
+                            'button',
+                            { className: 'btn btn-primary',
+                                onClick: this.save },
+                            'Save'
+                        )
+                    )
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-xs-12-col-md-6' },
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-12 col-md-6' },
+                    React.createElement(
+                        'div',
+                        { className: 'panel panel-default' },
+                        React.createElement(
+                            'div',
+                            { className: 'panel-heading' },
+                            React.createElement(
+                                'h3',
+                                { className: 'panel-title' },
+                                'Interfaces'
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'panel-body' },
+                            React.createElement(DeviceInterfaceList, { networks: this.state.networks.list,
+                                interfaces: this.props.device.interfaces,
+                                ref: 'interfaceList' })
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'panel-footer' },
+                            React.createElement(
+                                'button',
+                                { className: 'btn btn-success',
+                                    onClick: this.addInterface },
+                                'Add'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
 });
