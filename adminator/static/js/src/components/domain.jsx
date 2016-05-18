@@ -76,9 +76,6 @@ var Domain = React.createClass({
      return (
        <div>
         <AdminNavbar/>
-        <div className='container-fluid'>
-          <AlertSet alerts={this.state.alerts} />
-        </div>
         <div className='col-xs-12'>
           <div className='container-fluid'>
             <h3>Domains</h3>

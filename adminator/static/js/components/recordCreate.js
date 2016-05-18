@@ -296,7 +296,11 @@ var RecordCreate = React.createClass({
     return React.createElement(
       'div',
       { className: 'row' },
-      React.createElement(Feedback, null),
+      React.createElement(
+        'div',
+        { className: 'container-fluid' },
+        React.createElement(Feedback, null)
+      ),
       React.createElement(
         'form',
         { onSubmit: this.handleSubmit },

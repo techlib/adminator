@@ -97,11 +97,6 @@ var Domain = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
-        { className: 'container-fluid' },
-        React.createElement(AlertSet, { alerts: this.state.alerts })
-      ),
-      React.createElement(
-        'div',
         { className: 'col-xs-12' },
         React.createElement(
           'div',

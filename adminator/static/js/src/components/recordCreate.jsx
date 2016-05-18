@@ -239,7 +239,9 @@ var RecordCreate = React.createClass({
   render(){
    return (
      <div className='row'>
-      <Feedback />
+       <div className='container-fluid'>
+         <Feedback />
+       </div>
        <form onSubmit={this.handleSubmit}>
          <div className='col-xs-12'>
             <div className='panel panel-default '>
