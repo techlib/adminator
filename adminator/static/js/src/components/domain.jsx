@@ -13,8 +13,16 @@ var DomainNameComponent = React.createClass({
 
 
 var DomainActionsComponent = React.createClass({
-  deleteDomain(){
-    DomainActions.delete(this.props.rowData.id)
+
+  mixins: [ModalConfirmMixin],
+
+  handleDelete(){
+        var name = this.props.rowData.name;
+        this.modalConfirm('Confirm delete', `Delete ${name}?`,
+                            {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
+        .then(() => {
+          DomainActions.delete(this.props.rowData.id)
+        })
   },
   render() {
     return (
@@ -28,7 +36,7 @@ var DomainActionsComponent = React.createClass({
           </LinkContainer>
 
             <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-              <Button bsStyle='danger' onClick={this.deleteDomain}>
+              <Button bsStyle='danger' onClick={this.handleDelete}>
                 <i className="fa fa-trash-o"></i>
               </Button>
             </OverlayTrigger>
@@ -38,6 +46,7 @@ var DomainActionsComponent = React.createClass({
 })
 
 var Domain = React.createClass({
+
   mixins: [Reflux.connect(domainStore, 'data')],
 
   componentDidMount(){
@@ -67,9 +76,6 @@ var Domain = React.createClass({
      return (
        <div>
         <AdminNavbar/>
-        <div className='container-fluid'>
-          <AlertSet alerts={this.state.alerts} />
-        </div>
         <div className='col-xs-12'>
           <div className='container-fluid'>
             <h3>Domains</h3>

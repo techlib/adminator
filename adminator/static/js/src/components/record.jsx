@@ -48,14 +48,23 @@ var RecordTypeComponent = React.createClass({
 })
 
 var RecordActionsComponent = React.createClass({
-  deleteRecord(){
-    RecordActions.delete(this.props.rowData.id)
+  mixins: [ModalConfirmMixin],
+
+  handleDelete(){
+    var name = this.props.rowData.name;
+    var type = this.props.rowData.type;
+      this.modalConfirm('Confirm delete', `Delete ${type} record ${name}?`,
+                          {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
+      .then(() => {
+        RecordActions.delete(this.props.rowData.id)
+      })
+
   },
   render() {
     return (
       <ButtonGroup>
         <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
-          <Button bsStyle='danger' onClick={this.deleteRecord}>
+          <Button bsStyle='danger' onClick={this.handleDelete}>
             <i className="fa fa-trash-o"></i>
           </Button>
         </OverlayTrigger>
@@ -105,9 +114,9 @@ var Record = React.createClass({
       <div>
       <AdminNavbar/>
         <div className='col-xs-12 container'>
-        <RecordCreate />
           <div className='container-fluid'>
             <h3>Records</h3>
+            <RecordCreate />
             <Griddle results={this.state.data['list']}
                      tableClassName='datatable table table-striped table-hover table-bordered datatable'
                      useGriddleStyles={false}

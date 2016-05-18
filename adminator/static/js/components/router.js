@@ -16,6 +16,7 @@ ReactDOM.render(React.createElement(
   React.createElement(Route, { path: "/device", component: DeviceList }),
   React.createElement(Route, { path: "/device/new", component: DeviceNew }),
   React.createElement(Route, { path: "/device/:id", component: DeviceEdit }),
+  React.createElement(Route, { path: "/", component: DeviceList }),
   React.createElement(Route, { path: "/record/:id", component: RecordDetail }),
   React.createElement(Route, { path: "/record/", component: Record }),
   React.createElement(Route, { path: "/lease/", component: Lease })

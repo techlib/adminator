@@ -12,18 +12,32 @@ var DomainEdit = React.createClass({
   },
 
   getInitialState() {
-    return {data: {domain: {type: 'MASTER', last_check: moment().format('X')}}, alerts: []}
+    return {data: {domain: {type: 'MASTER', last_check: moment().format('X')}}}
   },
 
   handleErrors(data){
+    var errors = []
     data.errors.map((item) => {
-      this.setState({alerts: this.state.alerts.concat([new ErrorAlert(item.message.message)])})
+      errors.append(item.message.message)
     })
+    FeedbackActions.set('error', 'Errors from server', errors);
   },
 
   handleChangeType(event){
     this.state.data.domain.type = event.target.value
     this.setState({data: this.state.data})
+  },
+
+  validate(){
+      var data = this.state.data.domain
+      var errors = []
+      if (!data['name']) {errors.push('Name is missing')}
+      if (!data['type']) {errors.push('Type is missing')}
+      if (data['type'] == 'SLAVE' && !data['master']) {errors.push('Master is missing')}
+      if (data['type'] == 'SLAVE' && !isIP4(data['master'])) {errors.push('Master is not an IP address')}
+      if (!data['last_check']) {errors.push('Last check is missing')}
+
+      return errors
   },
 
   handleChange(){
@@ -39,13 +53,18 @@ var DomainEdit = React.createClass({
 
   handleSubmit(e){
     e.preventDefault()
-    if(_.isUndefined(this.state.data.domain.id)){
-      console.log(this.state.data.domain)
-      DomainActions.create(this.state.data.domain)
-      this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain created')])})
+    var errors = this.validate()
+
+    if (errors.length > 0) {
+        FeedbackActions.set('error', 'Form contains invalid data', errors);
     } else {
-      DomainActions.update(this.state.data.domain)
-      this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Domain updated')])})
+      if(_.isUndefined(this.state.data.domain.id)){
+        DomainActions.create(this.state.data.domain)
+        FeedbackActions.set('success', 'Domain created');
+      } else {
+        DomainActions.update(this.state.data.domain)
+        FeedbackActions.set('success', 'Domain updated');
+      }
     }
   },
 
@@ -53,70 +72,70 @@ var DomainEdit = React.createClass({
   render(){
    return (
      <div>
-     <AlertSet alerts={this.state.alerts} />
         <AdminNavbar/>
-        <div className='container col-md-12'>
-          <h3>Domain</h3>
-          <div className='col-md-12 well'>
+        <div className='container col-md-10 col-md-offset-1'>
+        <h1>{this.state.data.domain.name}</h1>
+          <Feedback />
           <form className='form-horizontal' onSubmit={this.handleSubmit}>
-            <div className='col-md-6'>
-              <Input
-                type='text'
-                label='Name'
-                labelClassName='col-md-2'
-                wrapperClassName='col-md-10'
-                ref='name'
-                required
-                onChange={this.handleChange}
-                value={this.state.data.domain.name} />
-            </div>
-            <div className='col-md-6'>
-              <Input
-                type='text'
-                label='Master'
-                labelClassName='col-md-2'
-                wrapperClassName='col-md-10'
-                ref='master'
-                onChange={this.handleChange}
-                value={this.state.data.domain.master} />
-            </div>
-            <div className='col-md-6'>
-              <BootstrapSelect
-                label='Type'
-                labelClassName='col-md-2'
-                wrapperClassName='col-md-10'
-                ref='type'
-                onChange={this.handleChangeType}
-                value={this.state.data.domain.type}>
-                  <option value='MASTER'>Master</option>
-                  <option value='SLAVE'>Slave</option>
-              </BootstrapSelect>
-            </div>
-            <div className='col-md-6'>
-              <div className='form-group'>
-                <label className='control-label col-md-2'>Last check</label>
-                <div className='col-md-10'>
-                <DateTimeField
-                  ref='last_check'
-                  onChange={this.handleChange}
-                  format='X'
-                  inputFormat='DD.MM.YYYY HH:mm'
-                  dateTime={this.state.data.domain.last_check} />
-                </div>
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h3 className="panel-title">Domain</h3>
               </div>
-            </div>
 
-            <div className='col-md-6'>
-              <div className='form-group'>
-                <div className='col-md-10 col-md-offset-2'>
-                  <ButtonInput type="submit" className='btn-primary' value="Save" />
+              <div className="panel-body">
+                <div className='col-md-6'>
+                  <Input
+                    type='text'
+                    label='Name'
+                    labelClassName='col-md-2'
+                    wrapperClassName='col-md-10'
+                    ref='name'
+                    onChange={this.handleChange}
+                    value={this.state.data.domain.name} />
+                </div>
+                <div className='col-md-6'>
+                  <Input
+                    type='text'
+                    label='Master'
+                    labelClassName='col-md-2'
+                    wrapperClassName='col-md-10'
+                    ref='master'
+                    onChange={this.handleChange}
+                    value={this.state.data.domain.master} />
+                </div>
+                <div className='col-md-6'>
+                  <BootstrapSelect
+                    label='Type'
+                    labelClassName='col-md-2'
+                    wrapperClassName='col-md-10'
+                    ref='type'
+                    onChange={this.handleChangeType}
+                    value={this.state.data.domain.type}>
+                      <option value='MASTER'>Master</option>
+                      <option value='SLAVE'>Slave</option>
+                  </BootstrapSelect>
+                </div>
+                <div className='col-md-6'>
+                  <div className='form-group'>
+                    <label className='control-label col-md-2'>Last check</label>
+                    <div className='col-md-10'>
+                      <DateTimeField
+                        ref='last_check'
+                        onChange={this.handleChange}
+                        format='X'
+                        inputFormat='DD.MM.YYYY HH:mm'
+                        dateTime={this.state.data.domain.last_check} />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            </form>
-            </div>
+              <div className="panel-footer">
+                <button type="submit" className='btn btn-primary'>Save</button>
+              </div>
           </div>
+        </form>
       </div>
+    </div>
     )
   },
 })

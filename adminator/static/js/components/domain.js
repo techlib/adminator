@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
 var DomainNameComponent = React.createClass({
-  displayName: "DomainNameComponent",
+  displayName: 'DomainNameComponent',
 
   render: function render() {
     return React.createElement(
-      "div",
+      'div',
       null,
       React.createElement(
         Link,
-        { to: "/domainEdit/" + this.props.rowData.id },
+        { to: '/domainEdit/' + this.props.rowData.id },
         this.props.data
       )
     );
@@ -17,10 +17,17 @@ var DomainNameComponent = React.createClass({
 });
 
 var DomainActionsComponent = React.createClass({
-  displayName: "DomainActionsComponent",
+  displayName: 'DomainActionsComponent',
 
-  deleteDomain: function deleteDomain() {
-    DomainActions["delete"](this.props.rowData.id);
+  mixins: [ModalConfirmMixin],
+
+  handleDelete: function handleDelete() {
+    var _this = this;
+
+    var name = this.props.rowData.name;
+    this.modalConfirm('Confirm delete', 'Delete ' + name + '?', { 'confirmLabel': 'DELETE', 'confirmClass': 'danger' }).then(function () {
+      DomainActions['delete'](_this.props.rowData.id);
+    });
   },
   render: function render() {
     return React.createElement(
@@ -28,32 +35,32 @@ var DomainActionsComponent = React.createClass({
       null,
       React.createElement(
         LinkContainer,
-        { to: "/domain/" + this.props.rowData.id },
+        { to: '/domain/' + this.props.rowData.id },
         React.createElement(
           OverlayTrigger,
-          { placement: "top", overlay: React.createElement(
+          { placement: 'top', overlay: React.createElement(
               Tooltip,
               null,
-              "Records"
+              'Records'
             ) },
           React.createElement(
             Button,
-            { bsStyle: "info" },
-            React.createElement("i", { className: "fa fa-list-alt" })
+            { bsStyle: 'info' },
+            React.createElement('i', { className: 'fa fa-list-alt' })
           )
         )
       ),
       React.createElement(
         OverlayTrigger,
-        { placement: "top", overlay: React.createElement(
+        { placement: 'top', overlay: React.createElement(
             Tooltip,
             null,
-            "Delete"
+            'Delete'
           ) },
         React.createElement(
           Button,
-          { bsStyle: "danger", onClick: this.deleteDomain },
-          React.createElement("i", { className: "fa fa-trash-o" })
+          { bsStyle: 'danger', onClick: this.handleDelete },
+          React.createElement('i', { className: 'fa fa-trash-o' })
         )
       )
     );
@@ -61,7 +68,7 @@ var DomainActionsComponent = React.createClass({
 });
 
 var Domain = React.createClass({
-  displayName: "Domain",
+  displayName: 'Domain',
 
   mixins: [Reflux.connect(domainStore, 'data')],
 
@@ -85,40 +92,35 @@ var Domain = React.createClass({
     }];
 
     return React.createElement(
-      "div",
+      'div',
       null,
       React.createElement(AdminNavbar, null),
       React.createElement(
-        "div",
-        { className: "container-fluid" },
-        React.createElement(AlertSet, { alerts: this.state.alerts })
-      ),
-      React.createElement(
-        "div",
-        { className: "col-xs-12" },
+        'div',
+        { className: 'col-xs-12' },
         React.createElement(
-          "div",
-          { className: "container-fluid" },
+          'div',
+          { className: 'container-fluid' },
           React.createElement(
-            "h3",
+            'h3',
             null,
-            "Domains"
+            'Domains'
           ),
           React.createElement(
-            "a",
-            { className: "btn btn-success pull-right", href: "#/domainEdit/new" },
-            React.createElement("i", { className: "fa fa-plus" }),
-            " New domain"
+            'a',
+            { className: 'btn btn-success pull-right', href: '#/domainEdit/new' },
+            React.createElement('i', { className: 'fa fa-plus' }),
+            ' New domain'
           ),
           React.createElement(Griddle, { results: this.state.data['list'],
-            tableClassName: "table table-bordered table-striped table-hover",
+            tableClassName: 'table table-bordered table-striped table-hover',
             useGriddleStyles: false,
             showFilter: false,
-            useCustomPagerComponent: "true",
+            useCustomPagerComponent: 'true',
             customPagerComponent: Pager,
-            sortAscendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-asc" }),
-            sortDescendingComponent: React.createElement("span", { className: "fa fa-sort-alpha-desc" }),
-            resultsPerPage: "20",
+            sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+            sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+            resultsPerPage: '20',
             columns: ['name', 'actions'],
             columnMetadata: columnMeta
           })

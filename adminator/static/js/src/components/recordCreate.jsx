@@ -12,7 +12,7 @@ var RecordCreate = React.createClass({
   },
 
   getInitialState() {
-    return {record: {type: ''}, alerts: [], data: {list: []}, domainName: ''}
+    return {record: {type: ''}, data: {list: []}, domainName: ''}
   },
 
   setType(type){
@@ -45,21 +45,56 @@ var RecordCreate = React.createClass({
     if(e.target.name == 'prio'){
       this.state.record.priority = (_.isUndefined(e.target.value) ? 0 : e.target.value)
     }
+    this.setState({record: this.state.record})
+  },
+
+  validate() {
+      var data = this.state.record
+      var errors = []
+      if (!data['name']) {errors.push('Name is missing')}
+
+      if(data['type'] == 'SRV'){
+        if(!data['prio']) {errors.push('Priority is missing')}
+        if(!inRange(data['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
+        if(!data['port']) {errors.push('Port is missing')}
+        if(!inRange(data['port'], 1, 65536)) {errors.push('Port must be a number 1-65536')}
+        if(!data['content']){errors.push('Content is missing')}
+      } else if(data['type'] == 'A'){
+          if(!data['content']){errors.push('IPv4 address is missing')}
+          if(data['content'] && !isIP4(data['content'])){errors.push('IPv4 address is not in the correct format')}
+      } else if(data['type'] == 'AAAA') {
+          if(!data['content']){errors.push('IPv6 address is missing')}
+          if(data['content'] && !isIP6(data['content'])){errors.push('IPv6 address is not in the correct format')}
+      } else if(data['type'] == 'MX'){
+          if(!data['prio']){errors.push('Priority is missing')}
+          if(!inRange(data['prio'], 0, 1000)){errors.push('Priority must be a number 0-1000')}
+      } else {
+        if (!data['content']) {errors.push('Content is missing')}
+      }
+      return errors
   },
 
   handleSubmit(e){
-    e.preventDefault();
-    // Append selected domain name if not present
-    if(this.state.record.name.indexOf(this.state.domainName) < 0){
-      this.state.record.name = this.state.record.name + '.' + this.state.domainName
-    }
-    if (this.state.record.type == 'SRV'){
-      this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.value
-    }
-    RecordActions.create(this.state.record);
-    this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Record created')])});
-  },
+    e.preventDefault()
 
+    var errors = this.validate()
+
+    if (errors.length > 0) {
+        FeedbackActions.set('error', 'Form contains invalid data', errors);
+    } else {
+
+      // Append selected domain name if not present
+      if(this.state.record.name.indexOf(this.state.domainName) < 0){
+        this.state.record.name = this.state.record.name + '.' + this.state.domainName
+      }
+      if (this.state.record.type == 'SRV'){
+        this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.value
+      }
+
+      RecordActions.create(this.state.record);
+      FeedbackActions.set('success', 'Form has been submited');
+    }
+  },
 
   renderInput() {
      switch (this.state.record.type){
@@ -77,7 +112,6 @@ var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
-              required
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -86,7 +120,6 @@ var RecordCreate = React.createClass({
               type='text'
               label='Value'
               ref='content'
-              required
               name='content'
               onChange={this.handleChange}
               value={this.state.record.content} />
@@ -102,7 +135,6 @@ var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
-              required
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -112,9 +144,6 @@ var RecordCreate = React.createClass({
               label='Priority'
               ref='prio'
               name='prio'
-              required
-              max='200'
-              min='0'
               onChange={this.handleChange}
               value={this.state.record.prio} />
           </div>
@@ -124,7 +153,6 @@ var RecordCreate = React.createClass({
               label='Value'
               ref='content'
               name='content'
-              required
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
@@ -140,7 +168,6 @@ var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
-              required
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -150,9 +177,6 @@ var RecordCreate = React.createClass({
               label='Priority'
               ref='prio'
               name='prio'
-              required
-              max='200'
-              min='0'
               onChange={this.handleSrvChange}
               value={this.state.record.content.prio} />
           </div>
@@ -162,9 +186,6 @@ var RecordCreate = React.createClass({
               label='Port'
               ref='port'
               name='port'
-              required
-              max='65535'
-              min='0'
               onChange={this.handleSrvChange}
               value={this.state.record.content.port} />
           </div>
@@ -174,7 +195,6 @@ var RecordCreate = React.createClass({
               label='Value'
               ref='value'
               name='value'
-              required
               onChange={this.handleSrvChange}
               value={this.state.record.content.value} />
           </div>
@@ -190,7 +210,6 @@ var RecordCreate = React.createClass({
                 label='Name'
                 ref='name'
                 name='name'
-                required
                 onChange={this.handleChange}
                 value={this.state.record.name} />
             </div>
@@ -200,7 +219,6 @@ var RecordCreate = React.createClass({
                 ref='content'
                 label='Content'
                 name='content'
-                required
                 onChange={this.handleChange}
                 value={this.state.record.content} />
             </div>
@@ -219,44 +237,56 @@ var RecordCreate = React.createClass({
   },
 
   render(){
-    if(this.state.record.type && this.state.record.type!=''){
-      var submitbutton = <button className='btn btn-primary' type="submit">Save</button>
-    }
    return (
-     <div className='container-fluid'>
-       <AlertSet alerts={this.state.alerts} />
-       <h3>New record</h3>
+     <div className='row'>
+       <div className='container-fluid'>
+         <Feedback />
+       </div>
        <form onSubmit={this.handleSubmit}>
-         <div className='col-xs-12 col-sm-8'>
-           <div className='form-group'>
-             <ButtonGroup>
-               {this.renderTypeButton('A')}
-               {this.renderTypeButton('AAAA')}
-               {this.renderTypeButton('CNAME')}
-               {this.renderTypeButton('SRV')}
-               {this.renderTypeButton('PTR')}
-               {this.renderTypeButton('TXT')}
-               {this.renderTypeButton('SOA')}
-               {this.renderTypeButton('NS')}
-               {this.renderTypeButton('MX')}
-             </ButtonGroup>
-           </div>
+         <div className='col-xs-12'>
+            <div className='panel panel-default '>
+              <div className="panel-heading">
+                <h3 className="panel-title">
+                 New record
+               </h3>
+              </div>
+
+              <div className="panel-body">
+
+                 <div className='col-xs-12 col-sm-8'>
+                   <div className='form-group'>
+                     <ButtonGroup>
+                       {this.renderTypeButton('A')}
+                       {this.renderTypeButton('AAAA')}
+                       {this.renderTypeButton('CNAME')}
+                       {this.renderTypeButton('SRV')}
+                       {this.renderTypeButton('PTR')}
+                       {this.renderTypeButton('TXT')}
+                       {this.renderTypeButton('SOA')}
+                       {this.renderTypeButton('NS')}
+                       {this.renderTypeButton('MX')}
+                     </ButtonGroup>
+                   </div>
+                 </div>
+
+                 <div className='col-xs-12 col-sm-4'>
+                   <BootstrapSelect ref='domain' addonBefore='Domain' onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
+                     {this.state.data['list'].map((domain) => {
+                       return <option value={domain.id} data-name={domain.name}>{domain.name}</option>
+                     })}
+                   </BootstrapSelect>
+                 </div>
+
+                <div className={"col-sm-12" + (this.state.record.type ? '': 'hidden')}>
+                  {this.renderInput()}
+                </div>
+              </div>
+            <div className={"panel-footer " + (this.state.record.type ? '': 'hidden')}>
+              <button className='btn btn-primary' type="submit">Save</button>
+            </div>
+          </div>
          </div>
-         <div className='col-xs-12 col-sm-4'>
-           <BootstrapSelect ref='domain' addonBefore='Domain' onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
-             {this.state.data['list'].map((domain) => {
-               return <option value={domain.id} data-name={domain.name}>{domain.name}</option>
-             })}
-           </BootstrapSelect>
-         </div>
-         <div className='col-xs-12 col-sm-12'>
-           {this.renderInput()}
-         </div>
-         <div className='col-xs-12 col-sm-12'>
-           <div className='col-xs-8 col-sm-4'>
-             {submitbutton}
-           </div>
-         </div>
+
        </form>
       </div>
     )

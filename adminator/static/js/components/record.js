@@ -58,8 +58,16 @@ var RecordTypeComponent = React.createClass({
 var RecordActionsComponent = React.createClass({
   displayName: 'RecordActionsComponent',
 
-  deleteRecord: function deleteRecord() {
-    RecordActions['delete'](this.props.rowData.id);
+  mixins: [ModalConfirmMixin],
+
+  handleDelete: function handleDelete() {
+    var _this = this;
+
+    var name = this.props.rowData.name;
+    var type = this.props.rowData.type;
+    this.modalConfirm('Confirm delete', 'Delete ' + type + ' record ' + name + '?', { 'confirmLabel': 'DELETE', 'confirmClass': 'danger' }).then(function () {
+      RecordActions['delete'](_this.props.rowData.id);
+    });
   },
   render: function render() {
     return React.createElement(
@@ -74,7 +82,7 @@ var RecordActionsComponent = React.createClass({
           ) },
         React.createElement(
           Button,
-          { bsStyle: 'danger', onClick: this.deleteRecord },
+          { bsStyle: 'danger', onClick: this.handleDelete },
           React.createElement('i', { className: 'fa fa-trash-o' })
         )
       )
@@ -123,7 +131,6 @@ var Record = React.createClass({
       React.createElement(
         'div',
         { className: 'col-xs-12 container' },
-        React.createElement(RecordCreate, null),
         React.createElement(
           'div',
           { className: 'container-fluid' },
@@ -132,6 +139,7 @@ var Record = React.createClass({
             null,
             'Records'
           ),
+          React.createElement(RecordCreate, null),
           React.createElement(Griddle, { results: this.state.data['list'],
             tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
             useGriddleStyles: false,

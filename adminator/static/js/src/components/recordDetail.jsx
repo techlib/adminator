@@ -7,19 +7,24 @@ var RecordDetail = React.createClass({
   },
 
   getInitialState() {
-    return {data: {record: {type: ''}}, alerts: []}
+    return {data: {record: {type: ''}}}
   },
 
   handleChange(){
-    this.setState({data: {record: {
+    var data = {data: {record: {
         name: this.refs.name.getValue(),
         content: this.refs.content.getValue(),
         type: this.state.data.record.type,
         domain_id: this.state.data.record.domain_id,
         id: this.state.data.record.id
       }
-    }})
+    }}
+    if(this.refs.prio){
+        data['prio'] = this.refs.prio.getValue()
+    }
+    this.setState(data)
   },
+
 
   handleSrvChange(){
     let content = this.refs.priority.getValue() + ' ' + this.refs.port.getValue() + ' ' + this.refs.value.getValue()
@@ -33,18 +38,48 @@ var RecordDetail = React.createClass({
     }})
   },
 
-  handleSubmit(){
-    RecordActions.update(this.state.data.record);
-    this.setState({alerts: this.state.alerts.concat([new SuccessAlert('Record updated')])});
+  validate() {
+      var data = this.state.data.record
+      var errors = []
+      if (!data['name']) {errors.push('Name is missing')}
+
+      if(data['type'] == 'SRV'){
+        if(!this.refs.priority.getValue()) {errors.push('Priority is missing')}
+        if(!inRange(this.refs.priority.getValue(), 0, 1000)) {errors.push('Priority must be a number 0-1000')}
+        if(!this.refs.port.getValue()) {errors.push('Port is missing')}
+        if(!inRange(this.refs.port.getValue(), 1, 65536)) {errors.push('Port must be a number 1-65536')}
+        if(!this.refs.value.getValue()){errors.push('Value is missing')}
+      } else if(data['type'] == 'A'){
+          if(!data['content']){errors.push('IPv4 address is missing')}
+          if(data['content'] && !isIP4(data['content'])){errors.push('IPv4 address is not in the correct format')}
+      } else if(data['type'] == 'AAAA') {
+          if(!data['content']){errors.push('IPv6 address is missing')}
+          if(data['content'] && !isIP6(data['content'])){errors.push('IPv6 address is not in the correct format')}
+      } else if(data['type'] == 'MX'){
+          if(!data['prio']){errors.push('Priority is missing')}
+          if(!inRange(data['prio'], 0, 1000)){errors.push('Priority must be a number 0-1000')}
+      } else {
+        if (!data['content']) {errors.push('Content is missing')}
+      }
+      return errors
   },
 
+  handleSubmit(){
+    var errors = this.validate()
+
+    if (errors.length > 0) {
+        FeedbackActions.set('error', 'Form contains invalid data', errors);
+    } else {
+      RecordActions.update(this.state.data.record);
+      FeedbackActions.set('success', 'Form has been submited');
+    }
+  },
 
   renderInput() {
      switch (this.state.data.record.type){
       case 'A':
       case 'AAAA':
       case 'CNAME':
-      case 'MX':
       case 'PTR':
       case 'NS':
       case 'SOA':
@@ -58,6 +93,37 @@ var RecordDetail = React.createClass({
               ref='name'
               onChange={this.handleChange}
               value={this.state.data.record.name} />
+            <Input
+              type='text'
+              label='Value'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-8'
+              ref='content'
+              onChange={this.handleChange}
+              value={this.state.data.record.content} />
+        </div>
+      )
+      break;
+      case 'MX':
+      return (
+        <div className='form-group'>
+            <Input
+              type='text'
+              label='Name'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-8'
+              ref='name'
+              onChange={this.handleChange}
+              value={this.state.data.record.name} />
+            <Input
+              type='text'
+              label='Priority'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-8'
+              ref='prio'
+              onChange={this.handleChange}
+              value={this.state.data.record.prio} />
+
             <Input
               type='text'
               label='Value'
@@ -136,28 +202,29 @@ var RecordDetail = React.createClass({
    return (
     <div>
       <AdminNavbar/>
-      <div className='container'>
-        <AlertSet alerts={this.state.alerts} />
-        <h3>Record</h3>
-        <div className='well'>
+
+        <div className='container col-md-6 col-md-offset-3'>
+          <h1>{this.state.data.record.name}</h1>
+          <Feedback />
           <form className='form-horizontal' onSubmit={this.handleSubmit}>
-            <div className='form-group'>
-              <div className='form-group'>
-                <label className='control-label col-xs-2'>
-                  Type
-                </label>
-                <div className='col-xs-8'>
-                  <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h3 className="panel-title">
+                    <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
                    {this.state.data.record.type}
-                  </span>
-                </div>
+                 </span> Record
+               </h3>
               </div>
+              <div className="panel-body">
+              {this.renderInput()}
+              </div>
+            <div className="panel-footer">
+              <button type="submit" className='btn btn-primary'>Save</button>
             </div>
-            {this.renderInput()}
-            <ButtonInput type="submit" className='col-xs-offset-2 btn-primary' value="Save" />
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
+
     </div>
     )
   },

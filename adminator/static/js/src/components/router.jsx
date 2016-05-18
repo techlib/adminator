@@ -13,6 +13,7 @@ ReactDOM.render((
     <Route path="/device" component={DeviceList} />
     <Route path="/device/new" component={DeviceNew} />
     <Route path="/device/:id" component={DeviceEdit} />
+    <Route path="/" component={DeviceList} />
     <Route path="/record/:id" component={RecordDetail} />
     <Route path="/record/" component={Record} />
     <Route path="/lease/" component={Lease} />

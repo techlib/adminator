@@ -1,6 +1,8 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 
+__all__ = ['generate_kea_config', 'DEFAULTS']
+
 from copy import deepcopy
 from collections import Mapping
 
@@ -53,13 +55,13 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
     def dhcp4_config():
         return {
-            'option-data': list(options(None, None, 'inet')),
+            'option-data': list(options(None, None, 4)),
             'subnet4': list(subnets(4)),
         }
 
     def dhcp6_config():
         return {
-            'option-data': list(options(None, None, 'inet6')),
+            'option-data': list(options(None, None, 6)),
             'subnet6': list(subnets(6)),
         }
 
@@ -102,7 +104,6 @@ def generate_kea_config(db, tpl=DEFAULTS):
                 'code': otype.code,
                 'space': 'dhcp4' if family == 4 else 'dhcp6',
                 'csv-format': True,
-                'array': otype.array,
                 'data': v.value,
             }
 
