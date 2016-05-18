@@ -106,7 +106,9 @@ var RecordCreate = React.createClass({
     return errors;
   },
 
-  handleSubmit: function handleSubmit() {
+  handleSubmit: function handleSubmit(e) {
+    e.preventDefault();
+
     var errors = this.validate();
 
     if (errors.length > 0) {
@@ -293,14 +295,14 @@ var RecordCreate = React.createClass({
   render: function render() {
     return React.createElement(
       'div',
-      { className: 'container-fluid' },
+      { className: 'row' },
       React.createElement(Feedback, null),
       React.createElement(
         'form',
         { onSubmit: this.handleSubmit },
         React.createElement(
           'div',
-          { className: 'col-xs-12 col-sm-12' },
+          { className: 'col-xs-12' },
           React.createElement(
             'div',
             { className: 'panel panel-default ' },

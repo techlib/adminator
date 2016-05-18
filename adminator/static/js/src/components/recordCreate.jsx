@@ -74,7 +74,9 @@ var RecordCreate = React.createClass({
       return errors
   },
 
-  handleSubmit(){
+  handleSubmit(e){
+    e.preventDefault()
+
     var errors = this.validate()
 
     if (errors.length > 0) {
@@ -236,10 +238,10 @@ var RecordCreate = React.createClass({
 
   render(){
    return (
-     <div className='container-fluid'>
-        <Feedback />
+     <div className='row'>
+      <Feedback />
        <form onSubmit={this.handleSubmit}>
-         <div className='col-xs-12 col-sm-12'>
+         <div className='col-xs-12'>
             <div className='panel panel-default '>
               <div className="panel-heading">
                 <h3 className="panel-title">

@@ -131,7 +131,6 @@ var Record = React.createClass({
       React.createElement(
         'div',
         { className: 'col-xs-12 container' },
-        React.createElement(RecordCreate, null),
         React.createElement(
           'div',
           { className: 'container-fluid' },
@@ -140,6 +139,7 @@ var Record = React.createClass({
             null,
             'Records'
           ),
+          React.createElement(RecordCreate, null),
           React.createElement(Griddle, { results: this.state.data['list'],
             tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
             useGriddleStyles: false,
