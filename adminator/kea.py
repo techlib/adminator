@@ -5,6 +5,8 @@ __all__ = ['generate_kea_config', 'DEFAULTS']
 
 from copy import deepcopy
 from collections import Mapping
+from uuid import UUID
+from struct import unpack
 
 DEFAULTS = {
     'Dhcp4': {
@@ -69,6 +71,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
         for net in db.network.all():
             if v == 4 and net.prefix4 is not None:
                 yield {
+                    'id': uuid2bigint(net.uuid),
                     'subnet': net.prefix4,
                     'pools': list(pools(net.uuid, v)),
                     'option-data': list(options(net.uuid, None, 4)),
@@ -76,6 +79,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
                 }
             elif v == 6 and net.prefix6 is not None:
                 yield {
+                    'id': uuid2bigint(net.uuid),
                     'subnet': net.prefix6,
                     'pools': list(pools(net.uuid, v)),
                     'option-data': list(options(net.uuid, None, 6)),
@@ -139,6 +143,11 @@ def dict_update_r(dst, src):
             dict_update_r(dst[k], src[k])
         else:
             dst[k] = src[k]
+
+
+def uuid2bigint(uuid):
+    """Return lower 64 bits of the uuid as an integer."""
+    return unpack('!Q', UUID(uuid).bytes[-8:])[0]
 
 
 # vim:set sw=4 ts=4 et:
