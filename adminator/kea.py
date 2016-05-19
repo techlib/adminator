@@ -146,8 +146,9 @@ def dict_update_r(dst, src):
 
 
 def uuid2bigint(uuid):
-    """Return lower 63 bits of the uuid as an integer."""
-    return unpack('!Q', UUID(uuid).bytes[-8:])[0] & 0x7fffffffffffffff
+    """Compress UUID string to a 32 bit integer."""
+    a, b, c, d = unpack('!LLLL', UUID(uuid).bytes)
+    return (a ^ b ^ c ^ d)
 
 
 # vim:set sw=4 ts=4 et:
