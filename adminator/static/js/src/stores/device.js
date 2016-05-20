@@ -13,7 +13,7 @@ var deviceStore = Reflux.createStore({
         this.trigger(this.data)
       },
       error: result => {
-        this.handleError('onRead', result.status, result.responseJSON)
+        FeedbackActions.set('error', result.responseJSON.message);
       }
     })
   },
@@ -39,7 +39,7 @@ var deviceStore = Reflux.createStore({
   onUpdate(device){
     $.ajax({
       url: `/device/${device.uuid}`,
-      method: 'PUT',
+      method: 'PATCH',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(device),
