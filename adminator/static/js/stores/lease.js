@@ -2,7 +2,7 @@
 
 var lease4Store = Reflux.createStore({
   mixins: [ErrorMixin],
-  listenables: [DeviceActions],
+  listenables: [Lease4Actions],
   data: { 'lease4': [], 'list': [], 'errors': [] },
 
   onRead: function onRead(id) {
@@ -41,6 +41,7 @@ var lease4Store = Reflux.createStore({
   onList: function onList() {
     var _this4 = this;
 
+    console.log('list leases');
     $.ajax({ url: '/lease4/', success: function success(result) {
         _this4.data.errors = [];
         _this4.data.list = result.result;
@@ -52,7 +53,7 @@ var lease4Store = Reflux.createStore({
 
 var lease6Store = Reflux.createStore({
   mixins: [ErrorMixin],
-  listenables: [DeviceActions],
+  listenables: [Lease6Actions],
   data: { 'lease6': [], 'list': [], 'errors': [] },
 
   onRead: function onRead(id) {

@@ -4,7 +4,7 @@ var Lease4ActionsComponent = React.createClass({
   displayName: "Lease4ActionsComponent",
 
   deleteLease4: function deleteLease4() {
-    Lease4Actions["delete"](this.props.rowData.id);
+    Lease4Actions["delete"](this.props.rowData.address);
   },
   render: function render() {
     return React.createElement(
@@ -31,7 +31,7 @@ var Lease6ActionsComponent = React.createClass({
   displayName: "Lease6ActionsComponent",
 
   deleteLease6: function deleteLease6() {
-    Lease6Actions["delete"](this.props.rowData.id);
+    Lease6Actions["delete"](this.props.rowData.address);
   },
   render: function render() {
     return React.createElement(
@@ -69,6 +69,53 @@ var Lease = React.createClass({
   },
 
   render: function render() {
+    var lease4ColumnMeta = [{
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: Lease4ActionsComponent
+    }, {
+      columnName: 'address',
+      displayName: 'IP'
+    }, {
+      columnName: 'hwaddr',
+      displayName: 'MAC'
+    }, {
+      columnName: 'expire',
+      displayName: 'Expire'
+    }, {
+      columnName: 'valid_lifetime',
+      displayName: 'Valid lifetime'
+    }, {
+      columnName: 'state',
+      displayName: 'State'
+    }, {
+      columnName: 'hostname',
+      displayName: 'Hostname'
+    }];
+    var lease6ColumnMeta = [{
+      columnName: 'actions',
+      displayName: 'Actions',
+      customComponent: Lease6ActionsComponent
+    }, {
+      columnName: 'address',
+      displayName: 'IP'
+    }, {
+      columnName: 'hwaddr',
+      displayName: 'MAC'
+    }, {
+      columnName: 'expire',
+      displayName: 'Expire'
+    }, {
+      columnName: 'valid_lifetime',
+      displayName: 'Valid lifetime'
+    }, {
+      columnName: 'state',
+      displayName: 'State'
+    }, {
+      columnName: 'hostname',
+      displayName: 'Hostname'
+    }];
+
     return React.createElement(
       "div",
       null,
@@ -120,10 +167,11 @@ var Lease = React.createClass({
                 customPagerComponent: Pager,
                 sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
                 sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
-                columns: ['name', 'type', 'content', 'actions'],
                 resultsPerPage: "20",
                 customFilterer: regexGridFilter,
-                useCustomFilterer: "true"
+                useCustomFilterer: "true",
+                columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
+                columnMetadata: lease4ColumnMeta
               })
             ),
             React.createElement(
@@ -137,10 +185,11 @@ var Lease = React.createClass({
                 customPagerComponent: Pager,
                 sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
                 sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
-                columns: ['name', 'type', 'content', 'actions'],
                 resultsPerPage: "20",
                 customFilterer: regexGridFilter,
-                useCustomFilterer: "true"
+                useCustomFilterer: "true",
+                columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
+                columnMetadata: lease6ColumnMeta
               })
             )
           )

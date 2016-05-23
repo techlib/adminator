@@ -244,20 +244,20 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.lease4.list())
 
-    @app.route('/lease4/<cn>', methods=['DELETE'])
-    def lease4_item_handler(cn):
+    @app.route('/lease4/<addr>', methods=['DELETE'])
+    def lease4_item_handler(addr):
         if 'DELETE' == flask.request.method:
-            return flask.jsonify(manager.lease4.delete(cn))
+            return flask.jsonify(manager.lease4.delete(addr))
 
     @app.route('/lease6/', methods=['GET'])
     def lease6_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.lease6.list())
 
-    @app.route('/lease6/<cn>', methods=['DELETE'])
-    def lease6_item_handler(cn):
+    @app.route('/lease6/<addr>', methods=['DELETE'])
+    def lease6_item_handler(addr):
         if 'DELETE' == flask.request.method:
-            return flask.jsonify(manager.lease6.delete(cn))
+            return flask.jsonify(manager.lease6.delete(addr))
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
