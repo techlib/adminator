@@ -265,6 +265,11 @@ def make_site(db, manager, access_model, debug=False):
     def shutdown_session(exception=None):
         manager.db.rollback()
 
+    # Logged user info
+    @app.route('/user-info/', methods=['GET'])
+    @pass_user_info
+    def userinfo_handler(**kwargs):
+        return flask.jsonify(**kwargs)
 
     return app
 
