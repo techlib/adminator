@@ -159,16 +159,13 @@ var DeviceList = React.createClass({
     return (
       <div>
         <AdminNavbar/>
-        <div className='col-xs-12'>
-          <div className='container-fluid'>
-              <h3>Devices</h3>
+        <div className='container-fluid col-xs-12'>
+              <h1>Devices
+                    <a className='btn btn-success pull-right' href='#/device/new'>
+                    <i className='fa fa-plus'></i> New device
+                    </a>
+              </h1>
               <Feedback />
-            <a className='btn btn-success pull-right' href='#/device/new'>
-              <i className='fa fa-plus'></i> New device
-            </a>
-          </div>
-          <div className='container-fluid'>
-
             <Griddle results={this.state.data.list}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}
@@ -185,7 +182,6 @@ var DeviceList = React.createClass({
                      />
           </div>
         </div>
-      </div>
     )
   }
 });

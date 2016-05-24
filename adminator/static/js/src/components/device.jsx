@@ -45,7 +45,7 @@ var Device = React.createClass({
         <div>
             <AdminNavbar/>
             <div className='container-fluid'>
-            <h2>{this.props.title}</h2>
+            <h1>{this.props.title}</h1>
                 <Feedback />
             </div>
 

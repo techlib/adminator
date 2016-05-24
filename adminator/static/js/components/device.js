@@ -53,7 +53,7 @@ var Device = React.createClass({
                 'div',
                 { className: 'container-fluid' },
                 React.createElement(
-                    'h2',
+                    'h1',
                     null,
                     this.props.title
                 ),
