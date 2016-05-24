@@ -5,7 +5,7 @@ var Lease4ActionsComponent = React.createClass({
   render() {
     return (
       <ButtonGroup>
-        <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
+        <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.address}>Delete</Tooltip>>
           <Button bsStyle='danger' onClick={this.deleteLease4}>
             <i className="fa fa-trash-o"></i>
           </Button>

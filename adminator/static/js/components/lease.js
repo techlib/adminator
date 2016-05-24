@@ -14,7 +14,7 @@ var Lease4ActionsComponent = React.createClass({
         OverlayTrigger,
         { placement: "top", overlay: React.createElement(
             Tooltip,
-            null,
+            { id: this.props.rowData.address },
             "Delete"
           ) },
         React.createElement(
