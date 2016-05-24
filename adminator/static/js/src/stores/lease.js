@@ -35,7 +35,6 @@ var lease4Store = Reflux.createStore({
   },
 
   onList() {
-    console.log('list leases')
     $.ajax({url: '/lease4/', success: result => {
         this.data.errors = []
         this.data.list = result.result
