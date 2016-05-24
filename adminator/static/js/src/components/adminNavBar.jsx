@@ -9,8 +9,8 @@ var AdminNavbar = React.createClass({
     return (
     <div className='navbar navbar-pf'>
       <Navbar.Header>
-        <Navbar.Brand>
-          <img src="/static/img/brand.svg" alt="PatternFly Enterprise Application" />
+          <Navbar.Brand>
+              <b>ADMINATOR</b> Network management
         </Navbar.Brand>
     </Navbar.Header>
 

@@ -19,7 +19,12 @@ var AdminNavbar = React.createClass({
         React.createElement(
           Navbar.Brand,
           null,
-          React.createElement('img', { src: '/static/img/brand.svg', alt: 'PatternFly Enterprise Application' })
+          React.createElement(
+            'b',
+            null,
+            'ADMINATOR'
+          ),
+          ' Network management'
         )
       ),
       React.createElement(
