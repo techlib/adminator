@@ -42,11 +42,10 @@ var Device = React.createClass({
 
     render() {
     return (
-            <div className='container-fluid'>
+        <div className='col-xs-12 container-fluid'>
             <h1>{this.props.title}</h1>
                 <Feedback />
-            </div>
-
+            <div className='row'>
             <div className='col-xs-12 col-md-6'>
                 <div className='panel panel-default'>
                     <div className='panel-heading'>
@@ -64,8 +63,7 @@ var Device = React.createClass({
                 </div>
             </div>
 
-        <div className='col-xs-12-col-md-6'>
-            <div className='col-xs-12 col-md-6'>
+        <div className='col-xs-12 col-md-6'>
             <div className='panel panel-default'>
                 <div className='panel-heading'>
                     <h3 className='panel-title'>Interfaces</h3>
@@ -82,9 +80,10 @@ var Device = React.createClass({
                             onClick={this.addInterface}>Add</button>
                 </div>
             </div>
-            </div>
 
         </div>
+    </div>
+</div>
     )
     }
 })

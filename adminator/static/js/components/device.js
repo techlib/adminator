@@ -47,54 +47,50 @@ var Device = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            null,
+            { className: 'col-xs-12 container-fluid' },
             React.createElement(
-                'div',
-                { className: 'container-fluid' },
-                React.createElement(
-                    'h1',
-                    null,
-                    this.props.title
-                ),
-                React.createElement(Feedback, null)
+                'h1',
+                null,
+                this.props.title
             ),
+            React.createElement(Feedback, null),
             React.createElement(
                 'div',
-                { className: 'col-xs-12 col-md-6' },
+                { className: 'row' },
                 React.createElement(
                     'div',
-                    { className: 'panel panel-default' },
+                    { className: 'col-xs-12 col-md-6' },
                     React.createElement(
                         'div',
-                        { className: 'panel-heading' },
+                        { className: 'panel panel-default' },
                         React.createElement(
-                            'h3',
-                            { className: 'panel-title' },
-                            'Device'
-                        )
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'panel-body' },
-                        React.createElement(DeviceForm, { device: this.props.device,
-                            users: this.state.users.list,
-                            ref: 'device' })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'panel-footer' },
+                            'div',
+                            { className: 'panel-heading' },
+                            React.createElement(
+                                'h3',
+                                { className: 'panel-title' },
+                                'Device'
+                            )
+                        ),
                         React.createElement(
-                            'button',
-                            { className: 'btn btn-primary',
-                                onClick: this.save },
-                            'Save'
+                            'div',
+                            { className: 'panel-body' },
+                            React.createElement(DeviceForm, { device: this.props.device,
+                                users: this.state.users.list,
+                                ref: 'device' })
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'panel-footer' },
+                            React.createElement(
+                                'button',
+                                { className: 'btn btn-primary',
+                                    onClick: this.save },
+                                'Save'
+                            )
                         )
                     )
-                )
-            ),
-            React.createElement(
-                'div',
-                { className: 'col-xs-12-col-md-6' },
+                ),
                 React.createElement(
                     'div',
                     { className: 'col-xs-12 col-md-6' },
