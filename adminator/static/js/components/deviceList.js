@@ -193,38 +193,33 @@ var DeviceList = React.createClass({
 
     return React.createElement(
       'div',
-      null,
-      React.createElement(AdminNavbar, null),
+      { className: 'container-fluid col-xs-12' },
       React.createElement(
-        'div',
-        { className: 'container-fluid col-xs-12' },
+        'h1',
+        null,
+        'Devices',
         React.createElement(
-          'h1',
-          null,
-          'Devices',
-          React.createElement(
-            'a',
-            { className: 'btn btn-success pull-right', href: '#/device/new' },
-            React.createElement('i', { className: 'fa fa-plus' }),
-            ' New device'
-          )
-        ),
-        React.createElement(Feedback, null),
-        React.createElement(Griddle, { results: this.state.data.list,
-          tableClassName: 'table table-bordered table-striped table-hover',
-          useGriddleStyles: false,
-          showFilter: true,
-          useCustomPagerComponent: 'true',
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
-          resultsPerPage: '20',
-          customFilterer: regexGridFilter,
-          useCustomFilterer: 'true',
-          columnMetadata: columnMeta
-        })
-      )
+          'a',
+          { className: 'btn btn-success pull-right', href: '#/device/new' },
+          React.createElement('i', { className: 'fa fa-plus' }),
+          ' New device'
+        )
+      ),
+      React.createElement(Feedback, null),
+      React.createElement(Griddle, { results: this.state.data.list,
+        tableClassName: 'table table-bordered table-striped table-hover',
+        useGriddleStyles: false,
+        showFilter: true,
+        useCustomPagerComponent: 'true',
+        customPagerComponent: Pager,
+        sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+        sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+        columns: ['interfaces', 'description', 'type', 'user', 'valid', 'actions'],
+        resultsPerPage: '20',
+        customFilterer: regexGridFilter,
+        useCustomFilterer: 'true',
+        columnMetadata: columnMeta
+      })
     );
   }
 });

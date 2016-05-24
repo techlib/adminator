@@ -36,43 +36,38 @@ var Dhcp = React.createClass({
 
         return React.createElement(
             'div',
-            null,
-            React.createElement(AdminNavbar, null),
+            { className: 'col-xs-12 container' },
+            React.createElement(
+                'h3',
+                null,
+                'Global DHPC options'
+            ),
+            React.createElement(Feedback, null),
             React.createElement(
                 'div',
-                { className: 'col-xs-12 container' },
-                React.createElement(
-                    'h3',
-                    null,
-                    'Global DHPC options'
-                ),
-                React.createElement(Feedback, null),
+                { className: 'row' },
                 React.createElement(
                     'div',
-                    { className: 'row' },
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-6' },
-                        React.createElement(DhcpOptionValues, { ref: 'dhcp',
-                            values: values.inet,
-                            options: options.inet,
-                            title: 'DHCPv4' })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-6' },
-                        React.createElement(DhcpOptionValues, { ref: 'dhcp6',
-                            values: values.inet6,
-                            options: options.inet6,
-                            title: 'DHCPv6' })
-                    )
+                    { className: 'col-xs-12 col-md-6' },
+                    React.createElement(DhcpOptionValues, { ref: 'dhcp',
+                        values: values.inet,
+                        options: options.inet,
+                        title: 'DHCPv4' })
                 ),
                 React.createElement(
-                    'button',
-                    { className: 'btn btn-primary',
-                        onClick: this.save },
-                    'Save'
+                    'div',
+                    { className: 'col-xs-12 col-md-6' },
+                    React.createElement(DhcpOptionValues, { ref: 'dhcp6',
+                        values: values.inet6,
+                        options: options.inet6,
+                        title: 'DHCPv6' })
                 )
+            ),
+            React.createElement(
+                'button',
+                { className: 'btn btn-primary',
+                    onClick: this.save },
+                'Save'
             )
         );
     }

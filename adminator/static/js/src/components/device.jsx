@@ -42,8 +42,6 @@ var Device = React.createClass({
 
     render() {
     return (
-        <div>
-            <AdminNavbar/>
             <div className='container-fluid'>
             <h1>{this.props.title}</h1>
                 <Feedback />
@@ -87,7 +85,6 @@ var Device = React.createClass({
             </div>
 
         </div>
-    </div>
     )
     }
 })

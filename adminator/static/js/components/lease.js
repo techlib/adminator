@@ -118,77 +118,72 @@ var Lease = React.createClass({
 
     return React.createElement(
       "div",
-      null,
-      React.createElement(AdminNavbar, null),
+      { className: "col-xs-12 container-fluid" },
       React.createElement(
-        "div",
-        { className: "col-xs-12 container-fluid" },
+        "h1",
+        null,
+        "Leases"
+      ),
+      React.createElement(
+        "ul",
+        { className: "nav nav-tabs", role: "tablist" },
         React.createElement(
-          "h1",
-          null,
-          "Leases"
+          "li",
+          { role: "presentation", className: "active" },
+          React.createElement(
+            "a",
+            { href: "#ipv4", "aria-controls": "ipv4", role: "tab", "data-toggle": "tab" },
+            "IPv4"
+          )
         ),
         React.createElement(
-          "ul",
-          { className: "nav nav-tabs", role: "tablist" },
+          "li",
+          { role: "presentation" },
           React.createElement(
-            "li",
-            { role: "presentation", className: "active" },
-            React.createElement(
-              "a",
-              { href: "#ipv4", "aria-controls": "ipv4", role: "tab", "data-toggle": "tab" },
-              "IPv4"
-            )
-          ),
-          React.createElement(
-            "li",
-            { role: "presentation" },
-            React.createElement(
-              "a",
-              { href: "#ipv6", "aria-controls": "profile", role: "ipv6", "data-toggle": "tab" },
-              "IPv6"
-            )
+            "a",
+            { href: "#ipv6", "aria-controls": "profile", role: "ipv6", "data-toggle": "tab" },
+            "IPv6"
           )
+        )
+      ),
+      React.createElement(
+        "div",
+        { className: "tab-content" },
+        React.createElement(
+          "div",
+          { role: "tabpanel", className: "tab-pane active", id: "ipv4" },
+          React.createElement(Griddle, { results: this.state.lease4data['list'],
+            tableClassName: "datatable table table-striped table-hover table-bordered datatable",
+            useGriddleStyles: false,
+            showFilter: true,
+            useCustomPagerComponent: "true",
+            customPagerComponent: Pager,
+            sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
+            sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
+            resultsPerPage: "20",
+            customFilterer: regexGridFilter,
+            useCustomFilterer: "true",
+            columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
+            columnMetadata: lease4ColumnMeta
+          })
         ),
         React.createElement(
           "div",
-          { className: "tab-content" },
-          React.createElement(
-            "div",
-            { role: "tabpanel", className: "tab-pane active", id: "ipv4" },
-            React.createElement(Griddle, { results: this.state.lease4data['list'],
-              tableClassName: "datatable table table-striped table-hover table-bordered datatable",
-              useGriddleStyles: false,
-              showFilter: true,
-              useCustomPagerComponent: "true",
-              customPagerComponent: Pager,
-              sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
-              sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
-              resultsPerPage: "20",
-              customFilterer: regexGridFilter,
-              useCustomFilterer: "true",
-              columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
-              columnMetadata: lease4ColumnMeta
-            })
-          ),
-          React.createElement(
-            "div",
-            { role: "tabpanel", className: "tab-pane", id: "ipv6" },
-            React.createElement(Griddle, { results: this.state.lease6data['list'],
-              tableClassName: "datatable table table-striped table-hover table-bordered datatable",
-              useGriddleStyles: false,
-              showFilter: true,
-              useCustomPagerComponent: "true",
-              customPagerComponent: Pager,
-              sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
-              sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
-              resultsPerPage: "20",
-              customFilterer: regexGridFilter,
-              useCustomFilterer: "true",
-              columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
-              columnMetadata: lease6ColumnMeta
-            })
-          )
+          { role: "tabpanel", className: "tab-pane", id: "ipv6" },
+          React.createElement(Griddle, { results: this.state.lease6data['list'],
+            tableClassName: "datatable table table-striped table-hover table-bordered datatable",
+            useGriddleStyles: false,
+            showFilter: true,
+            useCustomPagerComponent: "true",
+            customPagerComponent: Pager,
+            sortAscendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-asc" }),
+            sortDescendingComponent: React.createElement("span", { classNameName: "fa fa-sort-alpha-desc" }),
+            resultsPerPage: "20",
+            customFilterer: regexGridFilter,
+            useCustomFilterer: "true",
+            columns: ['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'actions'],
+            columnMetadata: lease6ColumnMeta
+          })
         )
       )
     );

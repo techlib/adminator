@@ -74,8 +74,6 @@ var Domain = React.createClass({
     ]
 
      return (
-       <div>
-        <AdminNavbar/>
         <div className='container-fluid col-xs-12'>
             <h1>Domains
             <a className='btn btn-success pull-right' href='#/domainEdit/new'>
@@ -95,7 +93,6 @@ var Domain = React.createClass({
                      columnMetadata={columnMeta}
                      />
           </div>
-        </div>
     )
   },
 

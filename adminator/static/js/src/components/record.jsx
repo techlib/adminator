@@ -111,8 +111,6 @@ var Record = React.createClass({
     ]
 
     return (
-      <div>
-      <AdminNavbar/>
         <div className='col-xs-12 container-fluid'>
             <h1>Records</h1>
             <RecordCreate />
@@ -131,7 +129,6 @@ var Record = React.createClass({
                      columnMetadata={columnMeta}
                      />
           </div>
-        </div>
     )
   },
 

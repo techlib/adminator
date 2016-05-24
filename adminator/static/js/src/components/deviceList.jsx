@@ -157,8 +157,6 @@ var DeviceList = React.createClass({
     ]
 
     return (
-      <div>
-        <AdminNavbar/>
         <div className='container-fluid col-xs-12'>
               <h1>Devices
                     <a className='btn btn-success pull-right' href='#/device/new'>
@@ -181,7 +179,6 @@ var DeviceList = React.createClass({
                      columnMetadata={columnMeta}
                      />
           </div>
-        </div>
     )
   }
 });

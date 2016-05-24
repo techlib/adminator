@@ -93,35 +93,30 @@ var Domain = React.createClass({
 
     return React.createElement(
       'div',
-      null,
-      React.createElement(AdminNavbar, null),
+      { className: 'container-fluid col-xs-12' },
       React.createElement(
-        'div',
-        { className: 'container-fluid col-xs-12' },
+        'h1',
+        null,
+        'Domains',
         React.createElement(
-          'h1',
-          null,
-          'Domains',
-          React.createElement(
-            'a',
-            { className: 'btn btn-success pull-right', href: '#/domainEdit/new' },
-            React.createElement('i', { className: 'fa fa-plus' }),
-            ' New domain'
-          )
-        ),
-        React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: 'table table-bordered table-striped table-hover',
-          useGriddleStyles: false,
-          showFilter: false,
-          useCustomPagerComponent: 'true',
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          resultsPerPage: '20',
-          columns: ['name', 'actions'],
-          columnMetadata: columnMeta
-        })
-      )
+          'a',
+          { className: 'btn btn-success pull-right', href: '#/domainEdit/new' },
+          React.createElement('i', { className: 'fa fa-plus' }),
+          ' New domain'
+        )
+      ),
+      React.createElement(Griddle, { results: this.state.data['list'],
+        tableClassName: 'table table-bordered table-striped table-hover',
+        useGriddleStyles: false,
+        showFilter: false,
+        useCustomPagerComponent: 'true',
+        customPagerComponent: Pager,
+        sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+        sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+        resultsPerPage: '20',
+        columns: ['name', 'actions'],
+        columnMetadata: columnMeta
+      })
     );
   },
 

@@ -48,7 +48,6 @@ var Device = React.createClass({
         return React.createElement(
             'div',
             null,
-            React.createElement(AdminNavbar, null),
             React.createElement(
                 'div',
                 { className: 'container-fluid' },

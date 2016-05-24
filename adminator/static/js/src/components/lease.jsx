@@ -114,8 +114,6 @@ var Lease = React.createClass({
 
 
       return (
-      <div>
-      <AdminNavbar/>
         <div className='col-xs-12 container-fluid'>
 
 						<h1>Leases</h1>
@@ -160,7 +158,6 @@ var Lease = React.createClass({
 							</div>
 						</div>
           </div>
-        </div>
     )
   },
 

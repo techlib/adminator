@@ -51,46 +51,41 @@ var Network = React.createClass({
 
         return React.createElement(
             'div',
-            null,
-            React.createElement(AdminNavbar, null),
+            { className: 'col-xs-12 container-fluid' },
+            React.createElement(
+                'h1',
+                null,
+                this.props.title
+            ),
+            React.createElement(Feedback, null),
             React.createElement(
                 'div',
-                { className: 'col-xs-12 container-fluid' },
-                React.createElement(
-                    'h1',
-                    null,
-                    this.props.title
-                ),
-                React.createElement(Feedback, null),
+                { className: 'row' },
                 React.createElement(
                     'div',
-                    { className: 'row' },
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(NetworkForm, { ref: 'network',
-                            values: this.state.network,
-                            saveHandler: this.save })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(IPPools, { ref: 'pools',
-                            values: this.state.network.pools,
-                            network: this.state.network.uuid })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-12 col-md-4' },
-                        React.createElement(DhcpOptionValues, { ref: 'dhcp_options',
-                            values: values.inet,
-                            options: options.inet,
-                            title: 'DHCP options' }),
-                        React.createElement(DhcpOptionValues, { ref: 'dhcp_options6',
-                            values: values.inet6,
-                            options: options.inet6,
-                            title: 'DHCP options v6' })
-                    )
+                    { className: 'col-xs-12 col-md-4' },
+                    React.createElement(NetworkForm, { ref: 'network',
+                        values: this.state.network,
+                        saveHandler: this.save })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-12 col-md-4' },
+                    React.createElement(IPPools, { ref: 'pools',
+                        values: this.state.network.pools,
+                        network: this.state.network.uuid })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'col-xs-12 col-md-4' },
+                    React.createElement(DhcpOptionValues, { ref: 'dhcp_options',
+                        values: values.inet,
+                        options: options.inet,
+                        title: 'DHCP options' }),
+                    React.createElement(DhcpOptionValues, { ref: 'dhcp_options6',
+                        values: values.inet6,
+                        options: options.inet6,
+                        title: 'DHCP options v6' })
                 )
             )
         );

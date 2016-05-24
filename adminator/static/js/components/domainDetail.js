@@ -39,7 +39,6 @@ var DomainDetail = React.createClass({
     return React.createElement(
       'div',
       null,
-      React.createElement(AdminNavbar, null),
       React.createElement(RecordCreate, { domain: this.props.params.id }),
       React.createElement(
         'div',

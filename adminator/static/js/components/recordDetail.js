@@ -234,50 +234,45 @@ var RecordDetail = React.createClass({
   render: function render() {
     return React.createElement(
       'div',
-      null,
-      React.createElement(AdminNavbar, null),
+      { className: 'container col-md-6 col-md-offset-3' },
       React.createElement(
-        'div',
-        { className: 'container col-md-6 col-md-offset-3' },
+        'h1',
+        null,
+        this.state.data.record.name
+      ),
+      React.createElement(Feedback, null),
+      React.createElement(
+        'form',
+        { className: 'form-horizontal', onSubmit: this.handleSubmit },
         React.createElement(
-          'h1',
-          null,
-          this.state.data.record.name
-        ),
-        React.createElement(Feedback, null),
-        React.createElement(
-          'form',
-          { className: 'form-horizontal', onSubmit: this.handleSubmit },
+          'div',
+          { className: 'panel panel-default' },
           React.createElement(
             'div',
-            { className: 'panel panel-default' },
+            { className: 'panel-heading' },
             React.createElement(
-              'div',
-              { className: 'panel-heading' },
+              'h1',
+              { className: 'panel-title' },
               React.createElement(
-                'h1',
-                { className: 'panel-title' },
-                React.createElement(
-                  'span',
-                  { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
-                  this.state.data.record.type
-                ),
-                ' Record'
-              )
-            ),
+                'span',
+                { className: 'label label-record label-' + this.state.data.record.type.toLowerCase() },
+                this.state.data.record.type
+              ),
+              ' Record'
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'panel-body' },
+            this.renderInput()
+          ),
+          React.createElement(
+            'div',
+            { className: 'panel-footer' },
             React.createElement(
-              'div',
-              { className: 'panel-body' },
-              this.renderInput()
-            ),
-            React.createElement(
-              'div',
-              { className: 'panel-footer' },
-              React.createElement(
-                'button',
-                { type: 'submit', className: 'btn btn-primary' },
-                'Save'
-              )
+              'button',
+              { type: 'submit', className: 'btn btn-primary' },
+              'Save'
             )
           )
         )

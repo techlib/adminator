@@ -200,9 +200,6 @@ var RecordDetail = React.createClass({
 
   render(){
    return (
-    <div>
-      <AdminNavbar/>
-
         <div className='container col-md-6 col-md-offset-3'>
           <h1>{this.state.data.record.name}</h1>
           <Feedback />
@@ -224,8 +221,6 @@ var RecordDetail = React.createClass({
           </div>
         </form>
       </div>
-
-    </div>
     )
   },
 })

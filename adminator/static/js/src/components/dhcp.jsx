@@ -34,8 +34,6 @@ var Dhcp = React.createClass({
         var options = sortDhcpOptions(this.state.options);
 
         return (
-            <div>
-                <AdminNavbar />
                 <div className="col-xs-12 container">
                     <h3>Global DHPC options</h3>
                     <Feedback />
@@ -62,7 +60,6 @@ var Dhcp = React.createClass({
                             onClick={this.save}>Save</button>
 
                 </div>
-            </div>
         )
     }
 })

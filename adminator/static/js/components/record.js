@@ -126,32 +126,27 @@ var Record = React.createClass({
 
     return React.createElement(
       'div',
-      null,
-      React.createElement(AdminNavbar, null),
+      { className: 'col-xs-12 container-fluid' },
       React.createElement(
-        'div',
-        { className: 'col-xs-12 container-fluid' },
-        React.createElement(
-          'h1',
-          null,
-          'Records'
-        ),
-        React.createElement(RecordCreate, null),
-        React.createElement(Griddle, { results: this.state.data['list'],
-          tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
-          useGriddleStyles: false,
-          showFilter: true,
-          useCustomPagerComponent: 'true',
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['name', 'type', 'content', 'actions'],
-          resultsPerPage: '20',
-          customFilterer: regexGridFilter,
-          useCustomFilterer: 'true',
-          columnMetadata: columnMeta
-        })
-      )
+        'h1',
+        null,
+        'Records'
+      ),
+      React.createElement(RecordCreate, null),
+      React.createElement(Griddle, { results: this.state.data['list'],
+        tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
+        useGriddleStyles: false,
+        showFilter: true,
+        useCustomPagerComponent: 'true',
+        customPagerComponent: Pager,
+        sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+        sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+        columns: ['name', 'type', 'content', 'actions'],
+        resultsPerPage: '20',
+        customFilterer: regexGridFilter,
+        useCustomFilterer: 'true',
+        columnMetadata: columnMeta
+      })
     );
   }
 

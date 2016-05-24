@@ -65,45 +65,40 @@ var NetworkList = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            null,
-            React.createElement(AdminNavbar, null),
+            { className: 'container-fluid col-xs-12' },
             React.createElement(
-                'div',
-                { className: 'container-fluid col-xs-12' },
+                'h1',
+                null,
+                'Networks'
+            ),
+            React.createElement(
+                'p',
+                null,
                 React.createElement(
-                    'h1',
-                    null,
-                    'Networks'
+                    Link,
+                    { to: '/dhcp/' },
+                    'Global DHCP options'
                 ),
                 React.createElement(
-                    'p',
-                    null,
-                    React.createElement(
-                        Link,
-                        { to: '/dhcp/' },
-                        'Global DHCP options'
-                    ),
-                    React.createElement(
-                        'a',
-                        { className: 'btn btn-success pull-right', href: '#/network/new' },
-                        React.createElement('i', { className: 'fa fa-plus' }),
-                        ' New network'
-                    )
-                ),
-                React.createElement(Feedback, null),
-                React.createElement(Griddle, { results: this.state.data['list'],
-                    tableClassName: 'table table-bordered table-striped table-hover',
-                    columnMetadata: this.colMetadata,
-                    useGriddleStyles: false,
-                    showFilter: true,
-                    columns: ['description', 'vlan', 'prefix4', 'prefix6', 'max_lease', 'controls'],
-                    showPager: true,
-                    resultsPerPage: '50',
-                    useCustomPagerComponent: true,
-                    customPagerComponent: Pager,
-                    initialSort: 'description'
-                })
-            )
+                    'a',
+                    { className: 'btn btn-success pull-right', href: '#/network/new' },
+                    React.createElement('i', { className: 'fa fa-plus' }),
+                    ' New network'
+                )
+            ),
+            React.createElement(Feedback, null),
+            React.createElement(Griddle, { results: this.state.data['list'],
+                tableClassName: 'table table-bordered table-striped table-hover',
+                columnMetadata: this.colMetadata,
+                useGriddleStyles: false,
+                showFilter: true,
+                columns: ['description', 'vlan', 'prefix4', 'prefix6', 'max_lease', 'controls'],
+                showPager: true,
+                resultsPerPage: '50',
+                useCustomPagerComponent: true,
+                customPagerComponent: Pager,
+                initialSort: 'description'
+            })
         );
     }
 });

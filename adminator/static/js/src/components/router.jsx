@@ -3,20 +3,21 @@ function onRouterUpdate(a,b,) {
 };
 ReactDOM.render((
   <Router onUpdate={onRouterUpdate} history={BrowserHistory}>
-    <Route path="/dhcp" component={Dhcp} />
-    <Route path="/domain" component={Domain} />
-    <Route path="/domain/:id" component={DomainDetail} />
-    <Route path="/domainEdit/:id" component={DomainEdit} />
-    <Route path="/network" component={NetworkList} />
-    <Route path="/network/new" component={NetworkNew} />
-    <Route path="/network/:id" component={NetworkEdit} />
-    <Route path="/device" component={DeviceList} />
-    <Route path="/device/new" component={DeviceNew} />
-    <Route path="/device/:id" component={DeviceEdit} />
-    <Route path="/" component={DeviceList} />
-    <Route path="/record/:id" component={RecordDetail} />
-    <Route path="/record/" component={Record} />
-    <Route path="/lease/" component={Lease} />
+    <Route path="/" component={App}>
+        <Route path="/dhcp" component={Dhcp} />
+        <Route path="/domain" component={Domain} />
+        <Route path="/domain/:id" component={DomainDetail} />
+        <Route path="/domainEdit/:id" component={DomainEdit} />
+        <Route path="/network" component={NetworkList} />
+        <Route path="/network/new" component={NetworkNew} />
+        <Route path="/network/:id" component={NetworkEdit} />
+        <Route path="/device" component={DeviceList} />
+        <Route path="/device/new" component={DeviceNew} />
+        <Route path="/device/:id" component={DeviceEdit} />
+        <Route path="/record/:id" component={RecordDetail} />
+        <Route path="/record/" component={Record} />
+        <Route path="/lease/" component={Lease} />
+    </Route>
   </Router>
  ), document.getElementById("AdminatorApp")
 )

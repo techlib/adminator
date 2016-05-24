@@ -57,8 +57,6 @@ var NetworkList = React.createClass({
 
    render() {
     return (
-        <div>
-        <AdminNavbar />
         <div className='container-fluid col-xs-12'>
                 <h1>Networks</h1>
                 <p><Link to='/dhcp/'>Global DHCP options</Link>
@@ -80,7 +78,6 @@ var NetworkList = React.createClass({
                 customPagerComponent={Pager}
                 initialSort="description"
             />
-        </div>
         </div>
          )
    }

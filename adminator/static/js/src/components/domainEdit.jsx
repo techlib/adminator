@@ -71,8 +71,6 @@ var DomainEdit = React.createClass({
 
   render(){
    return (
-     <div>
-        <AdminNavbar/>
         <div className='container col-md-12 '>
         <h1>{this.state.data.domain.name}</h1>
           <Feedback />
@@ -135,7 +133,6 @@ var DomainEdit = React.createClass({
           </div>
         </form>
       </div>
-    </div>
     )
   },
 })
