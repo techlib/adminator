@@ -55,7 +55,7 @@ var Network = React.createClass({
             React.createElement(AdminNavbar, null),
             React.createElement(
                 'div',
-                { className: 'col-xs-12 container' },
+                { className: 'col-xs-12 container-fluid' },
                 React.createElement(
                     'h1',
                     null,

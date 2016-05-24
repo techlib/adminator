@@ -59,17 +59,14 @@ var NetworkList = React.createClass({
     return (
         <div>
         <AdminNavbar />
-        <div className='col-xs-12'>
-            <div className="container-fluid">
-                <h3>Networks</h3>
-                <Feedback />
+        <div className='container-fluid col-xs-12'>
+                <h1>Networks</h1>
                 <p><Link to='/dhcp/'>Global DHCP options</Link>
                     <a className='btn btn-success pull-right' href='#/network/new'>
                         <i className='fa fa-plus'></i> New network
                     </a>
                 </p>
-            </div>
-            <div className='container-fluid'>
+                <Feedback />
             <Griddle results={this.state.data['list']}
                 tableClassName='table table-bordered table-striped table-hover'
                 columnMetadata={this.colMetadata}
@@ -85,7 +82,6 @@ var NetworkList = React.createClass({
             />
         </div>
         </div>
-    </div>
          )
    }
 });

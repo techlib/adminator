@@ -50,7 +50,7 @@ var Network = React.createClass({
         return (
         <div>
             <AdminNavbar />
-            <div className="col-xs-12 container">
+            <div className="col-xs-12 container-fluid">
                 <h1>{this.props.title}</h1>
                 <Feedback />
                 <div className="row">
