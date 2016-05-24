@@ -54,10 +54,12 @@ def make_site(db, manager, access_model, debug=False):
         def wrapper(*args, **kwargs):
             uid = flask.request.headers.get('X-User-Id', '0')
             username = flask.request.headers.get('X-Full-Name', 'Someone')
+            roles = flask.request.headers.get('X-Roles', '')
 
             kwargs.update({
                 'uid': int(uid),
                 'username': username.encode('latin1').decode('utf8'),
+                'roles': re.findall(r'\w+', roles)
             })
 
             return fn(*args, **kwargs)
