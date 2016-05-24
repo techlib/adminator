@@ -91,8 +91,8 @@ def make_site(db, manager, access_model, debug=False):
         response.status_code = 500
         return response
 
-#    @authorized_only(privilege='user')
     @app.route('/')
+    @authorized_only(privilege='admin')
     def index():
         nonlocal has_privilege
 
@@ -101,6 +101,7 @@ def make_site(db, manager, access_model, debug=False):
 
     # Devices
     @app.route('/device/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def device_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.device.list())
@@ -109,6 +110,7 @@ def make_site(db, manager, access_model, debug=False):
 
 
     @app.route('/device/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
+    @authorized_only(privilege='admin')
     def device_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.device.get_item(uuid))
@@ -125,6 +127,7 @@ def make_site(db, manager, access_model, debug=False):
 
     # Interfaces
     @app.route('/interface/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def interface_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.interface.list())
@@ -132,6 +135,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.interface.insert(flask.request.get_json(force=True)))
 
     @app.route('/interface/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='admin')
     def interface_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.interface.get_item(uuid))
@@ -146,6 +150,7 @@ def make_site(db, manager, access_model, debug=False):
 
     # DHCP option values
     @app.route('/dhcp-global/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def global_dhcp():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.dhcp_option_value.list_global())
@@ -155,12 +160,14 @@ def make_site(db, manager, access_model, debug=False):
 
     # Available DHCP options
     @app.route('/dhcp-options/', methods=['GET'])
+    @authorized_only(privilege='admin')
     def list_dhpc_options():
         return flask.jsonify(result=manager.dhcp_option.list())
 
 
     # Users
     @app.route('/user/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def user_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.user.list())
@@ -168,6 +175,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.user.insert(flask.request.get_json(force=True)))
 
     @app.route('/user/<cn>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='admin')
     def user_item_handler(cn):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.user.get_item(cn))
@@ -181,6 +189,7 @@ def make_site(db, manager, access_model, debug=False):
 
     # Networks
     @app.route('/network/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def network_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.network.list())
@@ -188,6 +197,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.network.insert(flask.request.get_json(force=True)))
 
     @app.route('/network/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
+    @authorized_only(privilege='admin')
     def network_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.network.get_item(uuid))
@@ -205,6 +215,7 @@ def make_site(db, manager, access_model, debug=False):
 
     # DNS
     @app.route('/domain/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def domain_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.domain.list())
@@ -212,6 +223,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.domain.insert(flask.request.get_json(force=True)))
 
     @app.route('/domain/<id>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='admin')
     def domain_item_handler(id):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.domain.get_item(id))
@@ -224,6 +236,7 @@ def make_site(db, manager, access_model, debug=False):
  
 
     @app.route('/record/', methods=['GET', 'POST'])
+    @authorized_only(privilege='admin')
     def record_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.record.list())
@@ -231,6 +244,7 @@ def make_site(db, manager, access_model, debug=False):
             return flask.jsonify(manager.record.insert(flask.request.get_json(force=True)))
 
     @app.route('/record/<id>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='admin')
     def record_item_handler(id):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.record.get_item(id))
@@ -244,21 +258,25 @@ def make_site(db, manager, access_model, debug=False):
 
     # Leases
     @app.route('/lease4/', methods=['GET'])
+    @authorized_only(privilege='admin')
     def lease4_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.lease4.list())
 
     @app.route('/lease4/<addr>', methods=['DELETE'])
+    @authorized_only(privilege='admin')
     def lease4_item_handler(addr):
         if 'DELETE' == flask.request.method:
             return flask.jsonify(manager.lease4.delete(addr))
 
     @app.route('/lease6/', methods=['GET'])
+    @authorized_only(privilege='admin')
     def lease6_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.lease6.list())
 
     @app.route('/lease6/<addr>', methods=['DELETE'])
+    @authorized_only(privilege='admin')
     def lease6_item_handler(addr):
         if 'DELETE' == flask.request.method:
             return flask.jsonify(manager.lease6.delete(addr))
