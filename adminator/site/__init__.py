@@ -38,8 +38,7 @@ def make_site(db, manager, access_model, debug=False):
             'error': 'pficon-error-circle-o',
         }[category]
 
-
-    def has_privilege(privilege):
+    def get_roles():
         roles = flask.request.headers.get('X-Roles', '')
 
         if not roles or '(null)' == roles:
@@ -47,19 +46,22 @@ def make_site(db, manager, access_model, debug=False):
         else:
             roles = re.findall(r'\w+', roles)
 
-        return access_model.have_privilege(privilege, roles)
+        return roles
+
+    def has_privilege(privilege):
+        return access_model.have_privilege(privilege, get_roles())
 
     def pass_user_info(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             uid = flask.request.headers.get('X-User-Id', '0')
             username = flask.request.headers.get('X-Full-Name', 'Someone')
-            roles = flask.request.headers.get('X-Roles', '')
+            roles = get_roles()
 
             kwargs.update({
                 'uid': int(uid),
                 'username': username.encode('latin1').decode('utf8'),
-                'roles': re.findall(r'\w+', roles)
+                'roles': roles
             })
 
             return fn(*args, **kwargs)
