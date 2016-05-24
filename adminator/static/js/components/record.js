@@ -130,31 +130,27 @@ var Record = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
-        { className: 'col-xs-12 container' },
+        { className: 'col-xs-12 container-fluid' },
         React.createElement(
-          'div',
-          { className: 'container-fluid' },
-          React.createElement(
-            'h3',
-            null,
-            'Records'
-          ),
-          React.createElement(RecordCreate, null),
-          React.createElement(Griddle, { results: this.state.data['list'],
-            tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
-            useGriddleStyles: false,
-            showFilter: true,
-            useCustomPagerComponent: 'true',
-            customPagerComponent: Pager,
-            sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-            sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-            columns: ['name', 'type', 'content', 'actions'],
-            resultsPerPage: '20',
-            customFilterer: regexGridFilter,
-            useCustomFilterer: 'true',
-            columnMetadata: columnMeta
-          })
-        )
+          'h1',
+          null,
+          'Records'
+        ),
+        React.createElement(RecordCreate, null),
+        React.createElement(Griddle, { results: this.state.data['list'],
+          tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
+          useGriddleStyles: false,
+          showFilter: true,
+          useCustomPagerComponent: 'true',
+          customPagerComponent: Pager,
+          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+          columns: ['name', 'type', 'content', 'actions'],
+          resultsPerPage: '20',
+          customFilterer: regexGridFilter,
+          useCustomFilterer: 'true',
+          columnMetadata: columnMeta
+        })
       )
     );
   }

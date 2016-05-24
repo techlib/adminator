@@ -209,11 +209,11 @@ var RecordDetail = React.createClass({
           <form className='form-horizontal' onSubmit={this.handleSubmit}>
             <div className="panel panel-default">
               <div className="panel-heading">
-                <h3 className="panel-title">
+                <h1 className="panel-title">
                     <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
                    {this.state.data.record.type}
                  </span> Record
-               </h3>
+               </h1>
               </div>
               <div className="panel-body">
               {this.renderInput()}

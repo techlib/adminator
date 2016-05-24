@@ -255,7 +255,7 @@ var RecordDetail = React.createClass({
               'div',
               { className: 'panel-heading' },
               React.createElement(
-                'h3',
+                'h1',
                 { className: 'panel-title' },
                 React.createElement(
                   'span',

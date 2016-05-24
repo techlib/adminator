@@ -113,9 +113,8 @@ var Record = React.createClass({
     return (
       <div>
       <AdminNavbar/>
-        <div className='col-xs-12 container'>
-          <div className='container-fluid'>
-            <h3>Records</h3>
+        <div className='col-xs-12 container-fluid'>
+            <h1>Records</h1>
             <RecordCreate />
             <Griddle results={this.state.data['list']}
                      tableClassName='datatable table table-striped table-hover table-bordered datatable'
@@ -133,7 +132,6 @@ var Record = React.createClass({
                      />
           </div>
         </div>
-      </div>
     )
   },
 
