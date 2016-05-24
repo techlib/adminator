@@ -42,3 +42,7 @@ var DhcpValuesActions = Reflux.createActions([
 var FeedbackActions = Reflux.createActions([
     'clear', 'set'
 ])
+
+var UserInfoActions = Reflux.createActions([
+    'read'
+])
