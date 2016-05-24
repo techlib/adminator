@@ -73,13 +73,13 @@ var DomainEdit = React.createClass({
    return (
      <div>
         <AdminNavbar/>
-        <div className='container col-md-10 col-md-offset-1'>
+        <div className='container col-md-12 '>
         <h1>{this.state.data.domain.name}</h1>
           <Feedback />
           <form className='form-horizontal' onSubmit={this.handleSubmit}>
             <div className="panel panel-default">
               <div className="panel-heading">
-                <h3 className="panel-title">Domain</h3>
+                <h1 className="panel-title">Domain</h1>
               </div>
 
               <div className="panel-body">

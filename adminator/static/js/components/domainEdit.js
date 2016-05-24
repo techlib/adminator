@@ -87,7 +87,7 @@ var DomainEdit = React.createClass({
       React.createElement(AdminNavbar, null),
       React.createElement(
         'div',
-        { className: 'container col-md-10 col-md-offset-1' },
+        { className: 'container col-md-12 ' },
         React.createElement(
           'h1',
           null,
@@ -104,7 +104,7 @@ var DomainEdit = React.createClass({
               'div',
               { className: 'panel-heading' },
               React.createElement(
-                'h3',
+                'h1',
                 { className: 'panel-title' },
                 'Domain'
               )

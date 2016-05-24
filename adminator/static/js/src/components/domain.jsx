@@ -76,12 +76,12 @@ var Domain = React.createClass({
      return (
        <div>
         <AdminNavbar/>
-        <div className='col-xs-12'>
-          <div className='container-fluid'>
-            <h3>Domains</h3>
+        <div className='container-fluid col-xs-12'>
+            <h1>Domains
             <a className='btn btn-success pull-right' href='#/domainEdit/new'>
               <i className='fa fa-plus'></i> New domain
             </a>
+            </h1>
             <Griddle results={this.state.data['list']}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}
@@ -96,7 +96,6 @@ var Domain = React.createClass({
                      />
           </div>
         </div>
-      </div>
     )
   },
 
