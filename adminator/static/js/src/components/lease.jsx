@@ -116,10 +116,9 @@ var Lease = React.createClass({
       return (
       <div>
       <AdminNavbar/>
-        <div className='col-xs-12 container'>
-          <div className='container-fluid'>
+        <div className='col-xs-12 container-fluid'>
 
-						<h3>Leases</h3>
+						<h1>Leases</h1>
 						<ul className="nav nav-tabs" role="tablist">
 							<li role="presentation" className="active"><a href="#ipv4" aria-controls="ipv4" role="tab" data-toggle="tab">IPv4</a></li>
 							<li role="presentation"><a href="#ipv6" aria-controls="profile" role="ipv6" data-toggle="tab">IPv6</a></li>
@@ -162,7 +161,6 @@ var Lease = React.createClass({
 						</div>
           </div>
         </div>
-      </div>
     )
   },
 
