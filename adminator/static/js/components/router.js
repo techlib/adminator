@@ -9,6 +9,7 @@ ReactDOM.render(React.createElement(
     React.createElement(
         Route,
         { path: "/", component: App },
+        React.createElement(ReactRouter.IndexRedirect, { to: "/device" }),
         React.createElement(Route, { path: "/dhcp", component: Dhcp }),
         React.createElement(Route, { path: "/domain", component: Domain }),
         React.createElement(Route, { path: "/domain/:id", component: DomainDetail }),

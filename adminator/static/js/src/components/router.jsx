@@ -4,6 +4,7 @@ function onRouterUpdate(a,b,) {
 ReactDOM.render((
   <Router onUpdate={onRouterUpdate} history={BrowserHistory}>
     <Route path="/" component={App}>
+        <ReactRouter.IndexRedirect to='/device' />
         <Route path="/dhcp" component={Dhcp} />
         <Route path="/domain" component={Domain} />
         <Route path="/domain/:id" component={DomainDetail} />
