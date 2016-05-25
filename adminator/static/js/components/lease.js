@@ -90,6 +90,19 @@ var LeaseMacComponent = React.createClass({
   }
 });
 
+var LeaseDateComponent = React.createClass({
+  displayName: "LeaseDateComponent",
+
+  render: function render() {
+    var txt = moment.parseZone(this.props.data).format('DD. MM. YYYY HH:mm:ss');
+    return React.createElement(
+      "span",
+      null,
+      txt
+    );
+  }
+});
+
 var Lease = React.createClass({
   displayName: "Lease",
 
@@ -118,7 +131,8 @@ var Lease = React.createClass({
       customComponent: LeaseMacComponent
     }, {
       columnName: 'expire',
-      displayName: 'Expire'
+      displayName: 'Expire',
+      customComponent: LeaseDateComponent
     }, {
       columnName: 'valid_lifetime',
       displayName: 'Valid lifetime'
@@ -143,7 +157,8 @@ var Lease = React.createClass({
       customComponent: LeaseMacComponent
     }, {
       columnName: 'expire',
-      displayName: 'Expire'
+      displayName: 'Expire',
+      customComponent: LeaseDateComponent
     }, {
       columnName: 'valid_lifetime',
       displayName: 'Valid lifetime'

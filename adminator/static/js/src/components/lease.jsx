@@ -57,6 +57,14 @@ var LeaseMacComponent = React.createClass({
     }
 })
 
+var LeaseDateComponent = React.createClass({
+    render() {
+        var txt = moment.parseZone(this.props.data).format('DD. MM. YYYY HH:mm:ss')
+        return <span>{txt}</span>
+    }
+})
+
+
 var Lease = React.createClass({
   mixins: [Reflux.connect(lease4Store, 'lease4data'), Reflux.connect(lease6Store, 'lease6data')],
 
@@ -89,6 +97,7 @@ var Lease = React.createClass({
       {
         columnName: 'expire',
         displayName: 'Expire',
+        customComponent: LeaseDateComponent
       },
       {
         columnName: 'valid_lifetime',
@@ -122,6 +131,7 @@ var Lease = React.createClass({
       {
         columnName: 'expire',
         displayName: 'Expire',
+        customComponent: LeaseDateComponent
       },
       {
         columnName: 'valid_lifetime',
