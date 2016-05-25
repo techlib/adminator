@@ -144,32 +144,9 @@ var Lease = React.createClass({
       columnName: 'hostname',
       displayName: 'Hostname'
     }];
-    var lease6ColumnMeta = [{
-      columnName: 'actions',
-      displayName: 'Actions',
-      customComponent: Lease6ActionsComponent
-    }, {
-      columnName: 'address',
-      displayName: 'IP'
-    }, {
-      columnName: 'hwaddr',
-      displayName: 'MAC',
-      customComponent: LeaseMacComponent
-    }, {
-      columnName: 'expire',
-      displayName: 'Expire',
-      customComponent: LeaseDateComponent
-    }, {
-      columnName: 'valid_lifetime',
-      displayName: 'Valid lifetime'
-    }, {
-      columnName: 'state',
-      displayName: 'State',
-      customComponent: LeaseStateComponent
-    }, {
-      columnName: 'hostname',
-      displayName: 'Hostname'
-    }];
+
+    var lease6ColumnMeta = _.cloneDeep(lease4ColumnMeta);
+    lease6ColumnMeta[0].customComponent = Lease6ActionsComponent;
 
     return React.createElement(
       "div",
