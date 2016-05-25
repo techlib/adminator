@@ -33,6 +33,23 @@ var Lease6ActionsComponent = React.createClass({
   }
 })
 
+var LeaseStateComponent = React.createClass({
+    render() {
+        var txt = this.props.data
+        switch (this.props.data) {
+            case 0:
+                txt = 'default'
+                break;
+            case 1:
+                txt = 'declined'
+                break;
+            case 2:
+                txt = 'expired-reclaimed'
+                break;
+        }
+        return <span>{txt}</span>
+    }
+})
 
 var Lease = React.createClass({
   mixins: [Reflux.connect(lease4Store, 'lease4data'), Reflux.connect(lease6Store, 'lease6data')],
@@ -72,7 +89,8 @@ var Lease = React.createClass({
       },
       {
         columnName: 'state',
-        displayName: 'State'
+        displayName: 'State',
+        customComponent: LeaseStateComponent
       },
       {
         columnName: 'hostname',
@@ -103,7 +121,8 @@ var Lease = React.createClass({
       },
       {
         columnName: 'state',
-        displayName: 'State'
+        displayName: 'State',
+        customComponent: LeaseStateComponent
       },
       {
         columnName: 'hostname',

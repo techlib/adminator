@@ -54,6 +54,30 @@ var Lease6ActionsComponent = React.createClass({
   }
 });
 
+var LeaseStateComponent = React.createClass({
+  displayName: "LeaseStateComponent",
+
+  render: function render() {
+    var txt = this.props.data;
+    switch (this.props.data) {
+      case 0:
+        txt = 'default';
+        break;
+      case 1:
+        txt = 'declined';
+        break;
+      case 2:
+        txt = 'expired-reclaimed';
+        break;
+    }
+    return React.createElement(
+      "span",
+      null,
+      txt
+    );
+  }
+});
+
 var Lease = React.createClass({
   displayName: "Lease",
 
@@ -87,7 +111,8 @@ var Lease = React.createClass({
       displayName: 'Valid lifetime'
     }, {
       columnName: 'state',
-      displayName: 'State'
+      displayName: 'State',
+      customComponent: LeaseStateComponent
     }, {
       columnName: 'hostname',
       displayName: 'Hostname'
@@ -110,7 +135,8 @@ var Lease = React.createClass({
       displayName: 'Valid lifetime'
     }, {
       columnName: 'state',
-      displayName: 'State'
+      displayName: 'State',
+      customComponent: LeaseStateComponent
     }, {
       columnName: 'hostname',
       displayName: 'Hostname'
