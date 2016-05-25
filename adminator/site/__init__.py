@@ -57,11 +57,15 @@ def make_site(db, manager, access_model, debug=False):
             uid = flask.request.headers.get('X-User-Id', '0')
             username = flask.request.headers.get('X-Full-Name', 'Someone')
             roles = get_roles()
+            privs = []
+
+            for role in roles:
+                privs.extend(access_model.privileges(role))
 
             kwargs.update({
                 'uid': int(uid),
                 'username': username.encode('latin1').decode('utf8'),
-                'roles': roles
+                'privileges': privs
             })
 
             return fn(*args, **kwargs)
