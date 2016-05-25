@@ -78,6 +78,18 @@ var LeaseStateComponent = React.createClass({
   }
 });
 
+var LeaseMacComponent = React.createClass({
+  displayName: "LeaseMacComponent",
+
+  render: function render() {
+    return React.createElement(
+      "span",
+      null,
+      formatMac(this.props.data)
+    );
+  }
+});
+
 var Lease = React.createClass({
   displayName: "Lease",
 
@@ -102,7 +114,8 @@ var Lease = React.createClass({
       displayName: 'IP'
     }, {
       columnName: 'hwaddr',
-      displayName: 'MAC'
+      displayName: 'MAC',
+      customComponent: LeaseMacComponent
     }, {
       columnName: 'expire',
       displayName: 'Expire'
@@ -126,7 +139,8 @@ var Lease = React.createClass({
       displayName: 'IP'
     }, {
       columnName: 'hwaddr',
-      displayName: 'MAC'
+      displayName: 'MAC',
+      customComponent: LeaseMacComponent
     }, {
       columnName: 'expire',
       displayName: 'Expire'

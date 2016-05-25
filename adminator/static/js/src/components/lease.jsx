@@ -51,6 +51,12 @@ var LeaseStateComponent = React.createClass({
     }
 })
 
+var LeaseMacComponent = React.createClass({
+    render() {
+        return <span>{formatMac(this.props.data)}</span>
+    }
+})
+
 var Lease = React.createClass({
   mixins: [Reflux.connect(lease4Store, 'lease4data'), Reflux.connect(lease6Store, 'lease6data')],
 
@@ -78,6 +84,7 @@ var Lease = React.createClass({
       {
         columnName: 'hwaddr',
         displayName: 'MAC',
+        customComponent: LeaseMacComponent
       },
       {
         columnName: 'expire',
@@ -110,6 +117,7 @@ var Lease = React.createClass({
       {
         columnName: 'hwaddr',
         displayName: 'MAC',
+        customComponent: LeaseMacComponent
       },
       {
         columnName: 'expire',
