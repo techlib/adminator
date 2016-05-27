@@ -158,11 +158,16 @@ var DeviceList = React.createClass({
 
     return (
         <div className='container-fluid col-xs-12'>
-              <h1>Devices
-                    <a className='btn btn-success pull-right' href='#/device/new'>
+            <div className="row">
+                <div className="col-xs-12 col-sm-10">
+                    <h1>Devices</h1>
+                </div>
+                <div className="col-xs-12 col-sm-2 h1 text-right">
+                    <a className='btn btn-success' href='#/device/new'>
                     <i className='fa fa-plus'></i> New device
                     </a>
-              </h1>
+                </div>
+            </div>
               <Feedback />
             <Griddle results={this.state.data.list}
                      tableClassName='table table-bordered table-striped table-hover'

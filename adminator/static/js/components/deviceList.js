@@ -195,14 +195,26 @@ var DeviceList = React.createClass({
       'div',
       { className: 'container-fluid col-xs-12' },
       React.createElement(
-        'h1',
-        null,
-        'Devices',
+        'div',
+        { className: 'row' },
         React.createElement(
-          'a',
-          { className: 'btn btn-success pull-right', href: '#/device/new' },
-          React.createElement('i', { className: 'fa fa-plus' }),
-          ' New device'
+          'div',
+          { className: 'col-xs-12 col-sm-10' },
+          React.createElement(
+            'h1',
+            null,
+            'Devices'
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'col-xs-12 col-sm-2 h1 text-right' },
+          React.createElement(
+            'a',
+            { className: 'btn btn-success', href: '#/device/new' },
+            React.createElement('i', { className: 'fa fa-plus' }),
+            ' New device'
+          )
         )
       ),
       React.createElement(Feedback, null),
