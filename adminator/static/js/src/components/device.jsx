@@ -76,8 +76,8 @@ var Device = React.createClass({
                 </div>
 
                 <div className='panel-footer'>
-                    <button className='btn btn-success'
-                            onClick={this.addInterface}>Add</button>
+                    <a onClick={this.addInterface}>
+                        <span className="pficon pficon-add-circle-o"></span> Add new interface</a>
                 </div>
             </div>
 

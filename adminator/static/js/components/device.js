@@ -117,10 +117,10 @@ var Device = React.createClass({
                             'div',
                             { className: 'panel-footer' },
                             React.createElement(
-                                'button',
-                                { className: 'btn btn-success',
-                                    onClick: this.addInterface },
-                                'Add'
+                                'a',
+                                { onClick: this.addInterface },
+                                React.createElement('span', { className: 'pficon pficon-add-circle-o' }),
+                                ' Add new interface'
                             )
                         )
                     )

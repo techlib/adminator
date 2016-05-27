@@ -96,9 +96,8 @@ var IPPools = React.createClass({
             }
         </div>
             <div className="panel-footer">
-                <a onClick={this.handleAdd}
-                    className="btn button btn-success">
-                    <i className="fa fa-plus"></i> Add</a>
+                <a onClick={this.handleAdd}>
+                    <span className="pficon pficon-add-circle-o"></span> Add new pool</a>
             </div>
 
         </div>
