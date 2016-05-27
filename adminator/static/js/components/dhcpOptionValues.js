@@ -278,20 +278,16 @@ var ArrayControl = React.createClass({
                 var id = _this5.props.name + (i == 0 ? '' : '-' + i);
                 return React.createElement(
                     'div',
-                    { key: item.c },
+                    { key: item.c, className: 'input-group array-row' },
+                    t({
+                        id: id,
+                        ref: id,
+                        value: _this5.state.values[i].val }),
                     React.createElement(
-                        'div',
-                        { className: 'input-group' },
-                        t({
-                            id: id,
-                            ref: id,
-                            value: _this5.state.values[i].val }),
-                        React.createElement(
-                            'a',
-                            { className: 'input-group-addon',
-                                onClick: _this5.handleRemove.bind(null, i) },
-                            React.createElement('span', { className: 'glyphicon glyphicon-trash' })
-                        )
+                        'a',
+                        { className: 'input-group-addon',
+                            onClick: _this5.handleRemove.bind(null, i) },
+                        React.createElement('span', { className: 'glyphicon glyphicon-trash' })
                     )
                 );
             }),

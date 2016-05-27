@@ -2,3 +2,7 @@
 .table>tbody+tbody {
     border-top-width: 1px !important;
 }
+
+.array-row {
+    margin-bottom: 4px
+}

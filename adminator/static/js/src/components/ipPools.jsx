@@ -71,7 +71,7 @@ var IPPools = React.createClass({
             <div className="panel-body">
 
             {this.state.values.map((item, i) => {
-                return <div className="row" key={item.uuid}>
+                return <div className="row array-row" key={item.uuid}>
                     <div className="col-xs-6">
                         <input className="form-control"
                             type="text"

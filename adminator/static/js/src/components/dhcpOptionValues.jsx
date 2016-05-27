@@ -246,8 +246,7 @@ let ArrayControl = React.createClass({
             {
                 this.state.values.map((item, i) => {
                     var id = this.props.name + ((i==0) ? '' : '-' + i);
-                    return <div key={item.c}>
-                    <div className="input-group">
+                    return <div key={item.c} className="input-group array-row">
                         {t({
                             id: id,
                             ref: id,
@@ -257,7 +256,6 @@ let ArrayControl = React.createClass({
                             <span className="glyphicon glyphicon-trash"></span>
                         </a>
                     </div>
-                </div>
                 })
             }
             <div className="form-control-static">

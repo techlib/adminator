@@ -90,7 +90,7 @@ var IPPools = React.createClass({
                 this.state.values.map(function (item, i) {
                     return React.createElement(
                         'div',
-                        { className: 'row', key: item.uuid },
+                        { className: 'row array-row', key: item.uuid },
                         React.createElement(
                             'div',
                             { className: 'col-xs-6' },
