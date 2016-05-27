@@ -1,0 +1,4 @@
+/* remove double border at paginator */
+.table>tbody+tbody {
+    border-top-width: 1px !important;
+}
