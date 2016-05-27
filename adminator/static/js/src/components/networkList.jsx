@@ -58,12 +58,18 @@ var NetworkList = React.createClass({
    render() {
     return (
         <div className='container-fluid col-xs-12'>
-                <h1>Networks</h1>
-                <p><Link to='/dhcp/'>Global DHCP options</Link>
-                    <a className='btn btn-success pull-right' href='#/network/new'>
-                        <i className='fa fa-plus'></i> New network
-                    </a>
-                </p>
+                <div className="row">
+                    <div className="col-xs-12 col-sm-6">
+                        <h1>Networks</h1>
+                    </div>
+                    <div className="col-xs-12 col-sm-6 h1 text-right">
+                        <a className='btn btn-default' href='#/dhcp/'>
+                            Global DHCP options
+                        </a> <a className='btn btn-success' href='#/network/new'>
+                            <i className='fa fa-plus'></i> New network
+                        </a>
+                    </div>
+                </div>
                 <Feedback />
             <Griddle results={this.state.data['list']}
                 tableClassName='table table-bordered table-striped table-hover'

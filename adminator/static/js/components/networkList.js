@@ -67,23 +67,32 @@ var NetworkList = React.createClass({
             'div',
             { className: 'container-fluid col-xs-12' },
             React.createElement(
-                'h1',
-                null,
-                'Networks'
-            ),
-            React.createElement(
-                'p',
-                null,
+                'div',
+                { className: 'row' },
                 React.createElement(
-                    Link,
-                    { to: '/dhcp/' },
-                    'Global DHCP options'
+                    'div',
+                    { className: 'col-xs-12 col-sm-6' },
+                    React.createElement(
+                        'h1',
+                        null,
+                        'Networks'
+                    )
                 ),
                 React.createElement(
-                    'a',
-                    { className: 'btn btn-success pull-right', href: '#/network/new' },
-                    React.createElement('i', { className: 'fa fa-plus' }),
-                    ' New network'
+                    'div',
+                    { className: 'col-xs-12 col-sm-6 h1 text-right' },
+                    React.createElement(
+                        'a',
+                        { className: 'btn btn-default', href: '#/dhcp/' },
+                        'Global DHCP options'
+                    ),
+                    ' ',
+                    React.createElement(
+                        'a',
+                        { className: 'btn btn-success', href: '#/network/new' },
+                        React.createElement('i', { className: 'fa fa-plus' }),
+                        ' New network'
+                    )
                 )
             ),
             React.createElement(Feedback, null),
