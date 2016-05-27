@@ -14,6 +14,10 @@ var DhcpOptionValues = React.createClass({
 
     handleAdd: function handleAdd() {
         var option = this.refs.newType.value;
+        if (option == "0") {
+            return;
+        }
+
         this.state.values.push({
             'type': 'string',
             'array': false,
@@ -111,7 +115,13 @@ var DhcpOptionValues = React.createClass({
                             'select',
                             {
                                 ref: 'newType',
-                                className: 'form-control' },
+                                className: 'form-control',
+                                onChange: this.handleAdd },
+                            React.createElement(
+                                'option',
+                                { value: '0', key: '0' },
+                                '- please select -'
+                            ),
                             _.map(this.getAvailableOptions(), function (item, key) {
                                 return React.createElement(
                                     'option',
@@ -120,17 +130,6 @@ var DhcpOptionValues = React.createClass({
                                     item.name
                                 );
                             })
-                        )
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-xs-1' },
-                        React.createElement(
-                            'a',
-                            { onClick: this.handleAdd,
-                                className: 'btn button btn-success' },
-                            React.createElement('i', { className: 'fa fa-plus' }),
-                            ' Add'
                         )
                     )
                 )
