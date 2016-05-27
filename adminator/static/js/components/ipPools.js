@@ -110,10 +110,10 @@ var IPPools = React.createClass({
                                     ref: item.uuid + '-1',
                                     defaultValue: item.range[1] }),
                                 React.createElement(
-                                    'span',
+                                    'a',
                                     { className: 'input-group-addon',
                                         onClick: _this3.handleRemove.bind(null, i) },
-                                    React.createElement('i', { className: 'fa fa-trash' })
+                                    React.createElement('span', { className: 'glyphicon glyphicon-trash' })
                                 )
                             )
                         )

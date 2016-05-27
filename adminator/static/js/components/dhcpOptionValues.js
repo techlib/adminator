@@ -288,10 +288,10 @@ var ArrayControl = React.createClass({
                             ref: id,
                             value: _this5.state.values[i].val }),
                         React.createElement(
-                            'span',
+                            'a',
                             { className: 'input-group-addon',
                                 onClick: _this5.handleRemove.bind(null, i) },
-                            React.createElement('i', { className: 'fa fa-trash' })
+                            React.createElement('span', { className: 'glyphicon glyphicon-trash' })
                         )
                     )
                 );

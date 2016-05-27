@@ -253,10 +253,10 @@ let ArrayControl = React.createClass({
                             id: id,
                             ref: id,
                             value: this.state.values[i].val})}
-                        <span className="input-group-addon" 
-                              onClick={this.handleRemove.bind(null, i)}>
-                              <i className="fa fa-trash"></i>
-                        </span>
+                        <a className="input-group-addon"
+                            onClick={this.handleRemove.bind(null, i)}>
+                            <span className="glyphicon glyphicon-trash"></span>
+                        </a>
                     </div>
                 </div>
                 })
