@@ -283,9 +283,13 @@ var RecordCreate = React.createClass({
   },
 
   renderTypeButton: function renderTypeButton(type) {
+    var _classNames;
+
+    var btnCls = classNames((_classNames = {}, _classNames['btn-' + type.toLowerCase()] = this.state.record.type == type, _classNames));
     return React.createElement(
       Button,
-      { bsStyle: this.state.record.type == type ? 'btn-lg btn-' + type.toLowerCase() : 'btn-lg',
+      { className: btnCls,
+        bsSize: 'lg',
         onClick: this.setType.bind(this, type),
         value: type },
       type
