@@ -40,7 +40,7 @@ var DomainActionsComponent = React.createClass({
           OverlayTrigger,
           { placement: 'top', overlay: React.createElement(
               Tooltip,
-              null,
+              { id: "record" + this.props.rowData.id },
               'Records'
             ) },
           React.createElement(
@@ -54,7 +54,7 @@ var DomainActionsComponent = React.createClass({
         OverlayTrigger,
         { placement: 'top', overlay: React.createElement(
             Tooltip,
-            null,
+            { id: "delete" + this.props.rowData.id },
             'Delete'
           ) },
         React.createElement(

@@ -28,14 +28,14 @@ var DomainActionsComponent = React.createClass({
     return (
         <ButtonGroup>
           <LinkContainer to={`/domain/${this.props.rowData.id}`}>
-            <OverlayTrigger placement="top" overlay=<Tooltip>Records</Tooltip>>
+            <OverlayTrigger placement="top" overlay=<Tooltip id={"record"+this.props.rowData.id}>Records</Tooltip>>
               <Button bsStyle='info'>
                 <i className="fa fa-list-alt"></i>
               </Button>
             </OverlayTrigger>
           </LinkContainer>
 
-            <OverlayTrigger placement="top" overlay=<Tooltip>Delete</Tooltip>>
+            <OverlayTrigger placement="top" overlay=<Tooltip id={"delete"+this.props.rowData.id}>Delete</Tooltip>>
               <Button bsStyle='danger' onClick={this.handleDelete}>
                 <i className="fa fa-trash-o"></i>
               </Button>
