@@ -352,7 +352,7 @@ var RecordCreate = React.createClass({
                   this.state.data['list'].map(function (domain) {
                     return React.createElement(
                       'option',
-                      { value: domain.id, 'data-name': domain.name },
+                      { value: domain.id, 'data-name': domain.name, key: domain.name },
                       domain.name
                     );
                   })

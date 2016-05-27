@@ -272,7 +272,7 @@ var RecordCreate = React.createClass({
                  <div className='col-xs-12 col-sm-4'>
                    <BootstrapSelect ref='domain' addonBefore='Domain' onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
                      {this.state.data['list'].map((domain) => {
-                       return <option value={domain.id} data-name={domain.name}>{domain.name}</option>
+                       return <option value={domain.id} data-name={domain.name} key={domain.name}>{domain.name}</option>
                      })}
                    </BootstrapSelect>
                  </div>
