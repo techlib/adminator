@@ -6,6 +6,10 @@ var DeviceForm = React.createClass({
     },
 
     componentWillReceiveProps(p) {
+        if (p.device.valid == null) {
+            delete(p.device.valid)
+        }
+
         this.setState(p.device);
     },
 
