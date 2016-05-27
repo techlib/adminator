@@ -16,6 +16,9 @@ var DomainEdit = React.createClass({
   },
 
   handleErrors(data){
+    if (!_.has(data, 'errors')) {
+        return;
+    }
     var errors = []
     data.errors.map((item) => {
       errors.append(item.message.message)
