@@ -77,7 +77,7 @@ var RecordActionsComponent = React.createClass({
         OverlayTrigger,
         { placement: 'top', overlay: React.createElement(
             Tooltip,
-            null,
+            { id: "recdelete" + this.props.rowData.id },
             'Delete'
           ) },
         React.createElement(
