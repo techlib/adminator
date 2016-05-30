@@ -5,3 +5,4 @@ SQLAlchemy
 SQLSoup
 psycopg2
 txpostgres
+ldap3
