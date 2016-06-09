@@ -33,9 +33,16 @@ class Device(Model):
 
     def list(self):
         devices = {}
+        users = {}
+
+        for user in self.db.execute('select * from network.user').fetchall():
+            users[user.cn] = dict(zip(user.keys(), user.values()))
+
         for device in self.db.execute('select * from device').fetchall():
             devices[str(device.uuid)] = dict(zip(device.keys(), device.values()))
             devices[str(device.uuid)]['interfaces'] = []
+            devices[str(device.uuid)]['users'] = users.get(device.user)
+
         for interface in self.db.execute('select * from interface').fetchall():
             item = dict(zip(interface.keys(), interface.values()))
             devices[str(interface.device)]['interfaces'].append(item)
