@@ -15,13 +15,13 @@ class Lease4(Model):
         # Primary key
         self.pkey = 'address'
 
+
     def list(self):
         items = []
-        for item in self.e().order_by(self.pkey).all():
+        for item in self.db.execute('select * from kea.lease4').fetchall():
             if item.address:
                 item.address = str(ipaddress.IPv4Address(item.address))
-                item = object_to_dict(item, include=self.include_relations.get('list'))
-            items.append(item)
+            items.append(dict(zip(record.keys(), record.values())))
         return items
 
     def delete(self, key):
