@@ -31,6 +31,29 @@ class Device(Model):
 
         return object_to_dict(e)
 
+    def list(self):
+        devices = {}
+        for device in self.db.execute('select * from device').fetchall():
+            devices[str(device.uuid)] = {
+                'uuid': device.uuid,
+                'description': device.description,
+                'type': device.type,
+                'user': device.user,
+                'valid': device.valid,
+                'interfaces': []
+            }
+        for interface in self.db.execute('select * from interface').fetchall():
+            item = {'macaddr': interface.macaddr,
+                    'ip4addr': interface.ip4addr, 
+                    'ip6addr': interface.ip6addr, 
+                    'network': interface.network, 
+                    'hostname': interface.hostname, 
+                    'device': interface.device, 
+                    'uuid': interface.uuid}
+            devices[str(interface.device)]['interfaces'].append(item)
+
+        return list(devices.values())
+
     def patch(self, data):
         assert data.get(self.pkey) is not None, 'Primary key is not set'
 
