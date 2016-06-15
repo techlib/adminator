@@ -1,4 +1,4 @@
-function onRouterUpdate(a,b,) {
+function onRouterUpdate(a,b) {
     FeedbackActions.clear();
 };
 ReactDOM.render((
