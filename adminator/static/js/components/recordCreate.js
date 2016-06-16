@@ -375,7 +375,7 @@ var RecordCreate = React.createClass({
               ),
               React.createElement(
                 'div',
-                { className: "col-sm-12" + (this.state.record.type ? '' : 'hidden') },
+                { className: "row col-sm-12" + (this.state.record.type ? '' : 'hidden') },
                 this.renderInput()
               )
             ),

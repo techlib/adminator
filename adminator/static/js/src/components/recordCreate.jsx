@@ -284,7 +284,7 @@ var RecordCreate = React.createClass({
                    </BootstrapSelect>
                  </div>
 
-                <div className={"col-sm-12" + (this.state.record.type ? '': 'hidden')}>
+                <div className={"row col-sm-12" + (this.state.record.type ? '': 'hidden')}>
                   {this.renderInput()}
                 </div>
               </div>
