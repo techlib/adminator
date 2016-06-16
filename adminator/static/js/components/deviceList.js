@@ -123,15 +123,9 @@ var DeviceValidComponent = React.createClass({
 var DeviceUserComponent = React.createClass({
   displayName: 'DeviceUserComponent',
 
-  getInitialState: function getInitialState() {
-    if (this.props.data == null) {
-      return {};
-    } else {
-      return { 'id': this.props.data, 'name': this.props.rowData.users.display_name };
-    }
-    this.props.rowData;
-  },
   render: function render() {
+    var name = this.props.rowData.user ? this.props.rowData.users.display_name : '';
+    var id = this.props.rowData.user ? this.props.rowData.user : '';
     return React.createElement(
       'div',
       null,
@@ -140,12 +134,12 @@ var DeviceUserComponent = React.createClass({
         { placement: 'left', overlay: React.createElement(
             Tooltip,
             { id: 42 },
-            this.state.id
+            id
           ) },
         React.createElement(
           'div',
           null,
-          this.state.name
+          name
         )
       )
     );

@@ -89,20 +89,14 @@ var DeviceValidComponent = React.createClass({
 })
 
 var DeviceUserComponent = React.createClass({
-  getInitialState() {
-   if (this.props.data == null){
-    return {}
-   } else {
-    return {'id': this.props.data, 'name':this.props.rowData.users.display_name}
-   }
-   this.props.rowData
-  },
   render() {
+    var name = (this.props.rowData.user) ? this.props.rowData.users.display_name : ''
+    var id = (this.props.rowData.user) ? this.props.rowData.user : ''
     return (
         <div>
-          <OverlayTrigger placement="left" overlay=<Tooltip id={42}>{this.state.id}</Tooltip>>
+          <OverlayTrigger placement="left" overlay=<Tooltip id={42}>{id}</Tooltip>>
             <div>
-              {this.state.name}
+              {name}
             </div>
           </OverlayTrigger>
         </div>
