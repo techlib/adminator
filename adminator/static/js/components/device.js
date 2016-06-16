@@ -3,7 +3,7 @@
 var Device = React.createClass({
     displayName: 'Device',
 
-    mixins: [Reflux.connect(networkStore, 'networks'), Reflux.connect(userStore, 'users')],
+    mixins: [Reflux.connect(networkStore, 'networks'), Reflux.connect(userStore, 'users'), ModalConfirmMixin],
 
     componentDidMount: function componentDidMount() {
         NetworkActions.list();
@@ -41,6 +41,28 @@ var Device = React.createClass({
             FeedbackActions.set('error', 'Form contains invalid data:', errors);
         } else {
             this.props.saveHandler(this.getValues());
+        }
+    },
+
+    'delete': function _delete() {
+        var uuid = this.props.device.uuid;
+        this.modalConfirm('Confirm delete', 'Delete ' + this.props.device.description + '?', { 'confirmLabel': 'DELETE', 'confirmClass': 'danger' }).then(function () {
+            DeviceActions['delete'](uuid);
+        });
+    },
+
+    getDeleteLink: function getDeleteLink() {
+        if (this.props.device.uuid) {
+            return React.createElement(
+                'button',
+                { type: 'button', className: 'btn btn-link', onClick: this['delete'] },
+                React.createElement(
+                    'span',
+                    { className: 'text-danger' },
+                    React.createElement('span', { className: 'pficon pficon-delete' }),
+                    ' Delete this device'
+                )
+            );
         }
     },
 
@@ -83,10 +105,23 @@ var Device = React.createClass({
                             'div',
                             { className: 'panel-footer' },
                             React.createElement(
-                                'button',
-                                { className: 'btn btn-primary',
-                                    onClick: this.save },
-                                'Save'
+                                'div',
+                                { className: 'row' },
+                                React.createElement(
+                                    'div',
+                                    { className: 'col-xs-6' },
+                                    React.createElement(
+                                        'button',
+                                        { className: 'btn btn-primary',
+                                            onClick: this.save },
+                                        'Save'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'col-xs-6 text-right' },
+                                    this.getDeleteLink()
+                                )
                             )
                         )
                     )

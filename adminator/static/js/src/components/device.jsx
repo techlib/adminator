@@ -1,7 +1,8 @@
 var Device = React.createClass({
 
     mixins: [Reflux.connect(networkStore, 'networks'),
-             Reflux.connect(userStore, 'users')],
+             Reflux.connect(userStore, 'users'),
+			 ModalConfirmMixin],
 
     componentDidMount() {
         NetworkActions.list()
@@ -40,6 +41,27 @@ var Device = React.createClass({
         }
     },
 
+    delete() {
+		var uuid = this.props.device.uuid;
+        this.modalConfirm('Confirm delete', `Delete ${this.props.device.description}?`,
+                            {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
+        .then(() => {
+            DeviceActions.delete(uuid)
+		})
+    },
+
+	getDeleteLink() {
+		if (this.props.device.uuid) {
+			return (
+				<button type="button" className="btn btn-link" onClick={this.delete}>
+					<span className="text-danger">
+						<span className="pficon pficon-delete"></span> Delete this device
+					</span>
+				</button>
+			)
+		}
+	},
+
     render() {
     return (
         <div className='col-xs-12 container-fluid'>
@@ -57,8 +79,15 @@ var Device = React.createClass({
                                     ref='device' />
                     </div>
                     <div className='panel-footer'>
-                        <button className='btn btn-primary'
-                                onClick={this.save}>Save</button>
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <button className='btn btn-primary'
+                                        onClick={this.save}>Save</button>
+                            </div>
+                            <div className="col-xs-6 text-right">
+								{this.getDeleteLink()}
+							</div>
+                        </div>
                     </div>
                 </div>
             </div>
