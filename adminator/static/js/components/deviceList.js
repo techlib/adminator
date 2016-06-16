@@ -91,15 +91,8 @@ var DeviceValidComponent = React.createClass({
       return null;
     }
 
-    var unlimited = React.createElement(
-      'code',
-      null,
-      'unlimited'
-    );
-
-    var start = this.props.data[0] ? moment(this.props.data[0]).format('DD. MM. YYYY') : unlimited;
-
-    var end = this.props.data[1] ? moment(this.props.data[1]).format('DD. MM. YYYY') : unlimited;
+    var start = moment(this.props.data[0]).format('DD. MM. YYYY');
+    var end = moment(this.props.data[1]).format('DD. MM. YYYY');
 
     return React.createElement(
       'span',
