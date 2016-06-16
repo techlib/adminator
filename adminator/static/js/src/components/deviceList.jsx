@@ -93,11 +93,10 @@ var DeviceUserComponent = React.createClass({
     var name = (this.props.rowData.user) ? this.props.rowData.users.display_name : ''
     var id = (this.props.rowData.user) ? this.props.rowData.user : ''
     var enabled = (this.props.rowData.user) ? this.props.rowData.users.enabled : false
-    var cls = classNames({'text-danger': !enabled})
     return (
         <div>
           <OverlayTrigger placement="left" overlay=<Tooltip id={42}>{id}</Tooltip>>
-            <div className={cls}>
+            <div>
               {name}
             </div>
           </OverlayTrigger>
@@ -152,6 +151,15 @@ var DeviceList = React.createClass({
       }
     ]
 
+    var rowMetadata = {
+        "bodyCssClassName": function(rowData) {
+            if (rowData.users && !rowData.users.enabled) {
+                return "warning";
+            }
+            return "default-row";
+        }
+    };
+
     return (
         <div className='container-fluid col-xs-12'>
             <div className="row">
@@ -169,6 +177,7 @@ var DeviceList = React.createClass({
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}
                      showFilter={true}
+                     rowMetadata={rowMetadata}
                      useCustomPagerComponent='true'
                      customPagerComponent={Pager}
                      sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}

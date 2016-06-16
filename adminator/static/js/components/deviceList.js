@@ -127,7 +127,6 @@ var DeviceUserComponent = React.createClass({
     var name = this.props.rowData.user ? this.props.rowData.users.display_name : '';
     var id = this.props.rowData.user ? this.props.rowData.user : '';
     var enabled = this.props.rowData.user ? this.props.rowData.users.enabled : false;
-    var cls = classNames({ 'text-danger': !enabled });
     return React.createElement(
       'div',
       null,
@@ -140,7 +139,7 @@ var DeviceUserComponent = React.createClass({
           ) },
         React.createElement(
           'div',
-          { className: cls },
+          null,
           name
         )
       )
@@ -187,6 +186,15 @@ var DeviceList = React.createClass({
       customComponent: DeviceInterfacesComponent
     }];
 
+    var rowMetadata = {
+      "bodyCssClassName": function bodyCssClassName(rowData) {
+        if (rowData.users && !rowData.users.enabled) {
+          return "warning";
+        }
+        return "default-row";
+      }
+    };
+
     return React.createElement(
       'div',
       { className: 'container-fluid col-xs-12' },
@@ -218,6 +226,7 @@ var DeviceList = React.createClass({
         tableClassName: 'table table-bordered table-striped table-hover',
         useGriddleStyles: false,
         showFilter: true,
+        rowMetadata: rowMetadata,
         useCustomPagerComponent: 'true',
         customPagerComponent: Pager,
         sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
