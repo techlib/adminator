@@ -92,10 +92,12 @@ var DeviceUserComponent = React.createClass({
   render() {
     var name = (this.props.rowData.user) ? this.props.rowData.users.display_name : ''
     var id = (this.props.rowData.user) ? this.props.rowData.user : ''
+    var enabled = (this.props.rowData.user) ? this.props.rowData.users.enabled : false
+    var cls = classNames({'text-danger': !enabled})
     return (
         <div>
           <OverlayTrigger placement="left" overlay=<Tooltip id={42}>{id}</Tooltip>>
-            <div>
+            <div className={cls}>
               {name}
             </div>
           </OverlayTrigger>

@@ -126,6 +126,8 @@ var DeviceUserComponent = React.createClass({
   render: function render() {
     var name = this.props.rowData.user ? this.props.rowData.users.display_name : '';
     var id = this.props.rowData.user ? this.props.rowData.user : '';
+    var enabled = this.props.rowData.user ? this.props.rowData.users.enabled : false;
+    var cls = classNames({ 'text-danger': !enabled });
     return React.createElement(
       'div',
       null,
@@ -138,7 +140,7 @@ var DeviceUserComponent = React.createClass({
           ) },
         React.createElement(
           'div',
-          null,
+          { className: cls },
           name
         )
       )
