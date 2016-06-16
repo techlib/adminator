@@ -43,6 +43,12 @@ class Device(Model):
             devices[str(device.uuid)]['interfaces'] = []
             devices[str(device.uuid)]['users'] = users.get(device.user)
 
+            if device['type'] == 'visitor':
+                devices[str(device.uuid)]['valid'] = [
+                        device['valid'].lower,
+                        device['valid'].upper
+                ]
+
         for interface in self.db.execute('select * from interface').fetchall():
             item = dict(zip(interface.keys(), interface.values()))
             devices[str(interface.device)]['interfaces'].append(item)
