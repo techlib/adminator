@@ -12,7 +12,22 @@ var DomainDetail = React.createClass({
   },
 
   getInitialState: function getInitialState() {
-    return { data: { domain: { records: [] } } };
+    return { data: { domain: { records: [] } }, showNewForm: false };
+  },
+
+  showNewRecord: function showNewRecord() {
+    this.setState({ showNewForm: !this.state.showNewForm });
+  },
+
+  hideNewRecord: function hideNewRecord() {
+    this.setState({ showNewForm: false });
+  },
+
+  getNewRecordForm: function getNewRecordForm() {
+    if (this.state.showNewForm) {
+      return React.createElement(RecordCreate, { domain: this.props.params.id,
+        hideHandler: this.hideNewRecord });
+    }
   },
 
   getDetail: function getDetail() {
@@ -35,7 +50,6 @@ var DomainDetail = React.createClass({
       columnName: 'content',
       displayName: 'Content'
     }];
-
     return React.createElement(
       'div',
       { className: 'col-xs-12 container-fluid' },
@@ -50,9 +64,19 @@ var DomainDetail = React.createClass({
             null,
             'Records'
           )
+        ),
+        React.createElement(
+          'div',
+          { className: 'col-xs-12 col-sm-2 h1 text-right' },
+          React.createElement(
+            'a',
+            { className: 'btn btn-success', onClick: this.showNewRecord },
+            React.createElement('i', { className: 'fa fa-plus' }),
+            ' New record'
+          )
         )
       ),
-      React.createElement(RecordCreate, { domain: this.props.params.id }),
+      this.getNewRecordForm(),
       React.createElement(Griddle, { results: this.state.data['domain'].records,
         tableClassName: 'table table-bordered table-striped table-hover',
         useGriddleStyles: false,
