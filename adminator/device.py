@@ -49,7 +49,8 @@ class Device(Model):
                         device['valid'].upper
                 ]
 
-        for interface in self.db.execute('select * from interface').fetchall():
+        for interface in \
+            self.db.execute('select i.*, n.vlan, n.description as network_name from interface as i left join network as n on i.network = n.uuid').fetchall():
             item = dict(zip(interface.keys(), interface.values()))
             devices[str(interface.device)]['interfaces'].append(item)
 
