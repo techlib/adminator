@@ -65,26 +65,17 @@ var DeviceValidComponent = React.createClass({
         return null
     }
 
-    if (this.props.data[0] != null) {
-      var start = moment(this.props.data[0]).format('DD. MM. YYYY')
-    }
+    var unlimited = <code>unlimited</code>
 
-    if (this.props.data[1] != null) {
-      var end = moment(this.props.data[1]).format('DD. MM. YYYY')
-   }
+    var start = (this.props.data[0])
+        ? moment(this.props.data[0]).format('DD. MM. YYYY')
+        : unlimited
 
-    return (
-        <div>
-          <div>
-            <span className='label label-primary'>
-              {start}
-            </span>
-            <span className='label label-success'>
-              {end}
-            </span>
-          </div>
-        </div>
-    )
+    var end = (this.props.data[1])
+        ? moment(this.props.data[1]).format('DD. MM. YYYY')
+        : unlimited
+
+    return <span>{start} - {end}</span>
   }
 })
 
@@ -153,7 +144,10 @@ var DeviceList = React.createClass({
 
     var rowMetadata = {
         "bodyCssClassName": function(rowData) {
-            if (rowData.users && !rowData.users.enabled) {
+            var isExpired = (rowData.type == 'visitor') &&
+                moment(rowData.valid[1]).isBefore()
+
+            if ((rowData.users && !rowData.users.enabled) || isExpired) {
                 return "warning";
             }
             return "default-row";
