@@ -86,19 +86,19 @@ var DeviceInterfacesComponent = React.createClass({
 var DeviceValidComponent = React.createClass({
   displayName: 'DeviceValidComponent',
 
-  getInitialState: function getInitialState() {
-    if (this.props.data == null) {
-      return { 'start': '', 'end': '' };
+  render: function render() {
+    if (this.props.rowData.type != 'visitor') {
+      return null;
     }
+
     if (this.props.data[0] != null) {
       var start = moment(this.props.data[0]).format('DD. MM. YYYY');
     }
+
     if (this.props.data[1] != null) {
       var end = moment(this.props.data[1]).format('DD. MM. YYYY');
     }
-    return { 'start': start, 'end': end };
-  },
-  render: function render() {
+
     return React.createElement(
       'div',
       null,
@@ -108,12 +108,12 @@ var DeviceValidComponent = React.createClass({
         React.createElement(
           'span',
           { className: 'label label-primary' },
-          this.state.start
+          start
         ),
         React.createElement(
           'span',
           { className: 'label label-success' },
-          this.state.end
+          end
         )
       )
     );

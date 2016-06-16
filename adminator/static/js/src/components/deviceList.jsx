@@ -60,27 +60,27 @@ var DeviceInterfacesComponent = React.createClass({
 })
 
 var DeviceValidComponent = React.createClass({
-  getInitialState() {
-   if (this.props.data == null){
-     return {'start': '', 'end': ''}
-   }
-   if (this.props.data[0] != null) {
+  render() {
+    if (this.props.rowData.type != 'visitor') {
+        return null
+    }
+
+    if (this.props.data[0] != null) {
       var start = moment(this.props.data[0]).format('DD. MM. YYYY')
-   }
-   if (this.props.data[1] != null) {
+    }
+
+    if (this.props.data[1] != null) {
       var end = moment(this.props.data[1]).format('DD. MM. YYYY')
    }
-    return {'start': start, 'end': end}
-  },
-  render() {
+
     return (
         <div>
           <div>
             <span className='label label-primary'>
-              {this.state.start}
+              {start}
             </span>
             <span className='label label-success'>
-              {this.state.end}
+              {end}
             </span>
           </div>
         </div>
