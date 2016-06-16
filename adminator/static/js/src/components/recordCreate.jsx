@@ -250,7 +250,12 @@ var RecordCreate = React.createClass({
               <div className="panel-heading">
                 <h3 className="panel-title">
                  New record
-               </h3>
+                 <button type="button"
+                         className="close"
+                         onClick={this.props.hideHandler}>
+                    <span>&times;</span>
+                </button>
+                </h3>
               </div>
 
               <div className="panel-body">

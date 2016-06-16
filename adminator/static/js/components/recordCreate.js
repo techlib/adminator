@@ -320,7 +320,18 @@ var RecordCreate = React.createClass({
               React.createElement(
                 'h3',
                 { className: 'panel-title' },
-                'New record'
+                'New record',
+                React.createElement(
+                  'button',
+                  { type: 'button',
+                    className: 'close',
+                    onClick: this.props.hideHandler },
+                  React.createElement(
+                    'span',
+                    null,
+                    '×'
+                  )
+                )
               )
             ),
             React.createElement(

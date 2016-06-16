@@ -100,7 +100,21 @@ var Record = React.createClass({
   },
 
   getInitialState: function getInitialState() {
-    return { data: { records: [] } };
+    return { data: { records: [] }, showNewForm: false };
+  },
+
+  showNewRecord: function showNewRecord() {
+    this.setState({ showNewForm: !this.state.showNewForm });
+  },
+
+  hideNewRecord: function hideNewRecord() {
+    this.setState({ showNewForm: false });
+  },
+
+  getNewRecordForm: function getNewRecordForm() {
+    if (this.state.showNewForm) {
+      return React.createElement(RecordCreate, { hideHandler: this.hideNewRecord });
+    }
   },
 
   render: function render() {
@@ -128,11 +142,29 @@ var Record = React.createClass({
       'div',
       { className: 'col-xs-12 container-fluid' },
       React.createElement(
-        'h1',
-        null,
-        'Records'
+        'div',
+        { className: 'row' },
+        React.createElement(
+          'div',
+          { className: 'col-xs-12 col-sm-10' },
+          React.createElement(
+            'h1',
+            null,
+            'Records'
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'col-xs-12 col-sm-2 h1 text-right' },
+          React.createElement(
+            'a',
+            { className: 'btn btn-success', onClick: this.showNewRecord },
+            React.createElement('i', { className: 'fa fa-plus' }),
+            ' New record'
+          )
+        )
       ),
-      React.createElement(RecordCreate, null),
+      this.getNewRecordForm(),
       React.createElement(Griddle, { results: this.state.data['list'],
         tableClassName: 'datatable table table-striped table-hover table-bordered datatable',
         useGriddleStyles: false,
