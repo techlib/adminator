@@ -119,14 +119,18 @@ var DeviceInterface = React.createClass({
                     updateOnLoad: true,
                     label: 'Network',
                     ref: 'network',
-                    name: 'network'
+                    name: 'network',
+                    'data-live-search': true
                 }, commonProps, {
                     value: this.state.network }),
                 _.map(this.props.networks, function (item) {
                     return React.createElement(
                         'option',
                         { value: item.uuid, key: item.uuid },
-                        item.description
+                        item.description,
+                        ' (',
+                        item.vlan,
+                        ')'
                     );
                 })
             ),

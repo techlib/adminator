@@ -100,11 +100,12 @@ var DeviceInterface = React.createClass({
                     label='Network'
                     ref='network'
                     name='network'
+                    data-live-search={true}
                     {...commonProps}
                     value={this.state.network}>
                     {_.map(this.props.networks, (item) => {
                         return <option value={item.uuid} key={item.uuid}>
-                                {item.description}
+                                {item.description} ({item.vlan})
                             </option>
                     })}
                 </BootstrapSelect>
