@@ -288,7 +288,7 @@ var RecordCreate = React.createClass({
     var btnCls = classNames((_classNames = {}, _classNames['btn-' + type.toLowerCase()] = this.state.record.type == type, _classNames));
     return React.createElement(
       Button,
-      { className: btnCls,
+      { bsStyle: btnCls,
         bsSize: 'lg',
         onClick: this.setType.bind(this, type),
         value: type },
