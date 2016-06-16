@@ -54,6 +54,7 @@ var DeviceInterfacesComponent = React.createClass({
       'div',
       null,
       this.props.data.map(function (item) {
+        var net = item.network_name + ' (' + item.vlan + ')';
         return React.createElement(
           'div',
           { key: item.uuid },
@@ -68,7 +69,10 @@ var DeviceInterfacesComponent = React.createClass({
                 item.ip4addr ? item.ip4addr : 'Dynamic IPv4',
                 ' ',
                 React.createElement('br', null),
-                item.ip6addr ? item.ip6addr : 'Dynamic IPv6'
+                item.ip6addr ? item.ip6addr : 'Dynamic IPv6',
+                ' ',
+                React.createElement('br', null),
+                net
               ) },
             React.createElement(
               'code',

@@ -38,13 +38,15 @@ var DeviceInterfacesComponent = React.createClass({
   render(){
     return <div>
       {this.props.data.map((item) => {
+        var net = `${item.network_name} (${item.vlan})`
         return (
           <div key={item.uuid}>
             <OverlayTrigger placement="right" overlay=
               <Tooltip id={item.uuid}>
                 {item.hostname? item.hostname: 'No hostname'} <br/> 
                 {item.ip4addr? item.ip4addr: 'Dynamic IPv4'} <br/> 
-                {item.ip6addr? item.ip6addr: 'Dynamic IPv6'}
+                {item.ip6addr? item.ip6addr: 'Dynamic IPv6'} <br/>
+                {net}
               </Tooltip>>
                 <code>
                   {item.macaddr}
