@@ -2,8 +2,9 @@ function regexGridFilter(rows, filter) {
 	var filterArr = s.trim(filter).split(' ');
 
 	return _.filter(rows, (row, row_id) => {
-        var found = false
+        var found = true
         _.forEach(filterArr, (match) => {
+			var filterWordFound = false
             _.forEach(row, (v,k) => {
 
 				if (_.isArray(v)) {
@@ -16,19 +17,18 @@ function regexGridFilter(rows, filter) {
 				if (match.substr(0,1) == '/') {
 					var re = new RegExp(match.substr(1, match.length-1))
                     if( ( v || "").toString().search(re) >= 0 ){
-                        found = true
+                        filterWordFound = true
                     }
                 } else {
 					if( (v || "").toString()
 						.toLowerCase().indexOf(match.toLowerCase()) >= 0 )
 					{
-                        found = true
+                        filterWordFound = true
                     }
                 }
+				if (filterWordFound) return true
             })
-            if (found) {
-				return false;
-			}
+			found = found && filterWordFound
 		})
         return found;
 	})
