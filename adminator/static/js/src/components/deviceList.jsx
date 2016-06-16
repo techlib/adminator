@@ -46,9 +46,9 @@ var DeviceInterfacesComponent = React.createClass({
                 {item.ip4addr? item.ip4addr: 'Dynamic IPv4'} <br/> 
                 {item.ip6addr? item.ip6addr: 'Dynamic IPv6'}
               </Tooltip>>
-                <span className='label label-warning'>
+                <code>
                   {item.macaddr}
-                </span>
+                </code>
             </OverlayTrigger>
           </div>
           )

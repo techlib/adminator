@@ -71,8 +71,8 @@ var DeviceInterfacesComponent = React.createClass({
                 item.ip6addr ? item.ip6addr : 'Dynamic IPv6'
               ) },
             React.createElement(
-              'span',
-              { className: 'label label-warning' },
+              'code',
+              null,
               item.macaddr
             )
           )
