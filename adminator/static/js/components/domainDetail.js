@@ -38,31 +38,35 @@ var DomainDetail = React.createClass({
 
     return React.createElement(
       'div',
-      null,
-      React.createElement(RecordCreate, { domain: this.props.params.id }),
+      { className: 'col-xs-12 container-fluid' },
       React.createElement(
         'div',
-        { className: 'col-xs-12 container' },
+        { className: 'row' },
         React.createElement(
-          'h3',
-          null,
-          'Records'
-        ),
-        React.createElement(Griddle, { results: this.state.data['domain'].records,
-          tableClassName: 'table table-bordered table-striped table-hover',
-          useGriddleStyles: false,
-          showFilter: true,
-          useCustomPagerComponent: 'true',
-          customPagerComponent: Pager,
-          sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
-          sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-          columns: ['name', 'type', 'content', 'actions'],
-          resultsPerPage: '20',
-          customFilterer: regexGridFilter,
-          useCustomFilterer: 'true',
-          columnMetadata: columnMeta
-        })
-      )
+          'div',
+          { className: 'col-xs-12 col-sm-10' },
+          React.createElement(
+            'h1',
+            null,
+            'Records'
+          )
+        )
+      ),
+      React.createElement(RecordCreate, { domain: this.props.params.id }),
+      React.createElement(Griddle, { results: this.state.data['domain'].records,
+        tableClassName: 'table table-bordered table-striped table-hover',
+        useGriddleStyles: false,
+        showFilter: true,
+        useCustomPagerComponent: 'true',
+        customPagerComponent: Pager,
+        sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
+        sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
+        columns: ['name', 'type', 'content', 'actions'],
+        resultsPerPage: '20',
+        customFilterer: regexGridFilter,
+        useCustomFilterer: 'true',
+        columnMetadata: columnMeta
+      })
     );
   },
 

@@ -34,11 +34,15 @@ var DomainDetail = React.createClass({
     ]
 
     return (
-      <div>
-        <RecordCreate domain={this.props.params.id} />
+        <div className="col-xs-12 container-fluid">
+           <div className="row">
+               <div className="col-xs-12 col-sm-10">
+                   <h1>Records</h1>
+               </div>
+           </div>
 
-        <div className='col-xs-12 container'>
-          <h3>Records</h3>
+          <RecordCreate domain={this.props.params.id} />
+
           <Griddle results={this.state.data['domain'].records} 
                    tableClassName='table table-bordered table-striped table-hover'
                    useGriddleStyles={false}
@@ -53,7 +57,6 @@ var DomainDetail = React.createClass({
                    useCustomFilterer='true'
                    columnMetadata={columnMeta}
                    />
-       </div>
       </div>
 
     )
