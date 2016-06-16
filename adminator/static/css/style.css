@@ -518,3 +518,16 @@ fieldset[disabled] .btn-cname.active {
 .griddle-footer .row .col-md-12 {
   line-height: 1;
 }
+
+
+th:last-child, td:last-child {
+    width: 1px !important;
+    padding: 0 !important;
+    margin: 0;
+}
+
+th:last-child .btn-group, td:last-child .btn-group {
+    display: flex;
+    margin: 0 !important;
+    padding: 0 !important;
+}

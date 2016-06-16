@@ -83,7 +83,7 @@ var Domain = React.createClass({
   getList: function getList() {
     var columnMeta = [{
       columnName: 'actions',
-      displayName: 'Actions',
+      displayName: '',
       customComponent: DomainActionsComponent
     }, {
       columnName: 'name',

@@ -62,7 +62,7 @@ var Domain = React.createClass({
     var columnMeta = [
       {
         columnName: 'actions',
-        displayName: 'Actions',
+        displayName: '',
         customComponent: DomainActionsComponent
       },
       {

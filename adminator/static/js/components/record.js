@@ -124,7 +124,7 @@ var Record = React.createClass({
       customComponent: RecordTypeComponent
     }, {
       columnName: 'actions',
-      displayName: 'Actions',
+      displayName: '',
       customComponent: RecordActionsComponent
     }, {
       columnName: 'name',

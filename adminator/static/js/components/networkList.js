@@ -59,7 +59,7 @@ var NetworkList = React.createClass({
     },
 
     colMetadata: [{ columnName: 'description', displayName: 'Description',
-        customComponent: NetLink }, { columnName: 'vlan', displayName: 'VLAN' }, { columnName: 'prefix4', displayName: 'Prefix IPv4' }, { columnName: 'prefix6', displayName: 'Prefix IPv6' }, { columnName: 'max_lease', displayName: 'Max. lease' }, { columnName: 'controls', displayName: 'Actions',
+        customComponent: NetLink }, { columnName: 'vlan', displayName: 'VLAN' }, { columnName: 'prefix4', displayName: 'Prefix IPv4' }, { columnName: 'prefix6', displayName: 'Prefix IPv6' }, { columnName: 'max_lease', displayName: 'Max. lease' }, { columnName: 'controls', displayName: '',
         customComponent: NetActions }],
 
     render: function render() {

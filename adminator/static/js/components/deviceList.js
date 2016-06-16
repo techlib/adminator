@@ -147,7 +147,7 @@ var DeviceList = React.createClass({
   render: function render() {
     var columnMeta = [{
       columnName: 'actions',
-      displayName: 'Actions',
+      displayName: '',
       customComponent: DeviceActionsComponent
     }, {
       columnName: 'description',

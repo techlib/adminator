@@ -51,7 +51,7 @@ var NetworkList = React.createClass({
         {columnName: 'prefix4', displayName: 'Prefix IPv4'},
         {columnName: 'prefix6', displayName: 'Prefix IPv6'},
         {columnName: 'max_lease', displayName: 'Max. lease'},
-        {columnName: 'controls', displayName: 'Actions',
+        {columnName: 'controls', displayName: '',
             customComponent: NetActions},
   ],
 
