@@ -12,37 +12,7 @@ var RecordNameComponent = React.createClass({
 
 var RecordTypeComponent = React.createClass({
   render() {
-    var className=''
-    switch (this.props.data){
-      case 'A':
-        className='label label-a'
-      break;
-      case 'AAAA':
-        className='label label-aaaa'
-      break;
-      case 'SOA':
-        className='label label-soa'
-      break;
-      case 'MX':
-        className='label label-mx'
-      break;
-      case 'CNAME':
-        className='label label-cname'
-      break;
-      case 'SRV':
-        className='label label-srv'
-      break;
-      case 'NS':
-        className='label label-ns'
-      break;
-      case 'TXT':
-        className='label label-txt'
-      break;
-      case 'PTR':
-        className='label label-ptr'
-      break;
-
-    }
+    var className = 'label label-' + this.props.data.toLowerCase()
     return <span className={className}>{this.props.data}</span>
   }
 })
