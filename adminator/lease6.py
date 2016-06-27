@@ -17,9 +17,15 @@ class Lease6(Model):
     def list(self):
         items = []
         for item in self.db.execute('select * from kea.lease6').fetchall():
-            if item.address:
-                item.address = str(ipaddress.IPv6Address(item.address))
-            items.append(dict(zip(record.keys(), record.values())))
+            obj = (dict(zip(item.keys(), item.values())))
+
+            if obj['address']:
+                obj['address'] = str(ipaddress.IPv6Address(obj['address']))
+
+            obj['client_id'] = str(obj['client_id'])
+            obj['duid'] = str(obj['duid'])
+            items.append(obj)
+
         return items
 
 # vim:set sw=4 ts=4 et:

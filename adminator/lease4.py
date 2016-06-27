@@ -19,9 +19,15 @@ class Lease4(Model):
     def list(self):
         items = []
         for item in self.db.execute('select * from kea.lease4').fetchall():
-            if item.address:
-                item.address = str(ipaddress.IPv4Address(item.address))
-            items.append(dict(zip(record.keys(), record.values())))
+            obj = (dict(zip(item.keys(), item.values())))
+
+            if obj['address']:
+                obj['address'] = str(ipaddress.IPv4Address(obj['address']))
+
+            obj['client_id'] = str(obj['client_id'])
+            obj['hwaddr'] = str(obj['hwaddr'])
+            items.append(obj)
+
         return items
 
     def delete(self, key):
