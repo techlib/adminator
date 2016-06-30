@@ -5,6 +5,52 @@ var AdminNavbar = React.createClass({
     return {user: {}}
   },
 
+  getAvailableLinks() {
+    var res = []
+
+    if (UserInfoStore.isAllowed( 'device')) {
+        res.push(
+            <LinkContainer to='/device/' key='device'>
+                <NavItem eventKey={2}>Devices</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    if (UserInfoStore.isAllowed('network')) {
+        res.push(
+            <LinkContainer to='/network/' key='network'>
+                <NavItem eventKey={2}>Networks</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    if (UserInfoStore.isAllowed('dns')) {
+        res.push(
+            <LinkContainer to='/domain/' key='domain'>
+                <NavItem eventKey={2}>Domains</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    if (UserInfoStore.isAllowed('dns')) {
+        res.push(
+            <LinkContainer to='/record/' key='record'>
+                <NavItem eventKey={2}>Records</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    if (UserInfoStore.isAllowed('lease')) {
+        res.push(
+            <LinkContainer to='/lease/' key='lease'>
+                <NavItem eventKey={2}>Leases</NavItem>
+            </LinkContainer>
+        )
+    }
+
+   return res;
+  },
+
   render(){
     return (
     <div className='navbar navbar-pf'>
@@ -24,32 +70,8 @@ var AdminNavbar = React.createClass({
            </Nav>
 
            <Nav className='navbar-nav navbar-primary'>
-              <LinkContainer to='/device/'>
-                <NavItem eventKey={2}>
-                  Devices
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to='/network/'>
-                <NavItem eventKey={2}>
-                  Networks
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to='/domain/'>
-                <NavItem eventKey={2}>
-                  Domains
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to='/record/'>
-                <NavItem eventKey={2}>
-                  Records
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to='/lease/'>
-                <NavItem eventKey={2}>
-                  Leases
-                </NavItem>
-              </LinkContainer>
-            </Nav>
+              {this.getAvailableLinks()}
+           </Nav>
     </div>
     )
   }
