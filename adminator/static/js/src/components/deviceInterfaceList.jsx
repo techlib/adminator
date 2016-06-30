@@ -7,6 +7,9 @@ var DeviceInterfaceList = React.createClass({
     },
 
     componentWillReceiveProps(p) {
+        if (this.state.interfaces) {
+           p = _.omit(p, ['interfaces']);
+        }
         this.setState(p)
     },
 

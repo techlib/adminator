@@ -14,12 +14,13 @@ var DeviceForm = React.createClass({
         if (p.device.valid == null) {
             delete p.device.valid;
         }
-
-        this.setState(p.device);
+        if (!this.state.uuid) {
+            this.setState(p.device);
+        }
     },
 
     getInitialState: function getInitialState() {
-        return { type: 'staff', valid: [moment().format('YYYY-MM-DDTHH:mm:ss'), moment().add(1, 'y').format('YYYY-MM-DDTHH:mm:ss')] };
+        return { type: this.props.allowedTypes[0], valid: [moment().format('YYYY-MM-DDTHH:mm:ss'), moment().add(1, 'y').format('YYYY-MM-DDTHH:mm:ss')] };
     },
 
     getDefaultProps: function getDefaultProps() {
@@ -30,6 +31,9 @@ var DeviceForm = React.createClass({
         var _setState;
 
         this.setState((_setState = {}, _setState[evt.target.name] = evt.target.value, _setState));
+        if (evt.target.name == 'type') {
+            this.props.typeChangeHandler(evt.target.value);
+        }
     },
 
     handleValidChange: function handleValidChange(value) {
@@ -67,7 +71,7 @@ var DeviceForm = React.createClass({
     },
 
     getUserSelect: function getUserSelect() {
-        if (this.state.type == 'staff') {
+        if (this.state.type == 'staff' && this.props.allowedTypes.indexOf('staff')) {
             return React.createElement(
                 BootstrapSelect,
                 _extends({
@@ -98,6 +102,17 @@ var DeviceForm = React.createClass({
         }
     },
 
+    getAllowedTypes: function getAllowedTypes() {
+        return _.map(this.props.allowedTypes, function (item) {
+            var name = item[0].toUpperCase() + item.substr(1);
+            return React.createElement(
+                'option',
+                { value: item, key: item },
+                name
+            );
+        });
+    },
+
     render: function render() {
         return React.createElement(
             'div',
@@ -117,24 +132,9 @@ var DeviceForm = React.createClass({
                     name: 'type',
                     label: 'Type',
                     onChange: this.handleChange,
-                    defaultValue: 'staff',
                     value: this.state.type
                 }, this.commonProps),
-                React.createElement(
-                    'option',
-                    { value: 'visitor' },
-                    'Visitor'
-                ),
-                React.createElement(
-                    'option',
-                    { value: 'staff' },
-                    'Staff'
-                ),
-                React.createElement(
-                    'option',
-                    { value: 'device' },
-                    'Device'
-                )
+                this.getAllowedTypes()
             ),
             this.getUserSelect(),
             this.getVisitorValidRange()

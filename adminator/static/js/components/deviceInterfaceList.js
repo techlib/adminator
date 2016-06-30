@@ -10,6 +10,9 @@ var DeviceInterfaceList = React.createClass({
     },
 
     componentWillReceiveProps: function componentWillReceiveProps(p) {
+        if (this.state.interfaces) {
+            p = _.omit(p, ['interfaces']);
+        }
         this.setState(p);
     },
 

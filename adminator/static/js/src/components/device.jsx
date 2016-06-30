@@ -10,7 +10,15 @@ var Device = React.createClass({
     },
 
     getInitialState() {
-       return {networks: {}, users: {}}
+       var perms = _.keys( UserInfoStore.getDeviceTypePermissions())
+       return {networks: {}, users: {}, device: {type: perms[0]}}
+    },
+
+    componentWillReceiveProps(p) {
+        if (this.state.device.uuid) {
+            p = _.omit(p, ['device']);
+        }
+        this.setState(p)
     },
 
     addInterface() {
@@ -62,6 +70,31 @@ var Device = React.createClass({
 		}
 	},
 
+    getAllowedTypes() {
+        var perms = UserInfoStore.getDeviceTypePermissions();
+        if (perms == null) {
+            return ['staff', 'visitor', 'device']
+        } else {
+            return _.keys(UserInfoStore.getDeviceTypePermissions());
+        }
+    },
+
+    getAllowedNetworks() {
+        var permissions = UserInfoStore.getDeviceTypePermissions();
+        if (permissions == null) {
+            return this.state.networks.list;
+        }
+
+        var allowedNetworks = permissions[this.state.device.type];
+        return _.filter(this.state.networks.list, function(item) {
+            return _.includes(allowedNetworks, item.uuid);
+        })
+    },
+
+    handleTypeChange(value) {
+        this.setState({device: {'type': value}});
+    },
+
     render() {
     return (
         <div className='col-xs-12 container-fluid'>
@@ -74,8 +107,10 @@ var Device = React.createClass({
                         <h3 className='panel-title'>Device</h3>
                     </div>
                     <div className='panel-body'>
-                        <DeviceForm device={this.props.device}
-                                    users={this.state.users.list} 
+                        <DeviceForm device={this.state.device}
+                                    users={this.state.users.list}
+                                    allowedTypes={this.getAllowedTypes()}
+                                    typeChangeHandler={this.handleTypeChange}
                                     ref='device' />
                     </div>
                     <div className='panel-footer'>
@@ -98,7 +133,7 @@ var Device = React.createClass({
                     <h3 className='panel-title'>Interfaces</h3>
                 </div>
                 <div className='panel-body'>
-                    <DeviceInterfaceList networks={this.state.networks.list}
+                    <DeviceInterfaceList networks={this.getAllowedNetworks()}
                                          interfaces={this.props.device.interfaces}
                                          ref='interfaceList' />
 

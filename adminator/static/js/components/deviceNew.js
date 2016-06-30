@@ -7,12 +7,13 @@ var DeviceNew = React.createClass({
         DeviceActions.create(data);
     },
 
+    getInitialState: function getInitialState() {
+        return { device: { interfaces: [], uuid: true } };
+    },
+
     render: function render() {
-        var device = {
-            interfaces: []
-        };
         return React.createElement(Device, { title: 'New device',
-            device: device,
+            device: this.state.device,
             saveHandler: this.handleSave
         });
     }

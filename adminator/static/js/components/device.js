@@ -11,7 +11,15 @@ var Device = React.createClass({
     },
 
     getInitialState: function getInitialState() {
-        return { networks: {}, users: {} };
+        var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
+        return { networks: {}, users: {}, device: { type: perms[0] } };
+    },
+
+    componentWillReceiveProps: function componentWillReceiveProps(p) {
+        if (this.state.device.uuid) {
+            p = _.omit(p, ['device']);
+        }
+        this.setState(p);
     },
 
     addInterface: function addInterface() {
@@ -66,6 +74,31 @@ var Device = React.createClass({
         }
     },
 
+    getAllowedTypes: function getAllowedTypes() {
+        var perms = UserInfoStore.getDeviceTypePermissions();
+        if (perms == null) {
+            return ['staff', 'visitor', 'device'];
+        } else {
+            return _.keys(UserInfoStore.getDeviceTypePermissions());
+        }
+    },
+
+    getAllowedNetworks: function getAllowedNetworks() {
+        var permissions = UserInfoStore.getDeviceTypePermissions();
+        if (permissions == null) {
+            return this.state.networks.list;
+        }
+
+        var allowedNetworks = permissions[this.state.device.type];
+        return _.filter(this.state.networks.list, function (item) {
+            return _.includes(allowedNetworks, item.uuid);
+        });
+    },
+
+    handleTypeChange: function handleTypeChange(value) {
+        this.setState({ device: { 'type': value } });
+    },
+
     render: function render() {
         return React.createElement(
             'div',
@@ -97,8 +130,10 @@ var Device = React.createClass({
                         React.createElement(
                             'div',
                             { className: 'panel-body' },
-                            React.createElement(DeviceForm, { device: this.props.device,
+                            React.createElement(DeviceForm, { device: this.state.device,
                                 users: this.state.users.list,
+                                allowedTypes: this.getAllowedTypes(),
+                                typeChangeHandler: this.handleTypeChange,
                                 ref: 'device' })
                         ),
                         React.createElement(
@@ -144,7 +179,7 @@ var Device = React.createClass({
                         React.createElement(
                             'div',
                             { className: 'panel-body' },
-                            React.createElement(DeviceInterfaceList, { networks: this.state.networks.list,
+                            React.createElement(DeviceInterfaceList, { networks: this.getAllowedNetworks(),
                                 interfaces: this.props.device.interfaces,
                                 ref: 'interfaceList' })
                         ),

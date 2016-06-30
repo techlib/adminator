@@ -6,12 +6,6 @@ var DeviceInterface = React.createClass({
         return this.props.item
     },
 
-    componentDidMount() {
-        if (!this.state.network && _.isArray(this.props.networks)) {
-            this.setState({network: this.props.networks[0].uuid})
-        }
-    },
-
     handleChange(evt) {
         this.setState({[evt.target.name]: evt.target.value})
     },

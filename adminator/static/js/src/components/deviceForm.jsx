@@ -9,12 +9,13 @@ var DeviceForm = React.createClass({
         if (p.device.valid == null) {
             delete(p.device.valid)
         }
-
-        this.setState(p.device);
+        if (!this.state.uuid) {
+            this.setState(p.device)
+        }
     },
 
     getInitialState() {
-        return {type: 'staff', valid: [
+        return {type: this.props.allowedTypes[0], valid: [
             moment().format('YYYY-MM-DDTHH:mm:ss'),
             moment().add(1, 'y').format('YYYY-MM-DDTHH:mm:ss')
         ]}
@@ -26,6 +27,9 @@ var DeviceForm = React.createClass({
 
     handleChange(evt) {
         this.setState({[evt.target.name]: evt.target.value})
+        if (evt.target.name == 'type') {
+            this.props.typeChangeHandler(evt.target.value);
+        }
     },
 
     handleValidChange(value) {
@@ -63,7 +67,7 @@ var DeviceForm = React.createClass({
     },
 
     getUserSelect() {
-        if (this.state.type == 'staff') {
+        if (this.state.type == 'staff' && this.props.allowedTypes.indexOf('staff')) {
             return (
                 <BootstrapSelect
                     label='User'
@@ -93,6 +97,13 @@ var DeviceForm = React.createClass({
         }
     },
 
+    getAllowedTypes() {
+        return _.map(this.props.allowedTypes, function(item) {
+            var name = item[0].toUpperCase() + item.substr(1)
+            return <option value={item} key={item}>{name}</option>
+        })
+    },
+
     render() {
         return (
             <div className='form-horizontal'>
@@ -110,12 +121,9 @@ var DeviceForm = React.createClass({
                     name='type'
                     label='Type'
                     onChange={this.handleChange}
-                    defaultValue='staff'
                     value={this.state.type}
                     {...this.commonProps}>
-                        <option value='visitor'>Visitor</option>
-                        <option value='staff'>Staff</option>
-                        <option value='device'>Device</option>
+                        {this.getAllowedTypes()}
                 </BootstrapSelect>
                 {this.getUserSelect()}
                 {this.getVisitorValidRange()}

@@ -4,13 +4,14 @@ var DeviceNew = React.createClass({
         DeviceActions.create(data)
     },
 
+    getInitialState() {
+        return {device: {interfaces: [], uuid: true}}
+    },
+
     render() {
-        var device = {
-            interfaces: []
-        }
         return (
             <Device title='New device'
-                    device={device}
+                    device={this.state.device}
                     saveHandler={this.handleSave}
                 />
         )
