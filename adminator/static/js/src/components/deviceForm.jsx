@@ -67,7 +67,7 @@ var DeviceForm = React.createClass({
     },
 
     getUserSelect() {
-        if (this.state.type == 'staff' && this.props.allowedTypes.indexOf('staff')) {
+        if (this.state.type == 'staff' && this.props.allowedTypes.indexOf('staff') > -1) {
             return (
                 <BootstrapSelect
                     label='User'
