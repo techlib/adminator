@@ -21,6 +21,11 @@ class AccessModel(object):
 
                 self.patterns.append((pat, priv))
 
+    def list_roles(self):
+        result = set()
+        for item in self.patterns:
+            result.add(item[1])
+        return list(result)
 
     def privileges(self, role):
         """Resolve a role to a set of application specific privileges."""
