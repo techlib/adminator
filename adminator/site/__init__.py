@@ -96,7 +96,7 @@ def make_site(db, manager, access_model, debug=False):
         return response
 
     @app.route('/')
-    @authorized_only(privilege='admin')
+    @authorized_only(privilege='user')
     def index():
         nonlocal has_privilege
 
@@ -105,29 +105,27 @@ def make_site(db, manager, access_model, debug=False):
 
     # Devices
     @app.route('/device/', methods=['GET', 'POST'])
-    @authorized_only(privilege='admin')
-    def device_handler():
+    @authorized_only(privilege='user')
+    @pass_user_info
+    def device_handler(**kwargs):
         if 'GET' == flask.request.method:
-            return flask.jsonify(result=manager.device.list())
+            return flask.jsonify(result=manager.device.list(kwargs.get('privileges')))
         if 'POST' == flask.request.method:
             return flask.jsonify(manager.device.insert(flask.request.get_json(force=True)))
 
 
-    @app.route('/device/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
-    @authorized_only(privilege='admin')
-    def device_item_handler(uuid):
+    @app.route('/device/<uuid>', methods=['GET', 'DELETE', 'PATCH'])
+    @authorized_only(privilege='user')
+    @pass_user_info
+    def device_item_handler(uuid, **kwargs):
         if 'GET' == flask.request.method:
-            return flask.jsonify(manager.device.get_item(uuid))
+            return flask.jsonify(manager.device.get_item(uuid, kwargs.get('privileges')))
         if 'DELETE' == flask.request.method:
-            return flask.jsonify(manager.device.delete(uuid))
-        if 'PUT' == flask.request.method:
-            device = flask.request.get_json(force=True)
-            device['uuid'] = uuid
-            return flask.jsonify(manager.device.update(device))
+            return flask.jsonify(manager.device.delete(uuid, kwargs.get('privileges')))
         if 'PATCH' == flask.request.method:
             device = flask.request.get_json(force=True)
             device['uuid'] = uuid
-            return flask.jsonify(manager.device.patch(device))
+            return flask.jsonify(manager.device.patch(device, kwargs.get('privileges')))
 
     # Interfaces
     @app.route('/interface/', methods=['GET', 'POST'])
@@ -170,13 +168,15 @@ def make_site(db, manager, access_model, debug=False):
 
 
     # Users
-    @app.route('/user/', methods=['GET', 'POST'])
+    @app.route('/user/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def user_get_handler():
+        return flask.jsonify(result=manager.user.list())
+
+    @app.route('/user/', methods=['POST'])
     @authorized_only(privilege='admin')
     def user_handler():
-        if 'GET' == flask.request.method:
-            return flask.jsonify(result=manager.user.list())
-        if 'POST' == flask.request.method:
-            return flask.jsonify(manager.user.insert(flask.request.get_json(force=True)))
+        return flask.jsonify(manager.user.insert(flask.request.get_json(force=True)))
 
     @app.route('/user/<cn>', methods=['GET', 'PUT', 'DELETE'])
     @authorized_only(privilege='admin')
@@ -192,19 +192,25 @@ def make_site(db, manager, access_model, debug=False):
 
 
     # Networks
-    @app.route('/network/', methods=['GET', 'POST'])
+    @app.route('/network/', methods=['GET'])
+    @authorized_only(privilege='user')
+    @pass_user_info
+    def network_get_handler(**kwargs):
+        return flask.jsonify(result=manager.network.list(kwargs.get('privileges')))
+     
+    @app.route('/network/', methods=['POST'])
     @authorized_only(privilege='admin')
     def network_handler():
-        if 'GET' == flask.request.method:
-            return flask.jsonify(result=manager.network.list())
-        if 'POST' == flask.request.method:
-            return flask.jsonify(manager.network.insert(flask.request.get_json(force=True)))
+        return flask.jsonify(manager.network.insert(flask.request.get_json(force=True)))
 
-    @app.route('/network/<uuid>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
+    @app.route('/network/<uuid>', methods=['GET'])
+    @authorized_only(privilege='user')
+    def network_get_item_handler(uuid):
+        return flask.jsonify(manager.network.get_item(uuid))
+
+    @app.route('/network/<uuid>', methods=['PUT', 'DELETE', 'PATCH'])
     @authorized_only(privilege='admin')
     def network_item_handler(uuid):
-        if 'GET' == flask.request.method:
-            return flask.jsonify(manager.network.get_item(uuid))
         if 'DELETE' == flask.request.method:
             return flask.jsonify(manager.network.delete(uuid))
         if 'PUT' == flask.request.method:

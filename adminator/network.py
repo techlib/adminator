@@ -19,6 +19,28 @@ class Network(Model):
         # Primary key
         self.pkey = 'uuid'
 
+    def network_acls(self, privileges):
+        acls = {}
+        for privilege in privileges:
+            for acl in self.db.network_acl.filter(self.db.network_acl.role==privilege).all():
+                acls[acl.network] = acl.device_types
+        return acls
+
+
+    def list(self, privileges):
+        # Check ACLs
+        acl = self.network_acls(privileges)
+
+        items = []
+        for item in self.e().order_by(self.pkey).all():
+            # Filter out networks
+            if 'admin' in privileges or str(item.uuid) in acl.keys():
+                item = object_to_dict(item, include=self.include_relations.get('list'))
+                items.append(item)
+        return items
+
+
+
     def insert(self, data):
         newVal = {}
         for k,v in data.items():
