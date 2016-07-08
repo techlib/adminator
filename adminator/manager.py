@@ -13,6 +13,7 @@ from adminator.dhcp_option import DhcpOption
 from adminator.user import User
 from adminator.network import Network
 from adminator.network_pool import NetworkPool
+from adminator.network_acl import NetworkAcl
 from adminator.domain import Domain
 from adminator.record import Record
 from adminator.lease4 import Lease4
@@ -32,6 +33,7 @@ class Manager(object):
         self.dhcp_option_value = DhcpOptionValue(self)
         self.network = Network(self)
         self.network_pool = NetworkPool(self)
+        self.network_acl = NetworkAcl(self)
 
         self.record = Record(self)
         self.domain = Domain(self)

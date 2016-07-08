@@ -222,6 +222,21 @@ def make_site(db, manager, access_model, debug=False):
             network['uuid'] = uuid
             return flask.jsonify(manager.network.patch(network))
 
+    # Network ACL
+    @app.route('/network-acl/', methods=['GET'])
+    @authorized_only(privilege='admin')
+    def network_acl_handler():
+        return flask.jsonify({'result': access_model.list_roles()})
+
+    @app.route('/network-acl/<role>', methods=['GET', 'PATCH'])
+    @authorized_only(privilege='admin')
+    def network_acl_role_handler(role):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.network_acl.get_role(role))
+        if 'PATCH' == flask.request.method:
+            return flask.jsonify(manager.network_acl.patch(
+                        role,
+                        flask.request.get_json(force=True)))
 
     # DNS
     @app.route('/domain/', methods=['GET', 'POST'])
