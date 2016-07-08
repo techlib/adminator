@@ -55,6 +55,14 @@ var NetworkList = React.createClass({
             customComponent: NetActions},
   ],
 
+  getAclButton() {
+     if (UserInfoStore.isAllowed('networkacl')) {
+        return (
+			<a className='btn btn-default' href='#/network/acl'> ACL</a>
+        )
+    }
+  },
+
    render() {
     return (
         <div className='container-fluid col-xs-12'>
@@ -63,7 +71,7 @@ var NetworkList = React.createClass({
                         <h1>Networks</h1>
                     </div>
                     <div className="col-xs-12 col-sm-6 h1 text-right">
-                        <a className='btn btn-default' href='#/dhcp/'>
+						{this.getAclButton()} <a className='btn btn-default' href='#/dhcp/'>
                             Global DHCP options
                         </a> <a className='btn btn-success' href='#/network/new'>
                             <i className='fa fa-plus'></i> New network

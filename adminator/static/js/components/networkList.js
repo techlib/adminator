@@ -62,6 +62,16 @@ var NetworkList = React.createClass({
         customComponent: NetLink }, { columnName: 'vlan', displayName: 'VLAN' }, { columnName: 'prefix4', displayName: 'Prefix IPv4' }, { columnName: 'prefix6', displayName: 'Prefix IPv6' }, { columnName: 'max_lease', displayName: 'Max. lease' }, { columnName: 'controls', displayName: '',
         customComponent: NetActions }],
 
+    getAclButton: function getAclButton() {
+        if (UserInfoStore.isAllowed('networkacl')) {
+            return React.createElement(
+                'a',
+                { className: 'btn btn-default', href: '#/network/acl' },
+                ' ACL'
+            );
+        }
+    },
+
     render: function render() {
         return React.createElement(
             'div',
@@ -81,6 +91,8 @@ var NetworkList = React.createClass({
                 React.createElement(
                     'div',
                     { className: 'col-xs-12 col-sm-6 h1 text-right' },
+                    this.getAclButton(),
+                    ' ',
                     React.createElement(
                         'a',
                         { className: 'btn btn-default', href: '#/dhcp/' },
