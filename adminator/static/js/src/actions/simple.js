@@ -46,3 +46,7 @@ var FeedbackActions = Reflux.createActions([
 var UserInfoActions = Reflux.createActions([
     'read'
 ])
+
+var NetworkAclActions = Reflux.createActions([
+  'read', 'update', 'list'
+])

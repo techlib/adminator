@@ -23,3 +23,5 @@ var DhcpValuesActions = Reflux.createActions(['listGlobal', 'saveGlobal']);
 var FeedbackActions = Reflux.createActions(['clear', 'set']);
 
 var UserInfoActions = Reflux.createActions(['read']);
+
+var NetworkAclActions = Reflux.createActions(['read', 'update', 'list']);

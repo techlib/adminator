@@ -9,6 +9,8 @@ ReactDOM.render((
         <Route path="/domain" component={Domain} />
         <Route path="/domain/:id" component={DomainDetail} />
         <Route path="/domainEdit/:id" component={DomainEdit} />
+        <Route path="/network/acl" component={NetworkAclList} />
+        <Route path="/network/acl/:id" component={NetworkAclEdit} />
         <Route path="/network" component={NetworkList} />
         <Route path="/network/new" component={NetworkNew} />
         <Route path="/network/:id" component={NetworkEdit} />

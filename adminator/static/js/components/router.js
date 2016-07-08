@@ -14,6 +14,8 @@ ReactDOM.render(React.createElement(
         React.createElement(Route, { path: "/domain", component: Domain }),
         React.createElement(Route, { path: "/domain/:id", component: DomainDetail }),
         React.createElement(Route, { path: "/domainEdit/:id", component: DomainEdit }),
+        React.createElement(Route, { path: "/network/acl", component: NetworkAclList }),
+        React.createElement(Route, { path: "/network/acl/:id", component: NetworkAclEdit }),
         React.createElement(Route, { path: "/network", component: NetworkList }),
         React.createElement(Route, { path: "/network/new", component: NetworkNew }),
         React.createElement(Route, { path: "/network/:id", component: NetworkEdit }),
