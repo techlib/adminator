@@ -24,7 +24,7 @@ var Device = React.createClass({
     },
 
     componentWillReceiveProps: function componentWillReceiveProps(p) {
-        if (this.state.device.uuid !== true) {
+        if (this.state.device.uuid) {
             p = _.omit(p, ['device']);
         }
         this.setState(p);

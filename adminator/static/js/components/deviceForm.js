@@ -14,9 +14,7 @@ var DeviceForm = React.createClass({
         if (p.device.valid == null) {
             delete p.device.valid;
         }
-        if (!this.state.uuid) {
-            this.setState(p.device);
-        }
+        this.setState(p.device);
     },
 
     getInitialState: function getInitialState() {
