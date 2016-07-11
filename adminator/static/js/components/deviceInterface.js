@@ -8,7 +8,9 @@ var DeviceInterface = React.createClass({
     mixins: [Reflux.connect(interfaceStore, 'data')],
 
     getInitialState: function getInitialState() {
-        return this.props.item;
+        var res = this.props.item;
+        res.network = this.props.networks[0].uuid;
+        return res;
     },
 
     handleChange: function handleChange(evt) {
