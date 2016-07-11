@@ -46,6 +46,14 @@ var UserInfoStore = Reflux.createStore({
         this.data.networks = _.pick(result, (value) => {
             return value.length > 0
         })
+
+        if (_.isEmpty(this.data.networks) || this.isAdmin()) {
+            this.data.networks = null
+        }
+    },
+
+    isAdmin() {
+        return _.includes(this.data.privileges, 'admin')
     },
 
 	getDeviceTypePermissions() {
