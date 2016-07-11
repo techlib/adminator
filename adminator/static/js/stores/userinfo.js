@@ -51,7 +51,7 @@ var UserInfoStore = Reflux.createStore({
             return value.length > 0;
         });
 
-        if (_.isEmpty(this.data.networks) || this.isAdmin()) {
+        if (this.isAdmin()) {
             this.data.networks = null;
         }
     },
