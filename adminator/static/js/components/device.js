@@ -12,7 +12,7 @@ var Device = React.createClass({
 
     getInitialState: function getInitialState() {
         var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
-        return { networks: {}, users: {}, device: { type: perms[0] } };
+        return { networks: {}, users: {}, device: { type: _.keys(perms)[0] } };
     },
 
     componentWillReceiveProps: function componentWillReceiveProps(p) {
