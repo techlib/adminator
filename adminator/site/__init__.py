@@ -314,7 +314,9 @@ def make_site(db, manager, access_model, debug=False):
     @app.route('/user-info/', methods=['GET'])
     @pass_user_info
     def userinfo_handler(**kwargs):
-        return flask.jsonify(**kwargs)
+        info = kwargs
+        info['networks'] = manager.network.network_acls(kwargs['privileges'])
+        return flask.jsonify(**info)
 
     return app
 
