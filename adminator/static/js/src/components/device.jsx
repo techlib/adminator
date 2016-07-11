@@ -59,7 +59,7 @@ var Device = React.createClass({
     },
 
 	getDeleteLink() {
-		if (this.props.device.uuid) {
+		if (this.props.device.uuid !== true) {
 			return (
 				<button type="button" className="btn btn-link" onClick={this.delete}>
 					<span className="text-danger">
