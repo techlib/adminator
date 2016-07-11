@@ -13,6 +13,7 @@ var UserInfoStore = Reflux.createStore({
         $.ajax({url: '/user-info/',
             success: result => {
                 this.data = result
+                this.processNetworks()
                 this.trigger(this.data)
             },
             error: result => {
@@ -29,15 +30,26 @@ var UserInfoStore = Reflux.createStore({
         return _.intersection(this.data.privileges, privilegesAllowed).length > 0
 	},
 
+    processNetworks() {
+        var result = {
+           'device': [],
+           'staff': [],
+           'visitor': []
+        }
+
+        _.each(this.data.networks, (item, network) => {
+            _.each(item, (type) => {
+                result[type].push(network)
+            })
+        })
+
+        this.data.networks = _.pick(result, (value) => {
+            return value.length > 0
+        })
+    },
+
 	getDeviceTypePermissions() {
-        return null;
-        /*
-		return {
-            'visitor': ['0b645942-c6b9-4e21-9c97-c47f2524e9ea'],
-			'device':  ['5e269bd2-be39-49f9-9810-519529fdc86c',
-                        'a4e8d238-9f6d-44ac-8444-176a568a0cbd'],
-		}
-       */
+        return this.data.networks
 	},
 
 })
