@@ -6,17 +6,25 @@ var Device = React.createClass({
     mixins: [Reflux.connect(networkStore, 'networks'), Reflux.connect(userStore, 'users'), ModalConfirmMixin],
 
     componentDidMount: function componentDidMount() {
+        UserInfoStore.listen(this.setUserConstraints);
         NetworkActions.list();
         UserActions.list();
     },
 
+    setUserConstraints: function setUserConstraints(data) {
+        if (this.state.device.type == null) {
+            var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
+            this.setState({ device: { type: perms[0] } });
+        }
+    },
+
     getInitialState: function getInitialState() {
         var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
-        return { networks: {}, users: {}, device: { type: _.keys(perms)[0] } };
+        return { networks: {}, users: {}, device: { type: perms[0] } };
     },
 
     componentWillReceiveProps: function componentWillReceiveProps(p) {
-        if (this.state.device.uuid) {
+        if (this.state.device.uuid !== true) {
             p = _.omit(p, ['device']);
         }
         this.setState(p);

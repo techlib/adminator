@@ -5,17 +5,25 @@ var Device = React.createClass({
 			 ModalConfirmMixin],
 
     componentDidMount() {
+        UserInfoStore.listen(this.setUserConstraints)
         NetworkActions.list()
         UserActions.list()
     },
 
+    setUserConstraints(data) {
+        if (this.state.device.type == null) {
+            var perms = _.keys( UserInfoStore.getDeviceTypePermissions())
+            this.setState({device: {type: perms[0]}})
+        }
+    },
+
     getInitialState() {
        var perms = _.keys( UserInfoStore.getDeviceTypePermissions())
-       return {networks: {}, users: {}, device: {type: _.keys(perms)[0]}}
+       return {networks: {}, users: {}, device: {type: perms[0]}}
     },
 
     componentWillReceiveProps(p) {
-        if (this.state.device.uuid) {
+        if (this.state.device.uuid !== true) {
             p = _.omit(p, ['device']);
         }
         this.setState(p)
