@@ -12,7 +12,7 @@ var AdminNavbar = React.createClass({
     getAvailableLinks: function getAvailableLinks() {
         var res = [];
 
-        if (UserInfoStore.isAllowed('device')) {
+        if (UserInfoStore.isAllowed(['device', 'user'])) {
             res.push(React.createElement(
                 LinkContainer,
                 { to: '/device/', key: 'device' },

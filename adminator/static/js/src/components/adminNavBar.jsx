@@ -8,7 +8,7 @@ var AdminNavbar = React.createClass({
   getAvailableLinks() {
     var res = []
 
-    if (UserInfoStore.isAllowed( 'device')) {
+    if (UserInfoStore.isAllowed(['device', 'user'])) {
         res.push(
             <LinkContainer to='/device/' key='device'>
                 <NavItem eventKey={2}>Devices</NavItem>
