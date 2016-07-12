@@ -86,11 +86,15 @@ var AdminNavbar = React.createClass({
                     Navbar.Brand,
                     null,
                     React.createElement(
-                        'b',
-                        null,
-                        'ADMINATOR'
-                    ),
-                    ' Network management'
+                        'a',
+                        { href: '/#/' },
+                        React.createElement(
+                            'b',
+                            null,
+                            'ADMINATOR'
+                        ),
+                        ' Network management'
+                    )
                 )
             ),
             React.createElement(

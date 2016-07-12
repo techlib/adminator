@@ -56,7 +56,7 @@ var AdminNavbar = React.createClass({
     <div className='navbar navbar-pf'>
       <Navbar.Header>
           <Navbar.Brand>
-              <b>ADMINATOR</b> Network management
+              <a href="/#/"><b>ADMINATOR</b> Network management</a>
         </Navbar.Brand>
     </Navbar.Header>
 
