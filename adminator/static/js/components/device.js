@@ -13,13 +13,21 @@ var Device = React.createClass({
 
     setUserConstraints: function setUserConstraints(data) {
         if (this.state.device.type == null) {
-            var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
+            var networks = UserInfoStore.getDeviceTypePermissions();
+            if (networks == null) {
+                var perms = ['staff', 'device', 'visitor'];
+            } else {
+                var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
+            }
             this.setState({ device: { type: perms[0] } });
         }
     },
 
     getInitialState: function getInitialState() {
         var perms = _.keys(UserInfoStore.getDeviceTypePermissions());
+        if (perms == null) {
+            perms = ['staff'];
+        }
         return { networks: {}, users: {}, device: { type: perms[0] } };
     },
 
