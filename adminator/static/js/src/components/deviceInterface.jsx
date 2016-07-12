@@ -4,8 +4,20 @@ var DeviceInterface = React.createClass({
 
     getInitialState() {
         var res = this.props.item
-        res.network = this.props.networks[0].uuid
+        if (_.isArray(this.props.networks) && this.props.networks.length > 0) {
+            res.network = this.props.networks[0].uuid
+        }
         return res
+    },
+
+    componentWillReceiveProps(p) {
+        if (p.networks) {
+            this.setState({'networks': p.networks})
+
+            if (this.state.network == null && p.networks.length > 0) {
+                this.setState({'network': p.networks[0].uuid})
+            }
+        }
     },
 
     handleChange(evt) {
