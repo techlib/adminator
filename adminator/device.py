@@ -42,7 +42,7 @@ class Device(Model):
 
     def delete(self, key, privileges):
         # Check ACLs by getting the item
-        self.get_item(key)
+        self.get_item(key, privileges)
 
         rows = self.e().filter_by(**{self.pkey: key}).delete()
         self.db.commit()

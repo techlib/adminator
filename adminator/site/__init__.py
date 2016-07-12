@@ -111,7 +111,7 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.device.list(kwargs.get('privileges')))
         if 'POST' == flask.request.method:
-            return flask.jsonify(manager.device.insert(flask.request.get_json(force=True)))
+            return flask.jsonify(manager.device.insert(flask.request.get_json(force=True), kwargs.get('privileges')))
 
 
     @app.route('/device/<uuid>', methods=['GET', 'DELETE', 'PATCH'])
