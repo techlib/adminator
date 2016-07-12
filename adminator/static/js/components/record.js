@@ -12,10 +12,25 @@ var RecordNameComponent = React.createClass({
   }
 });
 
+var RecordContentComponent = React.createClass({
+  displayName: 'RecordContentComponent',
+
+  render: function render() {
+    return React.createElement(
+      'span',
+      null,
+      this.props.rowData.content
+    );
+  }
+});
+
 var RecordTypeComponent = React.createClass({
   displayName: 'RecordTypeComponent',
 
   render: function render() {
+    if (this.props.data == null) {
+      return null;
+    }
     var className = 'label label-' + this.props.data.toLowerCase();
     return React.createElement(
       'span',
@@ -63,10 +78,26 @@ var RecordActionsComponent = React.createClass({
 var Record = React.createClass({
   displayName: 'Record',
 
-  mixins: [Reflux.connect(recordStore, 'data')],
+  mixins: [Reflux.listenTo(recordStore, 'handleData')],
 
   componentDidMount: function componentDidMount() {
     RecordActions.list();
+  },
+
+  handleData: function handleData(data) {
+    var records = [];
+    _.each(data.list, function (item) {
+      if (isIP4(item.content)) {
+        item.content_sort = item.content.replace(/\./g, '');
+      } else if (isIP6(item.content)) {
+        item.content_sort = item.content.replace(/\:/g, '');
+      } else {
+        item.content_sort = item.content;
+      }
+      records.push(item);
+    });
+    this.state.data.list = records;
+    this.setState(this.state);
   },
 
   getInitialState: function getInitialState() {
@@ -104,8 +135,9 @@ var Record = React.createClass({
       columnName: 'type',
       displayName: 'Type'
     }, {
-      columnName: 'content',
-      displayName: 'Content'
+      columnName: 'content_sort',
+      displayName: 'Content',
+      customComponent: RecordContentComponent
     }];
 
     return React.createElement(
@@ -143,7 +175,7 @@ var Record = React.createClass({
         customPagerComponent: Pager,
         sortAscendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-asc' }),
         sortDescendingComponent: React.createElement('span', { className: 'fa fa-sort-alpha-desc' }),
-        columns: ['name', 'type', 'content', 'actions'],
+        columns: ['name', 'type', 'content_sort', 'actions'],
         resultsPerPage: '20',
         customFilterer: regexGridFilter,
         useCustomFilterer: 'true',

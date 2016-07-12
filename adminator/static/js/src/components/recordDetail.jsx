@@ -58,7 +58,7 @@ var RecordDetail = React.createClass({
       } else if(data['type'] == 'MX'){
           if(!data['prio']){errors.push('Priority is missing')}
           if(!inRange(data['prio'], 0, 1000)){errors.push('Priority must be a number 0-1000')}
-      } else {
+      } else if(data['type'] != null) {
         if (!data['content']) {errors.push('Content is missing')}
       }
       return errors
@@ -77,6 +77,26 @@ var RecordDetail = React.createClass({
 
   renderInput() {
      switch (this.state.data.record.type){
+      case null:
+      return (
+        <div className='form-group'>
+            <Input
+              type='text'
+              label='Name'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-8'
+              ref='name'
+              onChange={this.handleChange}
+              value={this.state.data.record.name} />
+            <Input
+              type='hidden'
+              ref='content'
+              onChange={this.handleChange}
+              value={this.state.data.record.content} />
+
+        </div>
+      )
+      break;
       case 'A':
       case 'AAAA':
       case 'CNAME':
@@ -207,7 +227,7 @@ var RecordDetail = React.createClass({
             <div className="panel panel-default">
               <div className="panel-heading">
                 <h1 className="panel-title">
-                    <span className={'label label-record label-'+this.state.data.record.type.toLowerCase()}>
+                    <span className={'label label-record label-'+ (this.state.data.record.type ? this.state.data.record.type.toLowerCase() : '')}>
                    {this.state.data.record.type}
                  </span> Record
                </h1>

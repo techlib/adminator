@@ -8,10 +8,20 @@ var RecordNameComponent = React.createClass({
   }
 })
 
+var RecordContentComponent = React.createClass({
+  render() {
+    return (
+      <span>{this.props.rowData.content}</span>
+    )
+  }
+})
 
 
 var RecordTypeComponent = React.createClass({
   render() {
+    if(this.props.data == null){
+      return null
+    }
     var className = 'label label-' + this.props.data.toLowerCase()
     return <span className={className}>{this.props.data}</span>
   }
@@ -46,10 +56,27 @@ var RecordActionsComponent = React.createClass({
 
 
 var Record = React.createClass({
-  mixins: [Reflux.connect(recordStore, 'data')],
+  mixins: [Reflux.listenTo(recordStore, 'handleData')],
+
 
   componentDidMount(){
     RecordActions.list()
+  },
+
+  handleData(data){
+    var records = []
+    _.each(data.list, (item) => {
+     if(isIP4(item.content)){
+       item.content_sort = item.content.replace(/\./g, '')
+      } else if(isIP6(item.content)){
+       item.content_sort = item.content.replace(/\:/g, '')
+      } else { 
+       item.content_sort = item.content
+      }
+     records.push(item)
+    })
+    this.state.data.list = records
+    this.setState(this.state)
   },
 
   getInitialState() {
@@ -88,8 +115,9 @@ var Record = React.createClass({
         columnName: 'type',
         displayName: 'Type'
       }, {
-        columnName: 'content',
-        displayName: 'Content'
+        columnName: 'content_sort',
+        displayName: 'Content',
+        customComponent: RecordContentComponent
       }
 
     ]
@@ -115,7 +143,7 @@ var Record = React.createClass({
                      customPagerComponent={Pager}
                      sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
                      sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                     columns={['name', 'type','content', 'actions']}
+                     columns={['name', 'type','content_sort', 'actions']}
                      resultsPerPage='20'
                      customFilterer={regexGridFilter}
                      useCustomFilterer='true'
