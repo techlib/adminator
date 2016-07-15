@@ -22,7 +22,7 @@ class LdapAgent(object):
         self.db.user.update({'enabled': False})
         for user in self.get_users():
             e = self.db.user.get(user['cn'])
-            if(e):
+            if e:
                 for k,v in user.items():
                     setattr(e, k, v)
             else:
@@ -36,7 +36,7 @@ class LdapAgent(object):
                 'ou=users,o=ntk', 
                 '(|(ntkCategory=Z)(ntkCategory=ZV)(ntkCategory=ZU))', 
                 attributes=['sn', 'givenName', 'ntkStatus', 'cn'])
-        if(c):
+        if c:
             for e in self.ldap.entries:
                 users.append({
                     'cn': str(e['cn']),
