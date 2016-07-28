@@ -1,5 +1,8 @@
-function regexGridFilter(rows, filter) {
-	var filterArr = s.trim(filter).split(' ');
+import * as _ from 'lodash'
+import {trim} from 'underscore.string'
+
+export function regexGridFilter(rows, filter) {
+	var filterArr = trim(filter).split(' ');
 
 	return _.filter(rows, (row, row_id) => {
         var found = true

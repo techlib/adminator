@@ -1,3 +1,5 @@
+import * as _ from 'lodash'
+
 _.mixin({
   compact: function(o) {
      var clone = _.clone(o);
