@@ -3,9 +3,7 @@
 # install required dependencies
 npm:
 	npm install
-	cd adminator/static/js/
-	npm install
-	cd -
+	cd adminator/static/js/ && npm install
 
 # build app bundle and watch for changes with no optimizations or minification.
 dev:
