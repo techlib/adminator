@@ -17,6 +17,9 @@ export var DeviceForm = React.createClass({
         if (p.device.valid == null) {
             delete(p.device.valid)
         }
+        if (p.device.type == undefined) {
+            delete(p.device.type)
+        }
         this.setState(p.device)
     },
 
