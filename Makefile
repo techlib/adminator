@@ -1,6 +1,6 @@
 .PHONY: dev build npm default
 
-default: npm build ;
+default: npm build
 
 # install required dependencies
 npm:
