@@ -14,3 +14,8 @@ dev:
 # build production grade bundle
 build:
 	./node_modules/webpack/bin/webpack.js --progress --colors -p --config webpack/prod.js
+
+clean:
+	rm -rf node_modules
+	rm -rf adminator/static/js/node_modules
+	rm adminator/static/dist/app.bundle.js
