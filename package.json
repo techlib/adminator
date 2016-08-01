@@ -4,9 +4,6 @@
   "description": "Network administration tool",
   "main": "index.js",
   "dependencies": {
-    "babel-core": "^6.11.4",
-    "babel-loader": "^6.2.4",
-    "webpack": "^1.13.1"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",
