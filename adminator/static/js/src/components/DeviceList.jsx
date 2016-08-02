@@ -80,8 +80,8 @@ var DeviceValidComponent = React.createClass({
         return null
     }
 
-    var start = moment(this.props.data[0]).format('DD. MM. YYYY')
-    var end = moment(this.props.data[1]).format('DD. MM. YYYY')
+    var start = moment(this.props.data[0]).format('YYYY-MM-DD HH:mm:ss')
+    var end = moment(this.props.data[1]).format('YYYY-MM-DD HH:mm:ss')
 
     return <span>{start} - {end}</span>
   }

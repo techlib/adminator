@@ -136,7 +136,7 @@ export var DomainEdit = React.createClass({
                         ref='last_check'
                         onChange={this.handleChange}
                         format='X'
-                        inputFormat='DD.MM.YYYY HH:mm'
+                        inputFormat='YYYY-MM-DD HH:mm:ss'
                         dateTime={this.state.data.domain.last_check} />
                     </div>
                   </div>

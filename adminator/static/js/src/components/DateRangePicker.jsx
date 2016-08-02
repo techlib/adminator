@@ -47,7 +47,7 @@ export var DateRangePicker = React.createClass({
            <DateTimeField
              ref='valid_since'
              format='YYYY-MM-DDTHH:mm:ss'
-             inputFormat='DD.MM.YYYY HH:mm'
+             inputFormat='YYYY-MM-DD HH:mm:ss'
              maxDate={moment(max)}
              onChange={this.handleValidSince}
              dateTime={min} />
@@ -61,7 +61,7 @@ export var DateRangePicker = React.createClass({
             ref='valid_until'
             onChange={this.handleValidUntil}
             format='YYYY-MM-DDTHH:mm:ss'
-            inputFormat='DD.MM.YYYY HH:mm'
+            inputFormat='YYYY-MM-DD HH:mm:ss'
             minDate={moment(min)}
             dateTime={max} />
          </div>

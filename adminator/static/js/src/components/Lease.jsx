@@ -89,7 +89,7 @@ var LeaseMacComponent = React.createClass({
 
 var LeaseDateComponent = React.createClass({
     render() {
-        var txt = moment.parseZone(this.props.data).format('DD. MM. YYYY HH:mm:ss')
+        var txt = moment.parseZone(this.props.data).format('YYYY-MM-DD HH:mm:ss')
         return <span>{txt}</span>
     }
 })
