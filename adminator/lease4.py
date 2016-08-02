@@ -4,6 +4,7 @@
 from adminator.utils import object_to_dict
 from adminator.model import Model
 import ipaddress
+import binascii
 
 __all__ = ['Lease4']
 
@@ -25,7 +26,8 @@ class Lease4(Model):
                 obj['address'] = str(ipaddress.IPv4Address(obj['address']))
 
             obj['client_id'] = str(obj['client_id'])
-            obj['hwaddr'] = str(obj['hwaddr'])
+            obj['hwaddr'] = binascii.hexlify(bytes(obj['hwaddr'])).decode('ascii')
+
             items.append(obj)
 
         return items
