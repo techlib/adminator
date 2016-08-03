@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Input} from 'react-bootstrap'
-import {inRange, isIP4Cidr, isIP6CIDR, isInt} from '../util/simple-validators'
+import {inRange, isIP4Cidr, isIP6Cidr, isInt} from '../util/simple-validators'
 
 export var NetworkForm = React.createClass({
 
