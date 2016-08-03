@@ -93,9 +93,9 @@ export var NetworkAcl = React.createClass({
 			}
 			if (_.has(me.props.role, item.uuid)) {
 				var role = me.props.role[item.uuid]
-				i.device = _.contains(role, 'device');
-				i.staff = _.contains(role, 'staff');
-				i.visitor = _.contains(role, 'visitor');
+				i.device = _.includes(role, 'device');
+				i.staff = _.includes(role, 'staff');
+				i.visitor = _.includes(role, 'visitor');
 			}
 			data.push(i)
         })
