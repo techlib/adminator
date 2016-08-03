@@ -76,6 +76,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     'pools': list(pools(net.uuid, v)),
                     'option-data': list(options(net.uuid, None, 4)),
                     'reservations': list(reservations(net.uuid, 4)),
+                    'reservation-mode': 'all',
                 }
             elif v == 6 and net.prefix6 is not None:
                 yield {
@@ -84,6 +85,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     'pools': list(pools(net.uuid, v)),
                     'option-data': list(options(net.uuid, None, 6)),
                     'reservations': list(reservations(net.uuid, 6)),
+                    'reservation-mode': 'all',
                 }
 
     def pools(net, v):
@@ -113,18 +115,21 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
     def reservations(net, family):
         for iface in db.interface.filter_by(network=net).all():
+            reservation = {
+                'hw-address': iface.macaddr,
+            }
+
+            if iface.hostname:
+                reservation['hostname'] = iface.hostname
+
             if family == 4 and iface.ip4addr is not None:
-                yield {
-                    'hw-address': iface.macaddr,
-                    'ip-address': iface.ip4addr,
-                    'hostname': iface.hostname or '',
-                }
+                reservation['ip-address'] = iface.ip4addr
             elif family == 6 and iface.ip6addr is not None:
-                yield {
-                    'hw-address': iface.macaddr,
-                    'ip-address': iface.ip6addr,
-                    'hostname': iface.hostname or '',
-                }
+                reservation['ip-address'] = iface.ip6addr
+            else:
+                continue
+
+            yield reservation
 
     c = deepcopy(tpl)
     dict_update_r(c, {
