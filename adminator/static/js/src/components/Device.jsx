@@ -9,7 +9,7 @@ import {ModalConfirmMixin} from './ModalConfirmMixin'
 import {DeviceActions, FeedbackActions, NetworkActions, UserActions} from '../actions'
 import {Feedback} from './Feedback'
 import * as _ from 'lodash'
-import {notEmtpy} from '../util/simple-validators'
+import {notEmpty} from '../util/simple-validators'
 
 export var Device = React.createClass({
 
