@@ -7,6 +7,7 @@ from copy import deepcopy
 from collections import Mapping
 from uuid import UUID
 from struct import unpack
+from codecs import encode
 
 DEFAULTS = {
     'Dhcp4': {
@@ -129,12 +130,19 @@ def generate_kea_config(db, tpl=DEFAULTS):
             if otype.name == 'next-server':
                 continue
 
+            if otype.type == 'binary':
+                csv = False
+                value = encode(bytes(v.value, 'utf8'), 'hex')
+            else:
+                csv = True
+                value = v.value
+
             yield {
                 'name': otype.name,
                 'code': otype.code,
                 'space': 'dhcp4' if family == 4 else 'dhcp6',
-                'csv-format': True,
-                'data': v.value,
+                'csv-format': csv,
+                'data': value,
             }
 
     def reservations(net, family):
