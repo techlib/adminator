@@ -44,7 +44,8 @@ class Network(Model):
     def insert(self, data):
         newVal = {}
         for k,v in data.items():
-            if k not in self.get_relationships() and v is not None:
+            if k not in self.get_relationships():
+                if v == '': v = None
                 newVal[k] = v
 
         e = self.e().insert(**newVal)
@@ -64,6 +65,7 @@ class Network(Model):
         for k,v in data.items():
             if k in self.get_relationships() or k == self.pkey:
                 continue
+            if v == '': v = None
             setattr(item, k, v)
 
         self.process_relations(item, uuid, data)
