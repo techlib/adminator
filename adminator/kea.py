@@ -56,10 +56,16 @@ def generate_kea_config(db, tpl=DEFAULTS):
     """
 
     def dhcp4_config():
-        return {
+        config = {
             'option-data': list(options(None, None, 4)),
             'subnet4': list(subnets(4)),
         }
+
+        nexts = next_server(None, None)
+        if nexts:
+            config['next-server'] = nexts
+
+        return config
 
     def dhcp6_config():
         return {
@@ -70,7 +76,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
     def subnets(v):
         for net in db.network.all():
             if v == 4 and net.prefix4 is not None:
-                yield {
+                config = {
                     'id': uuid2bigint(net.uuid),
                     'subnet': net.prefix4,
                     'pools': list(pools(net.uuid, v)),
@@ -78,6 +84,13 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     'reservations': list(reservations(net.uuid, 4)),
                     'reservation-mode': 'all',
                 }
+
+                nexts = next_server(net.uuid, None)
+                if nexts is not None:
+                    config['next-server'] = nexts
+
+                yield config
+
             elif v == 6 and net.prefix6 is not None:
                 yield {
                     'id': uuid2bigint(net.uuid),
@@ -95,6 +108,14 @@ def generate_kea_config(db, tpl=DEFAULTS):
             elif v == 6 and ':' in pool.range[0]:
                 yield {'pool': '{} - {}'.format(*pool.range)}
 
+    def next_server(net=None, dev=None):
+        options = db.option_value.filter_by(network=net, device=dev, option='next-server').all()
+
+        for option in options:
+            return option.value
+
+        return None
+
     def options(net, dev, family):
         f = 'inet' if family == 4 else 'inet6'
         types = {o.name: o for o in db.option.filter_by(family=f).all()}
@@ -104,6 +125,9 @@ def generate_kea_config(db, tpl=DEFAULTS):
                 continue
 
             otype = types[v.option]
+
+            if otype.name == 'next-server':
+                continue
 
             yield {
                 'name': otype.name,
