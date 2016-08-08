@@ -19,6 +19,8 @@ from adminator.record import Record
 from adminator.lease4 import Lease4
 from adminator.lease6 import Lease6
 from adminator.interface import Interface
+from adminator.port import Port
+from adminator.connection import Connection
 
 
 class Manager(object):
@@ -40,6 +42,9 @@ class Manager(object):
 
         self.lease4 = Lease4(self)
         self.lease6 = Lease6(self)
+
+        self.port = Port(self)
+        self.connection = Connection(self)
 
 
 # vim:set sw=4 ts=4 et:
