@@ -18,6 +18,7 @@ import {RecordDetail} from './RecordDetail'
 import {Record} from './Record'
 import {Lease} from './Lease'
 import {FeedbackActions} from '../actions'
+import {TopologyList} from './TopologyList'
 
 function onRouterUpdate() {
     FeedbackActions.clear();
@@ -42,6 +43,7 @@ ReactDOM.render((
         <Route path="/record/:id" component={RecordDetail} />
         <Route path="record" component={Record} />
         <Route path="/lease/" component={Lease} />
+        <Route path="/topology/" component={TopologyList} />
     </Route>
   </Router>
  ), document.getElementById("AdminatorApp")

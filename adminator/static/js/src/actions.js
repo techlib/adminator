@@ -51,3 +51,7 @@ export var UserInfoActions = Reflux.createActions([
 export var NetworkAclActions = Reflux.createActions([
   'read', 'update', 'list'
 ])
+
+export var TopologyActions = Reflux.createActions([
+  'list'
+])

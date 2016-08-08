@@ -57,7 +57,15 @@ export var AdminNavBar = React.createClass({
         )
     }
 
-   return res;
+    if (UserInfoStore.isAllowed('topology')) {
+        res.push(
+            <LinkContainer to='/topology/' key='topology'>
+                <NavItem eventKey={2}>Topology</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    return res;
   },
 
   render(){
