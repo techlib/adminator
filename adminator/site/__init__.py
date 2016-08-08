@@ -318,6 +318,39 @@ def make_site(db, manager, access_model, debug=False):
         info['networks'] = manager.network.network_acls(kwargs['privileges'])
         return flask.jsonify(**info)
 
+
+    @app.route('/port/', methods=['GET', 'POST'])
+    @authorized_only(privilege='user')
+    def port_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.port.list())
+        if 'POST' == flask.request.method:
+            return flask.jsonify(manager.port.insert(flask.request.get_json(force=True)))
+
+    @app.route('/port/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='user')
+    def port_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.port.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.port.delete(uuid))
+        if 'PUT' == flask.request.method:
+            port = flask.request.get_json(force=True)
+            port['uuid'] = uuid
+            return flask.jsonify(manager.port.update(port))
+
+    @app.route('/connection/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def connection_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.connection.list())
+
+    @app.route('/connection/<uuid>', methods=['GET'])
+    @authorized_only(privilege='user')
+    def connection_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.connection.get_item(uuid))
+
     return app
 
 
