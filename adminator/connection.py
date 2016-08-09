@@ -24,4 +24,15 @@ class Connection(Model):
             t = Table(table_name, self.db._metadata, autoload=True)
             return self.db.map(t, primary_key=[t.c.src_uuid])
 
+    def list(self):
+        query = 'select src_analyzer_group_name, src_name, src_position_on_pp, \
+                 src_type, dst_analyzer_group_name, dst_name, dst_position_on_pp, \
+                 dst_type from %s.%s' % (self.schema, self.table_name)
+        res = []
+
+        for connection in self.db.execute(query).fetchall():
+           res.append(dict(zip(connection.keys(), connection.values())))
+
+        return res
+
 # vim:set sw=4 ts=4 et:
