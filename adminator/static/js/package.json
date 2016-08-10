@@ -6,6 +6,7 @@
     "classnames": "^2.2.5",
     "griddle-react": "^0.6.1",
     "history": "^2.1.2",
+    "ip-address": "^5.8.2",
     "ipaddr.js": "",
     "lodash": "^4.14.1",
     "moment": "",

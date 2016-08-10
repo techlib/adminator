@@ -1,13 +1,14 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
 import {DomainStore} from '../stores/Domain'
-import {DomainActions, RecordActions} from '../actions'
+import {DomainActions, RecordActions, FeedbackActions} from '../actions'
 import {Feedback} from './Feedback'
 import {Input, ButtonGroup, Button} from 'react-bootstrap'
 import {BootstrapSelect} from './Select'
 import * as _ from 'lodash'
 import classNames from 'classnames'
 import {inRange, isIP4, isIP6} from '../util/simple-validators'
+import {ipToPtr} from '../util/general'
 
 export var RecordCreate = React.createClass({
   mixins: [Reflux.connect(DomainStore, 'data'), Reflux.listenTo(DomainStore,'onDomainStoreChange')],
@@ -38,6 +39,12 @@ export var RecordCreate = React.createClass({
 
   handleSrvChange(e){
     this.state.record.content[e.target.name] = e.target.value
+    this.setState({record: this.state.record})
+  },
+
+  handlePtrChange(e){
+    this.state.record.ip = e.target.value
+    this.state.record.name = ipToPtr(e.target.value)
     this.setState({record: this.state.record})
   },
 
@@ -112,11 +119,42 @@ export var RecordCreate = React.createClass({
       case 'A':
       case 'AAAA':
       case 'CNAME':
-      case 'PTR':
       case 'NS':
       case 'SOA':
       return (
         <div className='form-group'>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='Name'
+              ref='name'
+              name='name'
+              onChange={this.handleChange}
+              value={this.state.record.name} />
+          </div>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='Value'
+              ref='content'
+              name='content'
+              onChange={this.handleChange}
+              value={this.state.record.content} />
+          </div>
+        </div>
+      )
+      case 'PTR':
+      return (
+        <div className='form-group'>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='IP'
+              ref='ip'
+              name='ip'
+              onChange={this.handlePtrChange}
+              value={this.state.record.ip} />
+          </div>
           <div className='col-xs-8 col-sm-4'>
             <Input
               type='text'
