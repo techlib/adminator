@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
 import {DomainStore} from '../stores/Domain'
-import {DomainActions} from '../actions'
+import {DomainActions, RecordActions} from '../actions'
 import {Feedback} from './Feedback'
 import {Input, ButtonGroup, Button} from 'react-bootstrap'
 import {BootstrapSelect} from './Select'
