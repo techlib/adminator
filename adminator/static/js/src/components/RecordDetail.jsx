@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
-import {RecordActions} from '../actions'
+import {RecordActions, FeedbackActions} from '../actions'
 import {RecordStore} from '../stores/Record'
 import {Feedback} from './Feedback'
 import {Input} from 'react-bootstrap'
