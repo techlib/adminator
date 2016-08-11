@@ -4,7 +4,7 @@ import * as Reflux from 'reflux'
 import {DhcpOptionValues} from './DhcpOptionValues'
 import {DhcpOptionsStore} from '../stores/DhcpOptions'
 import {DhcpValuesStore} from '../stores/DhcpValues'
-import {DhcpOptionActions, DhcpValuesActions} from '../actions'
+import {DhcpOptionActions, DhcpValuesActions, FeedbackActions} from '../actions'
 import {Feedback} from './Feedback'
 import {sortDhcpOptions, sortDhcpValues} from '../util/dhcp'
 
