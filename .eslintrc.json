@@ -1,0 +1,22 @@
+{
+    "rules": {
+        "space-before-blocks": "off",
+        "semi": "off",
+        "quotes": "off",
+        "curly": "off",
+        "object-curly-spacing": "off",
+        "space-before-function-paren": "off",
+        "comma-dangle": "off",
+        "array-bracket-spacing": "off",
+        "no-extra-semi": "off",
+        "react/jsx-quotes": "off",
+        "react/jsx-uses-vars": "error"
+    },
+    "plugins": [
+        "react"
+    ],
+    "env": {
+        "browser": true,
+        "jquery": true
+    }
+}

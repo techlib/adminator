@@ -1,4 +1,4 @@
-.PHONY: dev build npm default
+.PHONY: dev build npm default lint
 
 default: npm build
 
@@ -14,6 +14,10 @@ dev:
 # build production grade bundle
 build:
 	./node_modules/webpack/bin/webpack.js --progress --colors -p --config webpack/prod.js
+
+# check for js errors
+lint:
+	./node_modules/eslint/bin/eslint.js --ext .js,.jsx adminator/static/js/src/ -c .eslintrc.json
 
 clean:
 	rm -rf node_modules
