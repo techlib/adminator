@@ -1,6 +1,6 @@
 {
     "rules": {
-        "space-before-blocks": "off",
+        "space-before-blocks": "error",
         "semi": "off",
         "quotes": "off",
         "curly": "off",
