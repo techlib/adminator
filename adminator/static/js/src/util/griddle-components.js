@@ -4,11 +4,11 @@ import {trim} from 'underscore.string'
 export function regexGridFilter(rows, filter) {
 	var filterArr = trim(filter).split(' ');
 
-	return _.filter(rows, (row, row_id) => {
+	return _.filter(rows, (row) => {
         var found = true
         _.forEach(filterArr, (match) => {
 			var filterWordFound = false
-            _.forEach(row, (v,k) => {
+            _.forEach(row, (v) => {
 
 				if (_.isArray(v)) {
                     v = _.map(v, _.values).toString()

@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Reflux from 'reflux'
-import {FeedbackActions, Lease4Actions, Lease6Actions} from '../actions'
+import {Lease4Actions, Lease6Actions} from '../actions'
 import {ErrorMixin} from './Mixins'
 
 export var Lease4Store = Reflux.createStore({
@@ -29,7 +29,7 @@ export var Lease4Store = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         _this.onList()
       },
       error: result => {
@@ -74,7 +74,7 @@ export var Lease6Store = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         _this.onList()
       },
       error: result => {

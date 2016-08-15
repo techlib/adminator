@@ -20,12 +20,12 @@ export var IPPools = React.createClass({
     },
 
     handleRemove(index) {
-        let removed = this.state.values.splice(index, 1);
+        this.state.values.splice(index, 1);
         this.setState(this.state);
     },
 
     validate() {
-        return _.flatten(this.state.values.map((item, index) => {
+        return _.flatten(this.state.values.map((item) => {
             var result = []
 
             var ip1 = this.refs[item.uuid + '-0'].value;
@@ -53,7 +53,7 @@ export var IPPools = React.createClass({
     },
 
     getValues() {
-        return this.state.values.map((item, index) => {
+        return this.state.values.map((item) => {
             var result = {
                 'range': [this.refs[item.uuid + '-0'].value,
                           this.refs[item.uuid + '-1'].value]

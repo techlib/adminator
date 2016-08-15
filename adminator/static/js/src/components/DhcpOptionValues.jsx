@@ -29,7 +29,7 @@ export var DhcpOptionValues = React.createClass({
     },
 
     handleRemove(index) {
-        let removed = this.state.values.splice(index, 1);
+        this.state.values.splice(index, 1);
         this.setState(this.state);
     },
 
@@ -41,14 +41,14 @@ export var DhcpOptionValues = React.createClass({
     },
 
     getValues() {
-        return this.state.values.map((item, key) => {
+        return this.state.values.map((item) => {
             return {'option': item.option,
                     'value':  this.refs[item.option].getValue()};
         })
     },
 
     validate() {
-        return _.flatten(this.state.values.map((item, key) => {
+        return _.flatten(this.state.values.map((item) => {
             return this.refs[item.option].validate();
         })).filter(item => {return item !== true})
     },
@@ -88,7 +88,7 @@ export var DhcpOptionValues = React.createClass({
                             onChange={this.handleAdd}>
                             <option value="0" key="0">- please select -</option>
                             {
-                                _.map(this.getAvailableOptions(), (item, key) => {
+                                _.map(this.getAvailableOptions(), (item) => {
                                     return <option value={item.name}
                                                     key={item.name}>
                                                     {item.name}
@@ -194,7 +194,7 @@ let ArrayControl = React.createClass({
 
     componentDidMount() {
         let v = this.props.values.split(',');
-        v.map((item, key) => {
+        v.map((item) => {
             let val = item.trim();
             this.state.values.push({'c': this.state.counter,
                                     'val': val});

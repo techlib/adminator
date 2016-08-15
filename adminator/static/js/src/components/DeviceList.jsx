@@ -91,7 +91,6 @@ var DeviceUserComponent = React.createClass({
   render() {
     var name = (this.props.rowData.user) ? this.props.rowData.users.display_name : ''
     var id = (this.props.rowData.user) ? this.props.rowData.user : ''
-    var enabled = (this.props.rowData.user) ? this.props.rowData.users.enabled : false
     return (
         <div>
           <OverlayTrigger placement="left" overlay=<Tooltip id={42}>{id}</Tooltip>>

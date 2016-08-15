@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Reflux from 'reflux'
-import {FeedbackActions, RecordActions} from '../actions'
+import {RecordActions} from '../actions'
 
 export var RecordStore = Reflux.createStore({
   listenables: [RecordActions],
@@ -22,7 +22,7 @@ export var RecordStore = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         _this.onList()
       }
     })
@@ -47,7 +47,7 @@ export var RecordStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(record),
-      success: result => {
+      success: () => {
         _this.onList()
       }
     })

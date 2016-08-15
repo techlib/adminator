@@ -16,11 +16,7 @@ export var BootstrapSelect = React.createClass({displayName: 'BootstrapSelect',
     select.toggleClass('open', this.state.open);
   },
   componentWillUnmount: function () {
-    var self = this;
-    var select = $(ReactDOM.findDOMNode(this)).find('select');
-
     var button = $(ReactDOM.findDOMNode(this)).find('button');
-    var dropdown = $(ReactDOM.findDOMNode(this)).find('.dropdown-menu.open');
     var items = $(ReactDOM.findDOMNode(this)).find('ul.dropdown-menu li a');
 
     $('html').off('click');

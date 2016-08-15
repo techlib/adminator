@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Reflux from 'reflux'
-import {FeedbackActions, InterfaceActions} from '../actions'
+import {InterfaceActions} from '../actions'
 import {ErrorMixin} from './Mixins'
 
 export var InterfaceStore = Reflux.createStore({
@@ -27,7 +27,7 @@ export var InterfaceStore = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         _this.onList()
       },
       error: result => {
@@ -58,7 +58,7 @@ export var InterfaceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(item),
-      success: result => {
+      success: () => {
         _this.onList()
       },
       error: result => {

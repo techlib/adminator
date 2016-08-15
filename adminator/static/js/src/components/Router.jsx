@@ -1,6 +1,6 @@
 import * as ReactDOM from 'react-dom'
 import * as React from 'react'
-import {Router, Route, Link, hashHistory, IndexRedirect} from 'react-router'
+import {Router, Route, hashHistory, IndexRedirect} from 'react-router'
 import {App} from './App'
 import {Dhcp} from './Dhcp'
 import {Domain} from './Domain'

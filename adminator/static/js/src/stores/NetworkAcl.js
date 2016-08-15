@@ -31,7 +31,7 @@ export var NetworkAclStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(data),
-      success: function success(result) {
+      success: function success() {
         BrowserHistory.push('/network/acl/');
         FeedbackActions.set('success', 'Role updated');
       },

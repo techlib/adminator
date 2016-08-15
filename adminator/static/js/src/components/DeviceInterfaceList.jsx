@@ -24,7 +24,7 @@ export var DeviceInterfaceList = React.createClass({
 
     deleteInterface(index) {
         var state = this.state
-        var removed = state.interfaces.splice(index, 1)
+        state.interfaces.splice(index, 1)
         this.setState(state)
     },
 

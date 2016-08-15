@@ -37,7 +37,7 @@ export var NetworkStore = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
           BrowserHistory.push('/network/')
           me.ajaxSuccess('Network deleted')
       },
@@ -54,7 +54,7 @@ export var NetworkStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(network),
-      success: result => {
+      success: () => {
           BrowserHistory.push('/network/')
           me.ajaxSuccess('Network updated')
       },

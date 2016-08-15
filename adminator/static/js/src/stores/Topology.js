@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Reflux from 'reflux'
-import {FeedbackActions, TopologyActions} from '../actions'
+import {TopologyActions} from '../actions'
 import {ErrorMixin} from './Mixins'
 
 export var TopologyStore = Reflux.createStore({

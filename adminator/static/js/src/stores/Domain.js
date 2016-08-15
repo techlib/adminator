@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Reflux from 'reflux'
-import {DomainActions, FeedbackActions} from '../actions'
+import {DomainActions} from '../actions'
 
 export var DomainStore = Reflux.createStore({
   listenables: [DomainActions],
@@ -25,7 +25,7 @@ export var DomainStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(domain),
-      success: result => {
+      success: () => {
         _this.onList()
       }
     })
@@ -38,7 +38,7 @@ export var DomainStore = Reflux.createStore({
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         _this.onList()
       }
     })

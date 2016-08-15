@@ -24,13 +24,12 @@ export var DeviceStore = Reflux.createStore({
   },
 
   onDelete(id){
-    var _this = this;
     $.ajax({
       url: `/device/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
-      success: result => {
+      success: () => {
         BrowserHistory.push('/device/');
         FeedbackActions.set('success', 'Device deleted');
       },
@@ -48,7 +47,7 @@ export var DeviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(device),
-      success: function success(result) {
+      success: function success() {
         BrowserHistory.push('/device/');
         FeedbackActions.set('success', 'Device updated');
       },
@@ -59,7 +58,6 @@ export var DeviceStore = Reflux.createStore({
   },
 
   onCreate(device){
-    var _this = this;
     $.ajax({
       url: '/device/',
       method: 'POST',

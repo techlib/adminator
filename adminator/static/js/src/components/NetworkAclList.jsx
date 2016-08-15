@@ -5,7 +5,6 @@ import {NetworkAclStore} from '../stores/NetworkAcl'
 import {NetworkActions, NetworkAclActions} from '../actions'
 import {Feedback} from './Feedback'
 import Griddle from 'griddle-react'
-import {Pager} from './Pager'
 import {Link} from 'react-router'
 
 let AclLink = React.createClass({

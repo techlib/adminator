@@ -23,7 +23,7 @@ export var Device = React.createClass({
         UserActions.list()
     },
 
-    setUserConstraints(data) {
+    setUserConstraints() {
         if (this.state.device.type == null) {
             var networks = UserInfoStore.getDeviceTypePermissions()
             if (networks == null) {

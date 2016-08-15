@@ -22,7 +22,7 @@ export var DhcpValuesStore = Reflux.createStore({
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: result => {
+            success: () => {
                 FeedbackActions.set('success', 'DHCP options saved');
             },
             error: result => {
