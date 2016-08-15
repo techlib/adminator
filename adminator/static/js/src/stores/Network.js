@@ -30,7 +30,7 @@ export var NetworkStore = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var me = this;
     $.ajax({
       url: `/network/${id}`,
@@ -46,7 +46,7 @@ export var NetworkStore = Reflux.createStore({
   },
 
 
-  onUpdate(network){
+  onUpdate(network) {
     var me = this;
     $.ajax({
       url: `/network/${network.uuid}`,
@@ -62,7 +62,7 @@ export var NetworkStore = Reflux.createStore({
     })
   },
 
-  onCreate(network){
+  onCreate(network) {
     var me = this;
     $.ajax({
       url: '/network/',

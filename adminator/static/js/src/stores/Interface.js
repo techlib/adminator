@@ -20,7 +20,7 @@ export var InterfaceStore = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var _this = this;
     $.ajax({
       url: `/interface/${id}`,
@@ -37,7 +37,7 @@ export var InterfaceStore = Reflux.createStore({
   },
 
 
-  onUpdate(item){
+  onUpdate(item) {
     $.ajax({
       url: `/interface/${item.uuid}`,
       method: 'PUT',
@@ -50,7 +50,7 @@ export var InterfaceStore = Reflux.createStore({
     })
   },
 
-  onCreate(item){
+  onCreate(item) {
     var _this = this;
     $.ajax({
       url: '/interface/',

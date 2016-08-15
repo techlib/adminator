@@ -24,7 +24,7 @@ export var NetworkAclStore = Reflux.createStore({
     })
   },
 
-  onUpdate(role, data){
+  onUpdate(role, data) {
     $.ajax({
       url: `/network-acl/${role}`,
       method: 'PATCH',

@@ -16,9 +16,9 @@ export var DomainEdit = React.createClass({
     Reflux.listenTo(DomainStore, 'handleErrors')
   ],
 
-  componentDidMount(){
+  componentDidMount() {
     let { id } = this.props.params
-    if(id != 'new'){
+    if(id != 'new') {
       DomainActions.read(id)
     }
   },
@@ -27,7 +27,7 @@ export var DomainEdit = React.createClass({
     return {data: {domain: {type: 'MASTER', last_check: moment().format('X')}}}
   },
 
-  handleErrors(data){
+  handleErrors(data) {
     if (!_.has(data, 'errors')) {
         return;
     }
@@ -38,12 +38,12 @@ export var DomainEdit = React.createClass({
     FeedbackActions.set('error', 'Errors from server', errors);
   },
 
-  handleChangeType(event){
+  handleChangeType(event) {
     this.state.data.domain.type = event.target.value
     this.setState({data: this.state.data})
   },
 
-  validate(){
+  validate() {
       var data = this.state.data.domain
       var errors = []
       if (!data['name']) {errors.push('Name is missing')}
@@ -55,7 +55,7 @@ export var DomainEdit = React.createClass({
       return errors
   },
 
-  handleChange(){
+  handleChange() {
     this.setState({data: {domain: {
         name: this.refs.name.getValue(),
         master: this.refs.master.getValue(),
@@ -66,14 +66,14 @@ export var DomainEdit = React.createClass({
     }})
   },
 
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault()
     var errors = this.validate()
 
     if (errors.length > 0) {
         FeedbackActions.set('error', 'Form contains invalid data', errors);
     } else {
-      if(_.isUndefined(this.state.data.domain.id)){
+      if(_.isUndefined(this.state.data.domain.id)) {
         DomainActions.create(this.state.data.domain)
         FeedbackActions.set('success', 'Domain created');
       } else {
@@ -84,7 +84,7 @@ export var DomainEdit = React.createClass({
   },
 
 
-  render(){
+  render() {
    return (
         <div className='container col-md-12 '>
         <h1>{this.state.data.domain.name}</h1>

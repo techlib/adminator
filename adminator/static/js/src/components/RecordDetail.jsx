@@ -10,7 +10,7 @@ import {inRange, isIP4, isIP6} from '../util/simple-validators'
 export var RecordDetail = React.createClass({
   mixins: [Reflux.connect(RecordStore, 'data')],
 
-  componentDidMount(){
+  componentDidMount() {
     let { id } = this.props.params
     RecordActions.read(id)
   },
@@ -19,7 +19,7 @@ export var RecordDetail = React.createClass({
     return {data: {record: {type: ''}}}
   },
 
-  handleChange(){
+  handleChange() {
     var data = {data: {record: {
         name: this.refs.name.getValue(),
         content: this.refs.content.getValue(),
@@ -28,14 +28,14 @@ export var RecordDetail = React.createClass({
         id: this.state.data.record.id
       }
     }}
-    if(this.refs.prio){
+    if(this.refs.prio) {
         data['prio'] = this.refs.prio.getValue()
     }
     this.setState(data)
   },
 
 
-  handleSrvChange(){
+  handleSrvChange() {
     let content = this.refs.priority.getValue() + ' ' + this.refs.port.getValue() + ' ' + this.refs.value.getValue()
     this.setState({data: {record: {
         id: this.state.data.record.id,
@@ -52,28 +52,28 @@ export var RecordDetail = React.createClass({
       var errors = []
       if (!data['name']) {errors.push('Name is missing')}
 
-      if(data['type'] == 'SRV'){
+      if(data['type'] == 'SRV') {
         if(!this.refs.priority.getValue()) {errors.push('Priority is missing')}
         if(!inRange(this.refs.priority.getValue(), 0, 1000)) {errors.push('Priority must be a number 0-1000')}
         if(!this.refs.port.getValue()) {errors.push('Port is missing')}
         if(!inRange(this.refs.port.getValue(), 1, 65536)) {errors.push('Port must be a number 1-65536')}
-        if(!this.refs.value.getValue()){errors.push('Value is missing')}
-      } else if(data['type'] == 'A'){
-          if(!data['content']){errors.push('IPv4 address is missing')}
-          if(data['content'] && !isIP4(data['content'])){errors.push('IPv4 address is not in the correct format')}
+        if(!this.refs.value.getValue()) {errors.push('Value is missing')}
+      } else if(data['type'] == 'A') {
+          if(!data['content']) {errors.push('IPv4 address is missing')}
+          if(data['content'] && !isIP4(data['content'])) {errors.push('IPv4 address is not in the correct format')}
       } else if(data['type'] == 'AAAA') {
-          if(!data['content']){errors.push('IPv6 address is missing')}
-          if(data['content'] && !isIP6(data['content'])){errors.push('IPv6 address is not in the correct format')}
-      } else if(data['type'] == 'MX'){
-          if(!data['prio']){errors.push('Priority is missing')}
-          if(!inRange(data['prio'], 0, 1000)){errors.push('Priority must be a number 0-1000')}
+          if(!data['content']) {errors.push('IPv6 address is missing')}
+          if(data['content'] && !isIP6(data['content'])) {errors.push('IPv6 address is not in the correct format')}
+      } else if(data['type'] == 'MX') {
+          if(!data['prio']) {errors.push('Priority is missing')}
+          if(!inRange(data['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
       } else if(data['type'] != null) {
         if (!data['content']) {errors.push('Content is missing')}
       }
       return errors
   },
 
-  handleSubmit(){
+  handleSubmit() {
     var errors = this.validate()
 
     if (errors.length > 0) {
@@ -217,7 +217,7 @@ export var RecordDetail = React.createClass({
       }
   },
 
-  render(){
+  render() {
    return (
         <div className='container col-md-6 col-md-offset-3'>
           <h1>{this.state.data.record.name}</h1>

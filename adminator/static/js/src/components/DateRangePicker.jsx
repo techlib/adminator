@@ -3,11 +3,11 @@ import DateTimeField from 'react-bootstrap-datetimepicker'
 import moment from 'moment'
 export var DateRangePicker = React.createClass({
 
-  handleValidSince(since){
+  handleValidSince(since) {
      this.props.onChange([since, this.props.range[1]])
   },
 
-  handleValidUntil(until){
+  handleValidUntil(until) {
      this.props.onChange([this.props.range[0], until])
   },
 
@@ -33,7 +33,7 @@ export var DateRangePicker = React.createClass({
     return this.props.range
   },
 
-  render(){
+  render() {
     var max = this.props.range[1]
     var min = this.props.range[0]
 

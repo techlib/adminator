@@ -15,7 +15,7 @@ export var RecordStore = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var _this = this;
     $.ajax({
       url: `/record/${id}`,
@@ -29,7 +29,7 @@ export var RecordStore = Reflux.createStore({
   },
 
 
-  onUpdate(record){
+  onUpdate(record) {
     $.ajax({
       url: `/record/${record.id}`,
       method: 'PUT',
@@ -39,7 +39,7 @@ export var RecordStore = Reflux.createStore({
     })
   },
 
-  onCreate(record){
+  onCreate(record) {
     var _this = this;
     $.ajax({
       url: '/record/',

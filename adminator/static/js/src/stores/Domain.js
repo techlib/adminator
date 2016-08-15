@@ -7,7 +7,7 @@ export var DomainStore = Reflux.createStore({
   listenables: [DomainActions],
   data: {'domain': [], 'list': []},
 
-  onUpdate(domain){
+  onUpdate(domain) {
     $.ajax({
       url: `/domain/${domain.id}`,
       method: 'PUT',
@@ -17,7 +17,7 @@ export var DomainStore = Reflux.createStore({
     })
   },
 
-  onCreate(domain){
+  onCreate(domain) {
     var _this = this;
     $.ajax({
       url: '/domain/',
@@ -31,7 +31,7 @@ export var DomainStore = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var _this = this;
     $.ajax({
       url: `/domain/${id}`,

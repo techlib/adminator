@@ -26,7 +26,7 @@ var DomainActionsComponent = React.createClass({
 
   mixins: [ModalConfirmMixin],
 
-  handleDelete(){
+  handleDelete() {
         var name = this.props.rowData.name;
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
@@ -59,7 +59,7 @@ export var Domain = React.createClass({
 
   mixins: [Reflux.connect(DomainStore, 'data')],
 
-  componentDidMount(){
+  componentDidMount() {
     DomainActions.list()
   },
 
@@ -68,7 +68,7 @@ export var Domain = React.createClass({
   },
 
 
-  getList(){
+  getList() {
     var columnMeta = [
       {
         columnName: 'name',

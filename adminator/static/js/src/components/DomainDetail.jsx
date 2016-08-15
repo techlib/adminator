@@ -11,7 +11,7 @@ import {regexGridFilter} from '../util/griddle-components'
 export var DomainDetail = React.createClass({
   mixins: [Reflux.connect(DomainStore, 'data')],
 
-  componentDidMount(){
+  componentDidMount() {
     let { id } = this.props.params
     DomainActions.read(id)
   },
@@ -36,7 +36,7 @@ export var DomainDetail = React.createClass({
     },
 
 
-  getDetail(){
+  getDetail() {
     var columnMeta = [
       {
         columnName: 'type',

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 export var Pager = React.createClass({
-    getDefaultProps(){
+    getDefaultProps() {
         return{
             "maxPage": 0,
             "nextText": "",
@@ -9,10 +9,10 @@ export var Pager = React.createClass({
             "currentPage": 0,
         }
     },
-    pageChange(event){
+    pageChange(event) {
         this.props.setPage(parseInt(event.target.getAttribute("data-value")));
     },
-    render(){
+    render() {
 
       var prevActive = this.props.currentPage > 0 ? '': 'disabled'
       var previous = <li className={prevActive}><a onClick={this.props.previous}><i className="glyphicon glyphicon-arrow-left"></i> {this.props.previousText}</a></li>
@@ -29,7 +29,7 @@ export var Pager = React.createClass({
         startIndex = endIndex - 11;
       }
 
-        for(var i = startIndex; i < endIndex ; i++){
+        for(var i = startIndex; i < endIndex ; i++) {
           var selected = this.props.currentPage == i ? 'active' : '';
             options.push(<li key={i} className={selected}><a onClick={this.pageChange} data-value={i}>{i + 1}</a></li>);
         }

@@ -19,7 +19,7 @@ export function regexGridFilter(rows, filter) {
 
 				if (match.substr(0,1) == '/') {
 					var re = new RegExp(match.substr(1, match.length-1))
-                    if( ( v || "").toString().search(re) >= 0 ){
+                    if( ( v || "").toString().search(re) >= 0 ) {
                         filterWordFound = true
                     }
                 } else {

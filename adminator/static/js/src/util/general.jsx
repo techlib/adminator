@@ -14,12 +14,12 @@ _.mixin({
 });
 
 
-export function ipToPtr(ip){
+export function ipToPtr(ip) {
     var ip6 = new Address6(ip)
     var ip4 = new Address4(ip)
-    if(ip6.isValid()){
+    if(ip6.isValid()) {
         return ip6.canonicalForm().replace(/:/g,'').split('').reverse().join('.')+'.ip6.arpa'
-    } else if(ip4.isValid()){
+    } else if(ip4.isValid()) {
         return ip4.toArray().reverse().join('.') + '.in-addr.arpa'
     } else {
         return ''

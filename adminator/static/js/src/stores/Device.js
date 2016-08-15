@@ -23,7 +23,7 @@ export var DeviceStore = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     $.ajax({
       url: `/device/${id}`,
       method: 'DELETE',
@@ -40,7 +40,7 @@ export var DeviceStore = Reflux.createStore({
   },
 
 
-  onUpdate(device){
+  onUpdate(device) {
     $.ajax({
       url: `/device/${device.uuid}`,
       method: 'PATCH',
@@ -57,7 +57,7 @@ export var DeviceStore = Reflux.createStore({
     })
   },
 
-  onCreate(device){
+  onCreate(device) {
     $.ajax({
       url: '/device/',
       method: 'POST',

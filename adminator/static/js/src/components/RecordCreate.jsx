@@ -13,11 +13,11 @@ import {ipToPtr} from '../util/general'
 export var RecordCreate = React.createClass({
   mixins: [Reflux.connect(DomainStore, 'data'), Reflux.listenTo(DomainStore,'onDomainStoreChange')],
 
-  componentDidMount(){
+  componentDidMount() {
     DomainActions.list()
   },
 
-  onDomainStoreChange(data){
+  onDomainStoreChange(data) {
     this.state.record.domain_id = _.first(data.list).id
     this.state.domainName = _.first(data.list).name
     this.setState(this.state)
@@ -27,8 +27,8 @@ export var RecordCreate = React.createClass({
     return {record: {type: ''}, data: {list: []}, domainName: ''}
   },
 
-  setType(type){
-    if(type == 'SRV'){
+  setType(type) {
+    if(type == 'SRV') {
       this.state.record.content = {port: '', prio: '', value: ''}
     } else {
       this.state.record.content = null
@@ -37,20 +37,20 @@ export var RecordCreate = React.createClass({
     this.setState({record: this.state.record})
   },
 
-  handleSrvChange(e){
+  handleSrvChange(e) {
     this.state.record.content[e.target.name] = e.target.value
     this.setState({record: this.state.record})
   },
 
-  handlePtrChange(e){
+  handlePtrChange(e) {
     this.state.record.ip = e.target.value
     this.state.record.name = ipToPtr(e.target.value)
     this.setState({record: this.state.record})
   },
 
-  handleDomainChange(e){
+  handleDomainChange(e) {
     _.map(e.target.children, ((node) => {
-      if(e.target.value == node.value){
+      if(e.target.value == node.value) {
         this.state.domainName = node.dataset.name
       }
     }))
@@ -58,9 +58,9 @@ export var RecordCreate = React.createClass({
     this.setState({domainName: this.state.domainName, record: this.state.record})
   },
 
-  handleChange(e){
+  handleChange(e) {
     this.state.record[e.target.name] = e.target.value
-    if(e.target.name == 'prio'){
+    if(e.target.name == 'prio') {
       this.state.record.priority = (_.isUndefined(e.target.value) ? 0 : e.target.value)
     }
     this.setState({record: this.state.record})
@@ -71,28 +71,28 @@ export var RecordCreate = React.createClass({
       var errors = []
       if (!data['name']) {errors.push('Name is missing')}
 
-      if(data['type'] == 'SRV'){
+      if(data['type'] == 'SRV') {
         if(!data['prio']) {errors.push('Priority is missing')}
         if(!inRange(data['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
         if(!data['port']) {errors.push('Port is missing')}
         if(!inRange(data['port'], 1, 65536)) {errors.push('Port must be a number 1-65536')}
-        if(!data['content']){errors.push('Content is missing')}
-      } else if(data['type'] == 'A'){
-          if(!data['content']){errors.push('IPv4 address is missing')}
-          if(data['content'] && !isIP4(data['content'])){errors.push('IPv4 address is not in the correct format')}
+        if(!data['content']) {errors.push('Content is missing')}
+      } else if(data['type'] == 'A') {
+          if(!data['content']) {errors.push('IPv4 address is missing')}
+          if(data['content'] && !isIP4(data['content'])) {errors.push('IPv4 address is not in the correct format')}
       } else if(data['type'] == 'AAAA') {
-          if(!data['content']){errors.push('IPv6 address is missing')}
-          if(data['content'] && !isIP6(data['content'])){errors.push('IPv6 address is not in the correct format')}
-      } else if(data['type'] == 'MX'){
-          if(!data['prio']){errors.push('Priority is missing')}
-          if(!inRange(data['prio'], 0, 1000)){errors.push('Priority must be a number 0-1000')}
+          if(!data['content']) {errors.push('IPv6 address is missing')}
+          if(data['content'] && !isIP6(data['content'])) {errors.push('IPv6 address is not in the correct format')}
+      } else if(data['type'] == 'MX') {
+          if(!data['prio']) {errors.push('Priority is missing')}
+          if(!inRange(data['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
       } else {
         if (!data['content']) {errors.push('Content is missing')}
       }
       return errors
   },
 
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault()
 
     var errors = this.validate()
@@ -102,10 +102,10 @@ export var RecordCreate = React.createClass({
     } else {
 
       // Append selected domain name if not present
-      if(this.state.record.name.indexOf(this.state.domainName) < 0){
+      if(this.state.record.name.indexOf(this.state.domainName) < 0) {
         this.state.record.name = this.state.record.name + '.' + this.state.domainName
       }
-      if (this.state.record.type == 'SRV'){
+      if (this.state.record.type == 'SRV') {
         this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.value
       }
 
@@ -115,7 +115,7 @@ export var RecordCreate = React.createClass({
   },
 
   renderInput() {
-     switch (this.state.record.type){
+     switch (this.state.record.type) {
       case 'A':
       case 'AAAA':
       case 'CNAME':
@@ -284,7 +284,7 @@ export var RecordCreate = React.createClass({
         )
   },
 
-  render(){
+  render() {
    return (
      <div className='row'>
        <div className='container-fluid'>

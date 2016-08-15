@@ -33,7 +33,7 @@ export var RecordContentComponent = React.createClass({
 
 export var RecordTypeComponent = React.createClass({
   render() {
-    if(this.props.data == null){
+    if(this.props.data == null) {
       return null
     }
     var className = 'label label-' + this.props.data.toLowerCase()
@@ -44,7 +44,7 @@ export var RecordTypeComponent = React.createClass({
 export var RecordActionsComponent = React.createClass({
   mixins: [ModalConfirmMixin],
 
-  handleDelete(){
+  handleDelete() {
     var name = this.props.rowData.name;
     var type = this.props.rowData.type;
       this.modalConfirm('Confirm delete', `Delete ${type} record ${name}?`,
@@ -71,16 +71,16 @@ export var Record = React.createClass({
   mixins: [Reflux.listenTo(RecordStore, 'handleData')],
 
 
-  componentDidMount(){
+  componentDidMount() {
     RecordActions.list()
   },
 
-  handleData(data){
+  handleData(data) {
     var records = []
     _.each(data.list, (item) => {
-     if(isIP4(item.content)){
+     if(isIP4(item.content)) {
        item.content_sort = item.content.replace(/\./g, '')
-      } else if(isIP6(item.content)){
+      } else if(isIP6(item.content)) {
        item.content_sort = item.content.replace(/\:/g, '')
       } else { 
        item.content_sort = item.content
@@ -109,7 +109,7 @@ export var Record = React.createClass({
     }
   },
 
-  render(){
+  render() {
     var columnMeta = [
       {
         columnName: 'type',

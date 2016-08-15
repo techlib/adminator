@@ -22,7 +22,7 @@ export var Lease4Store = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var _this = this;
     $.ajax({
       url: `/lease4/${id}`,
@@ -67,7 +67,7 @@ export var Lease6Store = Reflux.createStore({
     })
   },
 
-  onDelete(id){
+  onDelete(id) {
     var _this = this;
     $.ajax({
       url: `/lease6/${id}`,

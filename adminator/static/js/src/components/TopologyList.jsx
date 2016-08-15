@@ -15,7 +15,7 @@ var EmptyTr = React.createClass({
 export var TopologyList = React.createClass({
   mixins: [Reflux.connect(TopologyStore, 'data')],
 
-  componentDidMount(){
+  componentDidMount() {
     TopologyActions.list()
   },
 

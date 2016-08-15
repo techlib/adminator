@@ -11,7 +11,7 @@ import {Link} from 'react-router'
 import {OverlayTrigger, Button, Tooltip} from 'react-bootstrap'
 
 let NetLink = React.createClass({
-  render: function(){
+  render: function() {
     return  <Link to={`/network/${this.props.rowData.uuid}`}>
                 {this.props.data}
             </Link>

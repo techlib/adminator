@@ -26,7 +26,7 @@ export var AlertDismissible = React.createClass({
         };
     },
 
-    icon: function(){
+    icon: function() {
       return {
               'success': 'pficon pficon-ok',
               'danger': 'pficon pficon-error-circle-o'
@@ -61,7 +61,7 @@ export var AlertDismissible = React.createClass({
 
 export var AlertSet = React.createClass({
     render: function() {
-      if(this.props.alerts){
+      if(this.props.alerts) {
         var alerts = this.props.alerts.map(function(alert, i) {
             return (
                 <AlertDismissible key={"alert-"+i} level={alert.level}

@@ -25,7 +25,7 @@ var DeviceActionsComponent = React.createClass({
 
     mixins: [ModalConfirmMixin],
 
-    deleteDevice(){
+    deleteDevice() {
         var name = this.props.rowData.description;
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
@@ -48,7 +48,7 @@ var DeviceActionsComponent = React.createClass({
 })
 
 var DeviceInterfacesComponent = React.createClass({
-  render(){
+  render() {
     return <div>
       {this.props.data.map((item) => {
         var net = `${item.network_name} (${item.vlan})`
@@ -107,7 +107,7 @@ var DeviceUserComponent = React.createClass({
 export var DeviceList = React.createClass({
   mixins: [Reflux.connect(DeviceStore, 'data')],
 
-  componentDidMount(){
+  componentDidMount() {
     DeviceActions.list()
   },
 

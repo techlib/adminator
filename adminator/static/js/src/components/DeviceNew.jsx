@@ -4,7 +4,7 @@ import {DeviceActions} from '../actions'
 
 export var DeviceNew = React.createClass({
 
-    handleSave(data){
+    handleSave(data) {
         DeviceActions.create(data)
     },
 

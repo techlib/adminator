@@ -9,7 +9,7 @@ export var DeviceEdit = React.createClass({
         Reflux.connect(DeviceStore, 'device'),
     ],
 
-    componentDidMount(){
+    componentDidMount() {
         DeviceActions.read(this.props.params.id)
     },
 
@@ -17,7 +17,7 @@ export var DeviceEdit = React.createClass({
         return {device: {device: {}}}
     },
 
-    handleSave(data){
+    handleSave(data) {
         data.uuid = this.props.params.id
         DeviceActions.update(data)
     },

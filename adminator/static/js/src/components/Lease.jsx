@@ -14,7 +14,7 @@ import {ModalConfirmMixin} from './ModalConfirmMixin'
 var Lease4ActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
-    deleteLease4(){
+    deleteLease4() {
         var name = this.props.rowData.address;
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
@@ -39,7 +39,7 @@ var Lease4ActionsComponent = React.createClass({
 var Lease6ActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
-    deleteLease6(){
+    deleteLease6() {
         var name = this.props.rowData.address;
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
@@ -96,7 +96,7 @@ var LeaseDateComponent = React.createClass({
 export var Lease = React.createClass({
   mixins: [Reflux.connect(Lease4Store, 'lease4data'), Reflux.connect(Lease6Store, 'lease6data')],
 
-  componentDidMount(){
+  componentDidMount() {
     Lease4Actions.list()
     Lease6Actions.list()
   },
@@ -106,7 +106,7 @@ export var Lease = React.createClass({
   },
 
 
-  render(){
+  render() {
     var lease4ColumnMeta = [
       {
         columnName: 'c',

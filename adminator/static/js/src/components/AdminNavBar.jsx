@@ -68,7 +68,7 @@ export var AdminNavBar = React.createClass({
     return res;
   },
 
-  render(){
+  render() {
     return (
     <div className='navbar navbar-pf'>
       <Header>
