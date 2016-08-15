@@ -21,14 +21,16 @@ export var Message = React.createClass({
     },
 
     render() {
+        var cls, title, icon
+
         if (this.props.type == 'success') {
-            var cls = 'alert-success';
-            var title = 'Success';
-            var icon = 'pficon-ok';
+            cls = 'alert-success';
+            title = 'Success';
+            icon = 'pficon-ok';
         } else if (this.props.type == 'error') {
-            var cls = 'alert-danger';
-            var title = 'Error';
-            var icon = 'pficon-error-circle-o';
+            cls = 'alert-danger';
+            title = 'Error';
+            icon = 'pficon-error-circle-o';
         }
 
         var clsIco = classNames('pficon', icon);

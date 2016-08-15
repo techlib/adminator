@@ -75,7 +75,7 @@ export var DeviceInterface = React.createClass({
 
         var delimiter = null;
         if (this.props.delimiter) {
-            var delimiter = <hr />
+            delimiter = <hr />
         }
 
         return (

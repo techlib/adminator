@@ -26,10 +26,9 @@ export var Device = React.createClass({
     setUserConstraints() {
         if (this.state.device.type == null) {
             var networks = UserInfoStore.getDeviceTypePermissions()
-            if (networks == null) {
-                var perms = ['staff', 'device', 'visitor']
-            } else {
-                var perms = _.keys( UserInfoStore.getDeviceTypePermissions())
+            var perms = ['staff', 'device', 'visitor']
+            if (networks !== null) {
+                perms = _.keys( UserInfoStore.getDeviceTypePermissions())
             }
             this.setState({device: {type: perms[0]}})
         }
