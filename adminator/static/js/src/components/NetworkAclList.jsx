@@ -8,7 +8,7 @@ import Griddle from 'griddle-react'
 import {Link} from 'react-router'
 
 let AclLink = React.createClass({
-  render: function() {
+  render: function () {
       return <Link to={`/network/acl/${this.props.data}`}>
                 {this.props.data}
              </Link>

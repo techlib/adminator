@@ -107,7 +107,7 @@ export var DeviceForm = React.createClass({
     },
 
     getAllowedTypes() {
-        return _.map(this.props.allowedTypes, function(item) {
+        return _.map(this.props.allowedTypes, function (item) {
             var name = item[0].toUpperCase() + item.substr(1)
             return <option value={item} key={item}>{name}</option>
         })

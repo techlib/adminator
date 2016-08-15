@@ -1,16 +1,16 @@
 import * as React from 'react'
 import {notEmpty, isInt, isIP4, isIP6} from '../util/simple-validators'
 
-var createFieldWithValidator = function(validator) {
+var createFieldWithValidator = function (validator) {
     return React.createClass({
 
         _validate: validator,
 
-        getValue: function() {
+        getValue: function () {
             return this.refs[this.props.id].value;
         },
 
-        validate: function() {
+        validate: function () {
             var value = this.getValue();
 
             if (!notEmpty(value)) {
@@ -24,7 +24,7 @@ var createFieldWithValidator = function(validator) {
             return true;
         },
 
-        getInitialState: function() {
+        getInitialState: function () {
             return {value: ''};
         },
 
@@ -62,7 +62,7 @@ export var DhcpTypeBool = React.createClass({
         return this.refs[this.props.id + '0'].checked;
     },
 
-    getInitialState: function() {
+    getInitialState: function () {
         return {value: ''};
     },
 

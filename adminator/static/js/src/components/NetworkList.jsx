@@ -11,7 +11,7 @@ import {Link} from 'react-router'
 import {OverlayTrigger, Button, Tooltip} from 'react-bootstrap'
 
 let NetLink = React.createClass({
-  render: function() {
+  render: function () {
     return  <Link to={`/network/${this.props.rowData.uuid}`}>
                 {this.props.data}
             </Link>
@@ -22,7 +22,7 @@ let NetActions = React.createClass({
 
     mixins: [ModalConfirmMixin],
 
-    handleDelete: function() {
+    handleDelete: function () {
         var name = this.props.rowData.description;
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
@@ -31,7 +31,7 @@ let NetActions = React.createClass({
         })
     },
 
-    render: function() {
+    render: function () {
         var id = 'row' + this.props.rowData.uuid;
         return (
         <OverlayTrigger placement="top" overlay=<Tooltip id={id}>Delete</Tooltip>>

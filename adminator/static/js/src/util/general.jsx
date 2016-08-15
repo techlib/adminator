@@ -2,9 +2,9 @@ import * as _ from 'lodash'
 import {Address6, Address4} from 'ip-address'
 
 _.mixin({
-  compact: function(o) {
+  compact: function (o) {
      var clone = _.clone(o);
-     _.each(clone, function(v, k) {
+     _.each(clone, function (v, k) {
        if(!v) {
          delete clone[k];
        }

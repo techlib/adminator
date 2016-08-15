@@ -20,20 +20,20 @@ ErrorAlert.prototype = Object.create(AlertNotice);
 ErrorAlert.prototype.constructor = ErrorAlert;
 
 export var AlertDismissible = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             isVisible: true
         };
     },
 
-    icon: function() {
+    icon: function () {
       return {
               'success': 'pficon pficon-ok',
               'danger': 'pficon pficon-error-circle-o'
              }[this.props.level]
     },
 
-    render: function() {
+    render: function () {
         if(!this.state.isVisible)
             return null;
 
@@ -50,19 +50,19 @@ export var AlertDismissible = React.createClass({
         );
     },
 
-    dismissAlert: function() {
+    dismissAlert: function () {
         this.setState({isVisible: false});
     },
 
-    showAlert: function() {
+    showAlert: function () {
       this.setState({isVisible: true});
     }
 });
 
 export var AlertSet = React.createClass({
-    render: function() {
+    render: function () {
       if(this.props.alerts) {
-        var alerts = this.props.alerts.map(function(alert, i) {
+        var alerts = this.props.alerts.map(function (alert, i) {
             return (
                 <AlertDismissible key={"alert-"+i} level={alert.level}
                         message={alert.message} code={alert.code} />

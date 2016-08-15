@@ -6,7 +6,7 @@
  */
 
 export var ErrorMixin = {
-  handleError: function(method, status, message) {
+  handleError: function (method, status, message) {
     this.data.errors = [{'method': method, 'status': status, 'message': message}]
     this.trigger(this.data)
   },

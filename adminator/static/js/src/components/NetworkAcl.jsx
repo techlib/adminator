@@ -82,7 +82,7 @@ export var NetworkAcl = React.createClass({
     var data = []
     var me = this;
 
-    _.map(this.state.networks.list, function(item) {
+    _.map(this.state.networks.list, function (item) {
       var i = {
         uuid: item.uuid,
         name: item.description,
@@ -116,7 +116,7 @@ export var NetworkAcl = React.createClass({
 
                     <div className='panel-body'>
             <form className="form-horizontal">
-              { data.map(function(item) {
+              { data.map(function (item) {
                 return (
                 <DeviceTypeSelector
                   key={item.uuid}

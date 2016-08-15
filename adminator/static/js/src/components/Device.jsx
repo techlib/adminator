@@ -114,7 +114,7 @@ export var Device = React.createClass({
         }
 
         var allowedNetworks = permissions[this.state.device.type];
-        return _.filter(this.state.networks.list, function(item) {
+        return _.filter(this.state.networks.list, function (item) {
             return _.includes(allowedNetworks, item.uuid);
         })
     },
