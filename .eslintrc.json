@@ -5,7 +5,6 @@
         "quotes": "off",
         "curly": "off",
         "object-curly-spacing": "off",
-        "space-before-function-paren": "off",
         "comma-dangle": "off",
         "array-bracket-spacing": "off",
         "no-extra-semi": "off",
