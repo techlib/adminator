@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
+import * as _ from 'lodash'
 import {RecordActions, FeedbackActions} from '../actions'
 import {RecordStore} from '../stores/Record'
 import {Feedback} from './Feedback'
@@ -84,54 +85,27 @@ export var RecordDetail = React.createClass({
   },
 
   renderInput() {
-     switch (this.state.data.record.type){
-      case null:
-      return (
-        <div className='form-group'>
-            <Input
-              type='text'
-              label='Name'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='name'
-              onChange={this.handleChange}
-              value={this.state.data.record.name} />
-            <Input
-              type='hidden'
-              ref='content'
-              onChange={this.handleChange}
-              value={this.state.data.record.content} />
+    var type = this.state.data.record.type
+     if (type == null) {
+        return (
+          <div className='form-group'>
+              <Input
+                type='text'
+                label='Name'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-8'
+                ref='name'
+                onChange={this.handleChange}
+                value={this.state.data.record.name} />
+              <Input
+                type='hidden'
+                ref='content'
+                onChange={this.handleChange}
+                value={this.state.data.record.content} />
 
-        </div>
-      )
-      case 'A':
-      case 'AAAA':
-      case 'CNAME':
-      case 'PTR':
-      case 'NS':
-      case 'SOA':
-      return (
-        <div className='form-group'>
-            <Input
-              type='text'
-              label='Name'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='name'
-              onChange={this.handleChange}
-              value={this.state.data.record.name} />
-            <Input
-              type='text'
-              label='Value'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='content'
-              onChange={this.handleChange}
-              value={this.state.data.record.content} />
-        </div>
-      )
-      case 'MX':
-      return (
+          </div>)
+     } else if (type == 'MX') {
+        return (
         <div className='form-group'>
             <Input
               type='text'
@@ -159,47 +133,68 @@ export var RecordDetail = React.createClass({
               onChange={this.handleChange}
               value={this.state.data.record.content} />
         </div>
-      )
-      case 'SRV':
-      let [priority, port, value] = this.state.data.record.content.split(' ')
-      return (
-        <div className='form-group'>
-            <Input
-              type='text'
-              label='Name'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='name'
-              onChange={this.handleSrvChange}
-              value={this.state.data.record.name} />
-            <Input
-              type='text'
-              label='Priority'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='priority'
-              onChange={this.handleSrvChange}
-              value={priority} />
-            <Input
-              type='text'
-              label='Port'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='port'
-              onChange={this.handleSrvChange}
-              value={port} />
-            <Input
-              type='text'
-              label='Value'
-              labelClassName='col-xs-2'
-              wrapperClassName='col-xs-8'
-              ref='value'
-              onChange={this.handleSrvChange}
-              value={value} />
-        </div>
-      )
-      case 'TXT':
-      return (
+        )
+      } else if (type == 'SRV') {
+        let [priority, port, value] = this.state.data.record.content.split(' ')
+        return (
+          <div className='form-group'>
+              <Input
+                type='text'
+                label='Name'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-8'
+                ref='name'
+                onChange={this.handleSrvChange}
+                value={this.state.data.record.name} />
+              <Input
+                type='text'
+                label='Priority'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-8'
+                ref='priority'
+                onChange={this.handleSrvChange}
+                value={priority} />
+              <Input
+                type='text'
+                label='Port'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-8'
+                ref='port'
+                onChange={this.handleSrvChange}
+                value={port} />
+              <Input
+                type='text'
+                label='Value'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-8'
+                ref='value'
+                onChange={this.handleSrvChange}
+                value={value} />
+          </div>
+        )
+      } else if (type == 'TXT') {
+        return (
+            <div className='form-group'>
+                <Input
+                  type='text'
+                  label='Name'
+                  labelClassName='col-xs-2'
+                  wrapperClassName='col-xs-8'
+                  ref='name'
+                  onChange={this.handleChange}
+                  value={this.state.data.record.name} />
+                <Input
+                  type='textarea'
+                  ref='content'
+                  label='Content'
+                  labelClassName='col-xs-2'
+                  wrapperClassName='col-xs-8'
+                  onChange={this.handleChange}
+                  value={this.state.data.record.content} />
+            </div>
+          )
+      } else if (_.contains(['A', 'AAAA', 'CNAME', 'PTR', 'NS', 'SOA'], type)) {
+        return (
           <div className='form-group'>
               <Input
                 type='text'
@@ -210,16 +205,16 @@ export var RecordDetail = React.createClass({
                 onChange={this.handleChange}
                 value={this.state.data.record.name} />
               <Input
-                type='textarea'
-                ref='content'
-                label='Content'
+                type='text'
+                label='Value'
                 labelClassName='col-xs-2'
                 wrapperClassName='col-xs-8'
+                ref='content'
                 onChange={this.handleChange}
                 value={this.state.data.record.content} />
           </div>
         )
-    }
+      }
   },
 
   render(){
