@@ -10,41 +10,41 @@ var DeviceTypeSelector = React.createClass({
 types: ['device', 'staff', 'visitor'],
 
 getState() {
-	return _.invert(this.state, true)[1] || []
+  return _.invert(this.state, true)[1] || []
 },
 
 handleChange(evt) {
-	var v = {}
-	v[evt.target.value] = + evt.target.checked
-	this.setState(v)
+  var v = {}
+  v[evt.target.value] = + evt.target.checked
+  this.setState(v)
 },
 
 getInitialState() {
-	return {device: + this.props.device,
-			staff: + this.props.staff,
-			visitor: + this.props.visitor}	
+  return {device: + this.props.device,
+      staff: + this.props.staff,
+      visitor: + this.props.visitor}  
 },
 
 render() {
-	return (
-	<div className="form-group" key={this.props.name}>
-		<label className="col-sm-6 control-label">{this.props.name} ({this.props.vlan})</label>
-		<div className="col-sm-6">
+  return (
+  <div className="form-group" key={this.props.name}>
+    <label className="col-sm-6 control-label">{this.props.name} ({this.props.vlan})</label>
+    <div className="col-sm-6">
 
-			{this.types.map((item) => {
-				return (
-				<label className="checkbox-inline" key={item}>
-				<input type="checkbox"
-					   value={item}
-					   onChange={this.handleChange}
-					   checked={this.state[item]} /> {item}
-				</label>
-				)
-			})
-			}
-		</div>
-	</div>
-	)
+      {this.types.map((item) => {
+        return (
+        <label className="checkbox-inline" key={item}>
+        <input type="checkbox"
+             value={item}
+             onChange={this.handleChange}
+             checked={this.state[item]} /> {item}
+        </label>
+        )
+      })
+      }
+    </div>
+  </div>
+  )
 }
 
 })
@@ -60,16 +60,16 @@ export var NetworkAcl = React.createClass({
     },
 
     save() {
-		var data = _.filter(_.map(this.state.networks.list, (item) => {
-			var types = this.refs[item.uuid].getState()
-			if (types.length > 0) {
-				return {
-					'network': item.uuid,
-					'device_types': types
-				}
-			}
-		}))
-		this.props.save_handler(data)
+    var data = _.filter(_.map(this.state.networks.list, (item) => {
+      var types = this.refs[item.uuid].getState()
+      if (types.length > 0) {
+        return {
+          'network': item.uuid,
+          'device_types': types
+        }
+      }
+    }))
+    this.props.save_handler(data)
     },
 
     getInitialState() {
@@ -79,25 +79,25 @@ export var NetworkAcl = React.createClass({
 
     render() {
 
-		var data = []
-		var me = this;
+    var data = []
+    var me = this;
 
-		_.map(this.state.networks.list, function(item) {
-			var i = {
-				uuid: item.uuid,
-				name: item.description,
-				vlan: item.vlan,
-				device: 0,
-				staff: 0,
-				visitor: 0
-			}
-			if (_.has(me.props.role, item.uuid)) {
-				var role = me.props.role[item.uuid]
-				i.device = _.includes(role, 'device');
-				i.staff = _.includes(role, 'staff');
-				i.visitor = _.includes(role, 'visitor');
-			}
-			data.push(i)
+    _.map(this.state.networks.list, function(item) {
+      var i = {
+        uuid: item.uuid,
+        name: item.description,
+        vlan: item.vlan,
+        device: 0,
+        staff: 0,
+        visitor: 0
+      }
+      if (_.has(me.props.role, item.uuid)) {
+        var role = me.props.role[item.uuid]
+        i.device = _.includes(role, 'device');
+        i.staff = _.includes(role, 'staff');
+        i.visitor = _.includes(role, 'visitor');
+      }
+      data.push(i)
         })
 
         data = _.sortBy(data, 'name')
@@ -107,7 +107,7 @@ export var NetworkAcl = React.createClass({
                 <h1>{this.props.title}</h1>
                 <Feedback />
                 <div className="row">
-				<div className='col-xs-12 col-md-4'>
+        <div className='col-xs-12 col-md-4'>
 
                     <div className='panel panel-default'>
                     <div className='panel-heading'>
@@ -115,21 +115,21 @@ export var NetworkAcl = React.createClass({
                     </div>
 
                     <div className='panel-body'>
-						<form className="form-horizontal">
-						  { data.map(function(item) {
-							  return (
-								<DeviceTypeSelector
-									key={item.uuid}
-									ref={item.uuid}
-									vlan={item.vlan}
-									name={item.name}
-									device={item.device}
-									staff={item.staff}
-									visitor={item.visitor}
-								/>)
-							})
-						  }
-						</form>
+            <form className="form-horizontal">
+              { data.map(function(item) {
+                return (
+                <DeviceTypeSelector
+                  key={item.uuid}
+                  ref={item.uuid}
+                  vlan={item.vlan}
+                  name={item.name}
+                  device={item.device}
+                  staff={item.staff}
+                  visitor={item.visitor}
+                />)
+              })
+              }
+            </form>
                     </div>
                     <div className='panel-footer'>
                         <div className="row">
@@ -142,7 +142,7 @@ export var NetworkAcl = React.createClass({
                         </div>
                     </div>
                 </div>
-			</div>
+      </div>
           </div>
         </div>
     )

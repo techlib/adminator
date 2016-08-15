@@ -20,19 +20,19 @@ export var DomainDetail = React.createClass({
     return {data: {domain: {records: []}}, showNewForm: false}
   },
 
-	showNewRecord() {
-		this.setState({showNewForm: !this.state.showNewForm})
+  showNewRecord() {
+    this.setState({showNewForm: !this.state.showNewForm})
     },
 
     hideNewRecord() {
-		this.setState({showNewForm: false})
+    this.setState({showNewForm: false})
     },
 
-	getNewRecordForm() {
-	  if (this.state.showNewForm) {
+  getNewRecordForm() {
+    if (this.state.showNewForm) {
          return (<RecordCreate domain={this.props.params.id}
-						 	   hideHandler={this.hideNewRecord} />)
-	  }
+                 hideHandler={this.hideNewRecord} />)
+    }
     },
 
 
@@ -64,7 +64,7 @@ export var DomainDetail = React.createClass({
                <div className="col-xs-12 col-sm-10">
                    <h1>Records</h1>
                </div>
-				<div className="col-xs-12 col-sm-2 h1 text-right">
+        <div className="col-xs-12 col-sm-2 h1 text-right">
                     <a className='btn btn-success' onClick={this.showNewRecord}>
                         <i className='fa fa-plus'></i> New record
                     </a>
@@ -72,7 +72,7 @@ export var DomainDetail = React.createClass({
 
            </div>
 
-		  {this.getNewRecordForm()}
+      {this.getNewRecordForm()}
 
           <Griddle results={this.state.data['domain'].records} 
                    tableClassName='table table-bordered table-striped table-hover'

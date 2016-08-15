@@ -150,7 +150,7 @@ export var Lease = React.createClass({
       return (
         <div className='col-xs-12 container-fluid'>
 
-						<h1>Leases</h1>
+            <h1>Leases</h1>
                         <Tabs defaultActiveKey={1}>
                             <Tab eventKey={1} animation={false} title="IPv4">
 
@@ -172,20 +172,20 @@ export var Lease = React.createClass({
 
                             </Tab>
                             <Tab eventKey={2} title="IPv6">
-								<Griddle results={this.state.lease6data['list']}
-												 tableClassName='datatable table table-striped table-hover table-bordered datatable'
-												 useGriddleStyles={false}
-												 showFilter={true}
-												 useCustomPagerComponent='true'
-												 customPagerComponent={Pager}
-												 sortAscendingComponent={<span classNameName='fa fa-sort-alpha-asc'></span>}
-												 sortDescendingComponent={<span classNameName='fa fa-sort-alpha-desc'></span>}
-												 resultsPerPage='20'
-												 customFilterer={regexGridFilter}
-												 useCustomFilterer='true'
-												 columns={['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'c']}
+                <Griddle results={this.state.lease6data['list']}
+                         tableClassName='datatable table table-striped table-hover table-bordered datatable'
+                         useGriddleStyles={false}
+                         showFilter={true}
+                         useCustomPagerComponent='true'
+                         customPagerComponent={Pager}
+                         sortAscendingComponent={<span classNameName='fa fa-sort-alpha-asc'></span>}
+                         sortDescendingComponent={<span classNameName='fa fa-sort-alpha-desc'></span>}
+                         resultsPerPage='20'
+                         customFilterer={regexGridFilter}
+                         useCustomFilterer='true'
+                         columns={['address', 'hwaddr', 'expire', 'valid_lifetime', 'state', 'hostname', 'c']}
                                                  columnMetadata={lease6ColumnMeta}
-												 />
+                         />
                             </Tab>
                         </Tabs>
 

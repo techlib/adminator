@@ -15,7 +15,7 @@ export var Device = React.createClass({
 
     mixins: [Reflux.connect(NetworkStore, 'networks'),
              Reflux.connect(UserStore, 'users'),
-			 ModalConfirmMixin],
+       ModalConfirmMixin],
 
     componentDidMount() {
         UserInfoStore.listen(this.setUserConstraints)

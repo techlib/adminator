@@ -24,7 +24,7 @@ let AclActions = React.createClass({
 export var NetworkAclList = React.createClass({
 
   mixins: [Reflux.connect(NetworkStore, 'networks'),
-		   Reflux.connect(NetworkAclStore, 'acl')],
+       Reflux.connect(NetworkAclStore, 'acl')],
 
   componentDidMount() {
     NetworkActions.list();
