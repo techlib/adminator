@@ -29,7 +29,7 @@ export function regexGridFilter(rows, filter) {
                         filterWordFound = true
                     }
                 }
-				if (filterWordFound) return true
+				if (filterWordFound) {return true}
             })
 			found = found && filterWordFound
 		})

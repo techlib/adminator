@@ -64,7 +64,7 @@ export function minLen(val, len) {
 }
 
 export function formatMac(val) {
-    if (!val) val = ''
+    if (!val) {val = ''}
     val = val.toLowerCase()
     val = val.replace(/[^a-f0-9]/g, '')
     val = val.replace(/([a-f0-9]{2})/g, '$1:').substring(0,17)

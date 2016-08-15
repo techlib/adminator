@@ -42,12 +42,12 @@ export var BootstrapSelect = React.createClass({displayName: 'BootstrapSelect',
     })
 
     dropdown.click(function () {
-      if (self.props.multiple) return
+      if (self.props.multiple) {return}
       self.setState({ open: !self.state.open })
     })
 
     items.click(function () {
-      if (self.props.multiple) return
+      if (self.props.multiple) {return}
       self.setState({ open: !self.state.open })
     })
   },

@@ -34,12 +34,14 @@ export var AlertDismissible = React.createClass({
     },
 
     render: function () {
-        if(!this.state.isVisible)
-            return null
+        if(!this.state.isVisible) {
+          return null
+        }
 
         var message = this.props.message
-        if(this.props.code !== null)
-            message = message +'(Code '+ this.props.code +')'
+        if(this.props.code !== null) {
+          message = message +'(Code '+ this.props.code +')'
+        }
         return (
           <Alert className="toast-pf toast-pf-top-right alert alert-dismissable" bsStyle={this.props.level}>
             <button type="button" className="close" data-dismiss="alert" aria-hidden="true">

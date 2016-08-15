@@ -145,27 +145,27 @@ let DhcpRow = React.createClass({
 
     getEditControl(type) {
 
-        if (type == 'string')
+        if (type == 'string') {
             return React.createFactory(Types.DhcpTypeString)
-        else if (type == 'boolean')
+        } else if (type == 'boolean') {
             return React.createFactory(Types.DhcpTypeBool)
-        else if (type == 'ipv4-address')
+        } else if (type == 'ipv4-address') {
             return React.createFactory(Types.DhcpTypeIpv4)
-        else if (type == 'ipv6-address')
+        } else if (type == 'ipv6-address') {
             return React.createFactory(Types.DhcpTypeIpv6)
-        else if (type == 'fqdn')
+        } else if (type == 'fqdn') {
             return React.createFactory(Types.DhcpTypeFqdn)
-        else if (type == 'binary')
+        } else if (type == 'binary') {
             return React.createFactory(Types.DhcpTypeBinary)
-        else if (type == 'empty')
+        } else if (type == 'empty') {
             return React.createFactory(Types.DhcpTypeEmpty)
-        else if (type == 'record')
+        } else if (type == 'record') {
             return React.createFactory(Types.DhcpTypeString)
-        else if (type.indexOf('int') != -1)
+        } else if (type.indexOf('int') != -1) {
             return React.createFactory(Types.DhcpTypeInt)
-        else
+        } else {
             return React.createFactory(Types.DhcpTypeEmpty)
-
+        }
     },
 
     render() {
