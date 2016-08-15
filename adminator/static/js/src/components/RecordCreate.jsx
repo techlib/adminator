@@ -330,11 +330,11 @@ export var RecordCreate = React.createClass({
                    </BootstrapSelect>
                  </div>
 
-                <div className={"row col-sm-12" + (this.state.record.type ? '': 'hidden')}>
+                <div className={'row col-sm-12' + (this.state.record.type ? '': 'hidden')}>
                   {this.renderInput()}
                 </div>
               </div>
-            <div className={"panel-footer " + (this.state.record.type ? '': 'hidden')}>
+            <div className={'panel-footer ' + (this.state.record.type ? '': 'hidden')}>
               <button className='btn btn-primary' type="submit">Save</button>
             </div>
           </div>

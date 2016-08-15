@@ -15,7 +15,7 @@ export var DhcpOptionValues = React.createClass({
 
     handleAdd() {
         let option = this.refs.newType.value
-        if (option == "0") {
+        if (option == '0') {
             return
         }
 

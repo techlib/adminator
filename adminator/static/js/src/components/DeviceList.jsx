@@ -150,14 +150,14 @@ export var DeviceList = React.createClass({
     ]
 
     var rowMetadata = {
-        "bodyCssClassName": function (rowData) {
+        'bodyCssClassName': function (rowData) {
             var isExpired = (rowData.type == 'visitor') &&
                 moment(rowData.valid[1]).isBefore()
 
             if ((rowData.users && !rowData.users.enabled) || isExpired) {
-                return "warning"
+                return 'warning'
             }
-            return "default-row"
+            return 'default-row'
         }
     }
 

@@ -66,7 +66,7 @@ export var AlertSet = React.createClass({
       if(this.props.alerts) {
         var alerts = this.props.alerts.map(function (alert, i) {
             return (
-                <AlertDismissible key={"alert-"+i} level={alert.level}
+                <AlertDismissible key={'alert-'+i} level={alert.level}
                         message={alert.message} code={alert.code} />
             )
         })

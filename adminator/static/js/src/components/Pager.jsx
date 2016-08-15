@@ -3,14 +3,14 @@ import * as React from 'react'
 export var Pager = React.createClass({
     getDefaultProps() {
         return{
-            "maxPage": 0,
-            "nextText": "",
-            "previousText": "",
-            "currentPage": 0,
+            'maxPage': 0,
+            'nextText': '',
+            'previousText': '',
+            'currentPage': 0,
         }
     },
     pageChange(event) {
-        this.props.setPage(parseInt(event.target.getAttribute("data-value")))
+        this.props.setPage(parseInt(event.target.getAttribute('data-value')))
     },
     render() {
 

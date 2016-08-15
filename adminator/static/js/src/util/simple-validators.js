@@ -55,7 +55,7 @@ export function notEmpty(val) {
 
 export function isMAC(val) {
     val = formatMac(val)
-    var test = new RegExp("^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
+    var test = new RegExp('^([0-9a-f]{2}:){5}[0-9a-f]{2}$')
     return test.test(val)
 }
 

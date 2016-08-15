@@ -46,5 +46,5 @@ ReactDOM.render((
         <Route path="/topology/" component={TopologyList} />
     </Route>
   </Router>
- ), document.getElementById("AdminatorApp")
+ ), document.getElementById('AdminatorApp')
 )
