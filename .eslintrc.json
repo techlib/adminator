@@ -1,7 +1,6 @@
 {
     "rules": {
         "quotes": "off",
-        "curly": "off",
         "object-curly-spacing": "off",
         "comma-dangle": "off",
         "array-bracket-spacing": "off",
