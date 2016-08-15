@@ -207,7 +207,6 @@ export var RecordCreate = React.createClass({
           </div>
         </div>
       )
-      break;
       case 'SRV':
       return (
         <div className='form-group'>
@@ -249,7 +248,6 @@ export var RecordCreate = React.createClass({
           </div>
         </div>
       )
-      break;
       case 'TXT':
       return (
           <div className='form-group'>
@@ -273,7 +271,6 @@ export var RecordCreate = React.createClass({
             </div>
           </div>
         )
-      break;
     }
   },
 

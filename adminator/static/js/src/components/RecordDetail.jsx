@@ -104,7 +104,6 @@ export var RecordDetail = React.createClass({
 
         </div>
       )
-      break;
       case 'A':
       case 'AAAA':
       case 'CNAME':
@@ -131,7 +130,6 @@ export var RecordDetail = React.createClass({
               value={this.state.data.record.content} />
         </div>
       )
-      break;
       case 'MX':
       return (
         <div className='form-group'>
@@ -200,7 +198,6 @@ export var RecordDetail = React.createClass({
               value={value} />
         </div>
       )
-      break;
       case 'TXT':
       return (
           <div className='form-group'>
@@ -222,7 +219,6 @@ export var RecordDetail = React.createClass({
                 value={this.state.data.record.content} />
           </div>
         )
-      break;
     }
   },
 
