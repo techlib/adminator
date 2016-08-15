@@ -37,8 +37,6 @@ export var DateRangePicker = React.createClass({
     var max = this.props.range[1]
     var min = this.props.range[0]
 
-
-
    return (
       <div>
         <div className='form-group'>

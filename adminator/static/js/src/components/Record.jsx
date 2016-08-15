@@ -67,8 +67,6 @@ export var RecordActionsComponent = React.createClass({
   }
 })
 
-
-
 export var Record = React.createClass({
   mixins: [Reflux.listenTo(RecordStore, 'handleData')],
 

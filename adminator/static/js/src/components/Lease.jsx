@@ -11,8 +11,6 @@ import moment from 'moment'
 import {formatMac} from '../util/simple-validators'
 import {ModalConfirmMixin} from './ModalConfirmMixin'
 
-
-
 var Lease4ActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
