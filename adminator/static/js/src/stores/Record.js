@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {RecordActions} from '../actions'
@@ -16,7 +16,7 @@ export var RecordStore = Reflux.createStore({
   },
 
   onDelete(id) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: `/record/${id}`,
       method: 'DELETE',
@@ -40,7 +40,7 @@ export var RecordStore = Reflux.createStore({
   },
 
   onCreate(record) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: '/record/',
       method: 'POST',
@@ -60,4 +60,4 @@ export var RecordStore = Reflux.createStore({
       }
     })
   }
-});
+})

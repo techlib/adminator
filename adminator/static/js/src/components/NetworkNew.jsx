@@ -15,6 +15,6 @@ export var NetworkNew = React.createClass({
             />
         )
     }
-});
+})
 
 

@@ -15,7 +15,7 @@ var Lease4ActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
     deleteLease4() {
-        var name = this.props.rowData.address;
+        var name = this.props.rowData.address
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
@@ -40,7 +40,7 @@ var Lease6ActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
     deleteLease6() {
-        var name = this.props.rowData.address;
+        var name = this.props.rowData.address
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
@@ -67,13 +67,13 @@ var LeaseStateComponent = React.createClass({
         switch (this.props.data) {
             case 0:
                 txt = 'default'
-                break;
+                break
             case 1:
                 txt = 'declined'
-                break;
+                break
             case 2:
                 txt = 'expired-reclaimed'
-                break;
+                break
         }
         return <span>{txt}</span>
     }

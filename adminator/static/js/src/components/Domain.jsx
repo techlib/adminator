@@ -27,7 +27,7 @@ var DomainActionsComponent = React.createClass({
   mixins: [ModalConfirmMixin],
 
   handleDelete() {
-        var name = this.props.rowData.name;
+        var name = this.props.rowData.name
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
@@ -109,5 +109,5 @@ export var Domain = React.createClass({
   render() {
    return this.getList()
   }
-});
+})
 

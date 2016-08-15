@@ -2,7 +2,7 @@ import * as _ from 'lodash'
 import {trim} from 'underscore.string'
 
 export function regexGridFilter(rows, filter) {
-	var filterArr = trim(filter).split(' ');
+	var filterArr = trim(filter).split(' ')
 
 	return _.filter(rows, (row) => {
         var found = true
@@ -33,6 +33,6 @@ export function regexGridFilter(rows, filter) {
             })
 			found = found && filterWordFound
 		})
-        return found;
+        return found
 	})
 }

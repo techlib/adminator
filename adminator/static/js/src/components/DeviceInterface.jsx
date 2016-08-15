@@ -62,7 +62,7 @@ export var DeviceInterface = React.createClass({
         if (this.state.ip6addr && !isIP6(this.state.ip6addr)) {
             r.push(`${this.state.ip6addr} is not valid IPv6 address`)
         }
-        return r;
+        return r
     },
 
     render() {
@@ -73,7 +73,7 @@ export var DeviceInterface = React.createClass({
             onChange: this.handleChange
         }
 
-        var delimiter = null;
+        var delimiter = null
         if (this.props.delimiter) {
             delimiter = <hr />
         }

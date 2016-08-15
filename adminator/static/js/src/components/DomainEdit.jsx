@@ -29,13 +29,13 @@ export var DomainEdit = React.createClass({
 
   handleErrors(data) {
     if (!_.has(data, 'errors')) {
-        return;
+        return
     }
     var errors = []
     data.errors.map((item) => {
       errors.append(item.message.message)
     })
-    FeedbackActions.set('error', 'Errors from server', errors);
+    FeedbackActions.set('error', 'Errors from server', errors)
   },
 
   handleChangeType(event) {
@@ -71,14 +71,14 @@ export var DomainEdit = React.createClass({
     var errors = this.validate()
 
     if (errors.length > 0) {
-        FeedbackActions.set('error', 'Form contains invalid data', errors);
+        FeedbackActions.set('error', 'Form contains invalid data', errors)
     } else {
       if(_.isUndefined(this.state.data.domain.id)) {
         DomainActions.create(this.state.data.domain)
-        FeedbackActions.set('success', 'Domain created');
+        FeedbackActions.set('success', 'Domain created')
       } else {
         DomainActions.update(this.state.data.domain)
-        FeedbackActions.set('success', 'Domain updated');
+        FeedbackActions.set('success', 'Domain updated')
       }
     }
   },

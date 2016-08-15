@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {TopologyActions} from '../actions'
@@ -17,5 +17,5 @@ export var TopologyStore = Reflux.createStore({
       }
     })
   }
-});
+})
 

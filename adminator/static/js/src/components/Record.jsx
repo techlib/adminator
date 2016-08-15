@@ -45,8 +45,8 @@ export var RecordActionsComponent = React.createClass({
   mixins: [ModalConfirmMixin],
 
   handleDelete() {
-    var name = this.props.rowData.name;
-    var type = this.props.rowData.type;
+    var name = this.props.rowData.name
+    var type = this.props.rowData.type
       this.modalConfirm('Confirm delete', `Delete ${type} record ${name}?`,
                           {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
       .then(() => {
@@ -165,5 +165,5 @@ export var Record = React.createClass({
     )
   },
 
-});
+})
 

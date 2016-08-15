@@ -30,5 +30,5 @@ export var DeviceEdit = React.createClass({
                 />
         )
     }
-});
+})
 

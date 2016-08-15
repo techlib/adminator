@@ -13,7 +13,7 @@ let AclLink = React.createClass({
                 {this.props.data}
              </Link>
   }
-});
+})
 
 let AclActions = React.createClass({
     render() {
@@ -27,13 +27,13 @@ export var NetworkAclList = React.createClass({
        Reflux.connect(NetworkAclStore, 'acl')],
 
   componentDidMount() {
-    NetworkActions.list();
-    NetworkAclActions.list();
+    NetworkActions.list()
+    NetworkAclActions.list()
   },
 
   getInitialState() {
     this.state = {'networks': {'list': []}, 'acl': {'list': []}}
-    return this.state;
+    return this.state
   },
 
   colMetadata: [

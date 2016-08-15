@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {InterfaceActions} from '../actions'
@@ -21,7 +21,7 @@ export var InterfaceStore = Reflux.createStore({
   },
 
   onDelete(id) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: `/interface/${id}`,
       method: 'DELETE',
@@ -51,7 +51,7 @@ export var InterfaceStore = Reflux.createStore({
   },
 
   onCreate(item) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: '/interface/',
       method: 'POST',
@@ -74,4 +74,4 @@ export var InterfaceStore = Reflux.createStore({
       }
     })
   }
-});
+})

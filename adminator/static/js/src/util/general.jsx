@@ -3,15 +3,15 @@ import {Address6, Address4} from 'ip-address'
 
 _.mixin({
   compact: function (o) {
-     var clone = _.clone(o);
+     var clone = _.clone(o)
      _.each(clone, function (v, k) {
        if(!v) {
-         delete clone[k];
+         delete clone[k]
        }
-     });
-     return clone;
+     })
+     return clone
   }
-});
+})
 
 
 export function ipToPtr(ip) {

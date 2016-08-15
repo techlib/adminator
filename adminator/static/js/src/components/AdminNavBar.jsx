@@ -65,7 +65,7 @@ export var AdminNavBar = React.createClass({
         )
     }
 
-    return res;
+    return res
   },
 
   render() {

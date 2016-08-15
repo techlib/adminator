@@ -13,29 +13,29 @@ export var Network = React.createClass({
     mixins: [Reflux.connect(DhcpOptionsStore, 'options')],
 
     componentDidMount() {
-        DhcpOptionActions.list();
+        DhcpOptionActions.list()
     },
 
     save() {
-        var errors = [];
+        var errors = []
 
-        var net = this.refs.network;
-        var dhcp = this.refs.dhcp_options;
-        var dhcp6 = this.refs.dhcp_options6;
-        var pools = this.refs.pools;
+        var net = this.refs.network
+        var dhcp = this.refs.dhcp_options
+        var dhcp6 = this.refs.dhcp_options6
+        var pools = this.refs.pools
 
-        errors = errors.concat(net.validate());
-        errors = errors.concat(dhcp.validate());
-        errors = errors.concat(dhcp6.validate());
-        errors = errors.concat(pools.validate());
+        errors = errors.concat(net.validate())
+        errors = errors.concat(dhcp.validate())
+        errors = errors.concat(dhcp6.validate())
+        errors = errors.concat(pools.validate())
 
         if (errors.length > 0) {
-            FeedbackActions.set('error', 'Form contains invalid data', errors);
+            FeedbackActions.set('error', 'Form contains invalid data', errors)
         } else {
-            var data = net.getValues();
-            data['dhcp_options'] = dhcp.getValues().concat(dhcp6.getValues());
-            data['pools'] = pools.getValues();
-            this.props.save_handler(data);
+            var data = net.getValues()
+            data['dhcp_options'] = dhcp.getValues().concat(dhcp6.getValues())
+            data['pools'] = pools.getValues()
+            this.props.save_handler(data)
         }
     },
 
@@ -48,14 +48,14 @@ export var Network = React.createClass({
 
     componentWillReceiveProps(p) {
         if (p) {
-            this.setState({'network': p.network_data});
+            this.setState({'network': p.network_data})
         }
     },
 
     render() {
         var values = sortDhcpValues(this.state.network.dhcp_options,
-                                     this.state.options);
-        var options = sortDhcpOptions(this.state.options);
+                                     this.state.options)
+        var options = sortDhcpOptions(this.state.options)
 
         return (
             <div className="col-xs-12 container-fluid">
@@ -90,6 +90,6 @@ export var Network = React.createClass({
             </div>
     )
   }
-});
+})
 
 

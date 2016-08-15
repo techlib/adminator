@@ -14,8 +14,8 @@ export var Dhcp = React.createClass({
              Reflux.connect(DhcpValuesStore, 'values')],
 
     componentDidMount() {
-        DhcpOptionActions.list();
-        DhcpValuesActions.listGlobal();
+        DhcpOptionActions.list()
+        DhcpValuesActions.listGlobal()
     },
 
     getInitialState() {
@@ -23,25 +23,25 @@ export var Dhcp = React.createClass({
     },
 
     save() {
-        var dhcp = this.refs['dhcp'];
-        var dhcp6 = this.refs['dhcp6'];
+        var dhcp = this.refs['dhcp']
+        var dhcp6 = this.refs['dhcp6']
 
-        var errors = [];
-        errors = errors.concat(dhcp.validate());
-        errors = errors.concat(dhcp6.validate());
+        var errors = []
+        errors = errors.concat(dhcp.validate())
+        errors = errors.concat(dhcp6.validate())
 
         if (errors.length > 0) {
-            FeedbackActions.set('error', 'Form contains invalid data', errors);
+            FeedbackActions.set('error', 'Form contains invalid data', errors)
         } else {
-            var data = dhcp.getValues().concat(dhcp6.getValues());
-            DhcpValuesActions.saveGlobal(data);
+            var data = dhcp.getValues().concat(dhcp6.getValues())
+            DhcpValuesActions.saveGlobal(data)
         }
     },
 
     render() {
         var values = sortDhcpValues(this.state.values,
-                                    this.state.options);
-        var options = sortDhcpOptions(this.state.options);
+                                    this.state.options)
+        var options = sortDhcpOptions(this.state.options)
 
         return (
                 <div className="col-xs-12 container">

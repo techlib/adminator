@@ -99,5 +99,5 @@ export var TopologyList = React.createClass({
           </div>
     )
   }
-});
+})
 

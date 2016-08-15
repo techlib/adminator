@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {DeviceActions, FeedbackActions} from '../actions'
@@ -18,7 +18,7 @@ export var DeviceStore = Reflux.createStore({
         this.trigger(this.data)
       },
       error: result => {
-        FeedbackActions.set('error', result.responseJSON.message);
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -30,8 +30,8 @@ export var DeviceStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       success: () => {
-        BrowserHistory.push('/device/');
-        FeedbackActions.set('success', 'Device deleted');
+        BrowserHistory.push('/device/')
+        FeedbackActions.set('success', 'Device deleted')
       },
       error: result => {
         FeedbackActions.set('error', result.responseJSON.message)
@@ -48,8 +48,8 @@ export var DeviceStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(device),
       success: function success() {
-        BrowserHistory.push('/device/');
-        FeedbackActions.set('success', 'Device updated');
+        BrowserHistory.push('/device/')
+        FeedbackActions.set('success', 'Device updated')
       },
       error: result => {
         FeedbackActions.set('error', result.responseJSON.message)
@@ -65,8 +65,8 @@ export var DeviceStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(device),
       success: function success(result) {
-        BrowserHistory.push('/device/' + result.uuid);
-        FeedbackActions.set('success', 'Device created');
+        BrowserHistory.push('/device/' + result.uuid)
+        FeedbackActions.set('success', 'Device created')
       },
       error: result => {
         FeedbackActions.set('error', result.responseJSON.message)
@@ -84,4 +84,4 @@ export var DeviceStore = Reflux.createStore({
       }
     })
   }
-});
+})

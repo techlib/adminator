@@ -37,7 +37,7 @@ export var DeviceForm = React.createClass({
     handleChange(evt) {
         this.setState({[evt.target.name]: evt.target.value})
         if (evt.target.name == 'type') {
-            this.props.typeChangeHandler(evt.target.value);
+            this.props.typeChangeHandler(evt.target.value)
         }
     },
 

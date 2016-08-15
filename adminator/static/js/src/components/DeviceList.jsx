@@ -26,7 +26,7 @@ var DeviceActionsComponent = React.createClass({
     mixins: [ModalConfirmMixin],
 
     deleteDevice() {
-        var name = this.props.rowData.description;
+        var name = this.props.rowData.description
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
@@ -155,11 +155,11 @@ export var DeviceList = React.createClass({
                 moment(rowData.valid[1]).isBefore()
 
             if ((rowData.users && !rowData.users.enabled) || isExpired) {
-                return "warning";
+                return "warning"
             }
-            return "default-row";
+            return "default-row"
         }
-    };
+    }
 
     return (
         <div className='container-fluid col-xs-12'>
@@ -192,5 +192,5 @@ export var DeviceList = React.createClass({
           </div>
     )
   }
-});
+})
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {FeedbackActions, UserInfoActions} from '../actions'
@@ -21,7 +21,7 @@ export var UserInfoStore = Reflux.createStore({
                 this.trigger(this.data)
             },
             error: result => {
-                FeedbackActions.set('error', result.responseJSON.message);
+                FeedbackActions.set('error', result.responseJSON.message)
             }
         })
     },

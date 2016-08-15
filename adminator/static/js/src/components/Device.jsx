@@ -44,7 +44,7 @@ export var Device = React.createClass({
 
     componentWillReceiveProps(p) {
         if (this.state.device.uuid) {
-            p = _.omit(p, ['device']);
+            p = _.omit(p, ['device'])
         }
         this.setState(p)
     },
@@ -78,7 +78,7 @@ export var Device = React.createClass({
     },
 
     delete() {
-		var uuid = this.props.device.uuid;
+		var uuid = this.props.device.uuid
         this.modalConfirm('Confirm delete', `Delete ${this.props.device.description}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
@@ -99,28 +99,28 @@ export var Device = React.createClass({
 	},
 
     getAllowedTypes() {
-        var perms = UserInfoStore.getDeviceTypePermissions();
+        var perms = UserInfoStore.getDeviceTypePermissions()
         if (perms == null) {
             return ['staff', 'visitor', 'device']
         } else {
-            return _.keys(UserInfoStore.getDeviceTypePermissions());
+            return _.keys(UserInfoStore.getDeviceTypePermissions())
         }
     },
 
     getAllowedNetworks() {
-        var permissions = UserInfoStore.getDeviceTypePermissions();
+        var permissions = UserInfoStore.getDeviceTypePermissions()
         if (permissions == null) {
-            return this.state.networks.list;
+            return this.state.networks.list
         }
 
-        var allowedNetworks = permissions[this.state.device.type];
+        var allowedNetworks = permissions[this.state.device.type]
         return _.filter(this.state.networks.list, function (item) {
-            return _.includes(allowedNetworks, item.uuid);
+            return _.includes(allowedNetworks, item.uuid)
         })
     },
 
     handleTypeChange(value) {
-        this.setState({device: {'type': value}});
+        this.setState({device: {'type': value}})
     },
 
     render() {

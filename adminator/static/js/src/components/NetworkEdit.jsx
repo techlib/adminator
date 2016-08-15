@@ -9,11 +9,11 @@ export var NetworkEdit = React.createClass({
   mixins: [Reflux.connect(NetworkStore, 'network')],
 
   componentDidMount() {
-    NetworkActions.read(this.props.params.id);
+    NetworkActions.read(this.props.params.id)
   },
 
   save(data) {
-      NetworkActions.update(data);
+      NetworkActions.update(data)
   },
 
   getInitialState() {
@@ -29,6 +29,6 @@ export var NetworkEdit = React.createClass({
              />
     )
   }
-});
+})
 
 

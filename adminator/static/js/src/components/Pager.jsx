@@ -10,7 +10,7 @@ export var Pager = React.createClass({
         }
     },
     pageChange(event) {
-        this.props.setPage(parseInt(event.target.getAttribute("data-value")));
+        this.props.setPage(parseInt(event.target.getAttribute("data-value")))
     },
     render() {
 
@@ -20,18 +20,18 @@ export var Pager = React.createClass({
       var nextActive = this.props.currentPage != (this.props.maxPage -1) ? '': 'disabled'
       var next = <li className={nextActive}><a onClick={this.props.next}>{this.props.nextText} <i className="glyphicon glyphicon-arrow-right"></i></a></li>
 
-      var options = [];
+      var options = []
 
-      var startIndex = Math.max(this.props.currentPage - 5, 0);
-      var endIndex = Math.min(startIndex + 11, this.props.maxPage);
+      var startIndex = Math.max(this.props.currentPage - 5, 0)
+      var endIndex = Math.min(startIndex + 11, this.props.maxPage)
 
       if (this.props.maxPage >= 11 && (endIndex - startIndex) <= 10) {
-        startIndex = endIndex - 11;
+        startIndex = endIndex - 11
       }
 
-        for(var i = startIndex; i < endIndex ; i++) {
-          var selected = this.props.currentPage == i ? 'active' : '';
-            options.push(<li key={i} className={selected}><a onClick={this.pageChange} data-value={i}>{i + 1}</a></li>);
+        for(var i = startIndex; i < endIndex;  i++) {
+          var selected = this.props.currentPage == i ? 'active' : ''
+            options.push(<li key={i} className={selected}><a onClick={this.pageChange} data-value={i}>{i + 1}</a></li>)
         }
 
         return (
@@ -44,4 +44,4 @@ export var Pager = React.createClass({
           </div>
         )
     }
-});
+})

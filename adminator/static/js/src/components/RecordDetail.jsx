@@ -77,10 +77,10 @@ export var RecordDetail = React.createClass({
     var errors = this.validate()
 
     if (errors.length > 0) {
-        FeedbackActions.set('error', 'Form contains invalid data', errors);
+        FeedbackActions.set('error', 'Form contains invalid data', errors)
     } else {
-      RecordActions.update(this.state.data.record);
-      FeedbackActions.set('success', 'Form has been submited');
+      RecordActions.update(this.state.data.record)
+      FeedbackActions.set('success', 'Form has been submited')
     }
   },
 

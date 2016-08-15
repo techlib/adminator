@@ -98,7 +98,7 @@ export var RecordCreate = React.createClass({
     var errors = this.validate()
 
     if (errors.length > 0) {
-        FeedbackActions.set('error', 'Form contains invalid data', errors);
+        FeedbackActions.set('error', 'Form contains invalid data', errors)
     } else {
 
       // Append selected domain name if not present
@@ -109,8 +109,8 @@ export var RecordCreate = React.createClass({
         this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.value
       }
 
-      RecordActions.create(this.state.record);
-      FeedbackActions.set('success', 'Form has been submited');
+      RecordActions.create(this.state.record)
+      FeedbackActions.set('success', 'Form has been submited')
     }
   },
 
@@ -299,7 +299,7 @@ export var RecordCreate = React.createClass({
                  <button type="button"
                          className="close"
                          onClick={this.props.hideHandler}>
-                    <span>&times;</span>
+                    <span>&times</span>
                 </button>
                 </h3>
               </div>

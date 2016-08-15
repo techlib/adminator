@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {FeedbackActions, NetworkActions} from '../actions'
@@ -9,7 +9,7 @@ export var NetworkStore = Reflux.createStore({
   data: {network: [], list: []},
 
   ajaxSuccess(message) {
-    FeedbackActions.set('success', message);
+    FeedbackActions.set('success', message)
   },
 
   ajaxError(result) {
@@ -17,7 +17,7 @@ export var NetworkStore = Reflux.createStore({
   },
 
   onRead(id) {
-    var me = this;
+    var me = this
     $.ajax({url: `/network/${id}`,
         success: result => {
             this.data.network = result
@@ -31,7 +31,7 @@ export var NetworkStore = Reflux.createStore({
   },
 
   onDelete(id) {
-    var me = this;
+    var me = this
     $.ajax({
       url: `/network/${id}`,
       method: 'DELETE',
@@ -47,7 +47,7 @@ export var NetworkStore = Reflux.createStore({
 
 
   onUpdate(network) {
-    var me = this;
+    var me = this
     $.ajax({
       url: `/network/${network.uuid}`,
       method: 'PATCH',
@@ -63,7 +63,7 @@ export var NetworkStore = Reflux.createStore({
   },
 
   onCreate(network) {
-    var me = this;
+    var me = this
     $.ajax({
       url: '/network/',
       method: 'POST',
@@ -85,4 +85,4 @@ export var NetworkStore = Reflux.createStore({
       }
     })
   }
-});
+})

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {FeedbackActions, NetworkAclActions} from '../actions'
@@ -19,7 +19,7 @@ export var NetworkAclStore = Reflux.createStore({
         this.trigger(this.data)
       },
       error: result => {
-        FeedbackActions.set('error', result.responseJSON.message);
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -32,8 +32,8 @@ export var NetworkAclStore = Reflux.createStore({
       contentType: 'application/json',
       data: JSON.stringify(data),
       success: function success() {
-        BrowserHistory.push('/network/acl/');
-        FeedbackActions.set('success', 'Role updated');
+        BrowserHistory.push('/network/acl/')
+        FeedbackActions.set('success', 'Role updated')
       },
       error: result => {
         FeedbackActions.set('error', result.responseJSON.message)
@@ -51,4 +51,4 @@ export var NetworkAclStore = Reflux.createStore({
       }
     })
   }
-});
+})

@@ -56,7 +56,7 @@ export var NetworkAcl = React.createClass({
 ],
 
     componentDidMount() {
-        NetworkActions.list();
+        NetworkActions.list()
     },
 
     save() {
@@ -80,7 +80,7 @@ export var NetworkAcl = React.createClass({
     render() {
 
     var data = []
-    var me = this;
+    var me = this
 
     _.map(this.state.networks.list, function (item) {
       var i = {
@@ -93,9 +93,9 @@ export var NetworkAcl = React.createClass({
       }
       if (_.has(me.props.role, item.uuid)) {
         var role = me.props.role[item.uuid]
-        i.device = _.includes(role, 'device');
-        i.staff = _.includes(role, 'staff');
-        i.visitor = _.includes(role, 'visitor');
+        i.device = _.includes(role, 'device')
+        i.staff = _.includes(role, 'staff')
+        i.visitor = _.includes(role, 'visitor')
       }
       data.push(i)
         })
@@ -147,6 +147,6 @@ export var NetworkAcl = React.createClass({
         </div>
     )
   }
-});
+})
 
 

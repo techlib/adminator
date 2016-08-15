@@ -5,18 +5,18 @@ import * as _ from 'lodash'
 export var DhcpOptionValues = React.createClass({
 
     componentWillReceiveProps(p) {
-        this.setState(p);
+        this.setState(p)
     },
 
     getInitialState() {
         this.state = {'values': []}
-        return this.state;
+        return this.state
     },
 
     handleAdd() {
-        let option = this.refs.newType.value;
+        let option = this.refs.newType.value
         if (option == "0") {
-            return;
+            return
         }
 
         this.state.values.push({
@@ -24,32 +24,32 @@ export var DhcpOptionValues = React.createClass({
             'array': false,
             'value': '',
             'option': option
-        });
-        this.setState(this.state);
+        })
+        this.setState(this.state)
     },
 
     handleRemove(index) {
-        this.state.values.splice(index, 1);
-        this.setState(this.state);
+        this.state.values.splice(index, 1)
+        this.setState(this.state)
     },
 
     getAvailableOptions() {
         let excluded = this.state.values.map((item) => {
-            return item.option;
-        });
-        return _.omit(this.props.options, excluded);
+            return item.option
+        })
+        return _.omit(this.props.options, excluded)
     },
 
     getValues() {
         return this.state.values.map((item) => {
             return {'option': item.option,
-                    'value':  this.refs[item.option].getValue()};
+                    'value':  this.refs[item.option].getValue()}
         })
     },
 
     validate() {
         return _.flatten(this.state.values.map((item) => {
-            return this.refs[item.option].validate();
+            return this.refs[item.option].validate()
         })).filter(item => {return item !== true})
     },
 
@@ -63,7 +63,7 @@ export var DhcpOptionValues = React.createClass({
                     <form className='form-horizontal'>
                     {this.state.values.map((item, i) => {
                         if (_.has(this.props.options, item.option)) {
-                            let option = this.props.options[item.option];
+                            let option = this.props.options[item.option]
                             return <div className="form-group" key={option.name}>
                                         <DhcpRow
                                             optionDesc={option}
@@ -110,17 +110,17 @@ let DhcpRow = React.createClass({
     },
 
     componentDidMount() {
-        _.extend(this.state, this.props.optionDesc);
-        this.state.value = this.props.value.value;
-        this.setState(this.state);
+        _.extend(this.state, this.props.optionDesc)
+        this.state.value = this.props.value.value
+        this.setState(this.state)
     },
 
     getValue() {
-        return this.refs[this.state.name].getValue();
+        return this.refs[this.state.name].getValue()
     },
 
     validate() {
-        return this.refs[this.state.name].validate();
+        return this.refs[this.state.name].validate()
     },
 
     getEdit(type, array, values, name) {
@@ -140,7 +140,7 @@ let DhcpRow = React.createClass({
     },
 
     handleRemove() {
-        this.props.deleteHandler(this.props.index);
+        this.props.deleteHandler(this.props.index)
     },
 
     getEditControl(type) {
@@ -172,13 +172,13 @@ let DhcpRow = React.createClass({
         let valueEdit = this.getEdit(this.state.type,
                                      this.state.array,
                                      this.state.value,
-                                     this.state.name);
+                                     this.state.name)
 
         return (
             <div className='row form-group'>
                 <label htmlFor={this.props.optionDesc.name} 
                        className="col-xs-5 control-label">
-                    {this.props.optionDesc.name}&nbsp;
+                    {this.props.optionDesc.name}&nbsp
                     <a onClick={this.handleRemove}>
                         <i className="fa fa-trash"></i>
                     </a>
@@ -193,20 +193,20 @@ let DhcpRow = React.createClass({
 let ArrayControl = React.createClass({
 
     componentDidMount() {
-        let v = this.props.values.split(',');
+        let v = this.props.values.split(',')
         v.map((item) => {
-            let val = item.trim();
+            let val = item.trim()
             this.state.values.push({'c': this.state.counter,
-                                    'val': val});
-            this.state.counter++;
+                                    'val': val})
+            this.state.counter++
         })
 
         if (v.length == 0) {
             this.state.values.push({'val': '', 'c': 0})
         }
 
-        this.updateValue();
-        this.setState(this.state);
+        this.updateValue()
+        this.setState(this.state)
     },
 
     getInitialState() {
@@ -215,13 +215,13 @@ let ArrayControl = React.createClass({
 
     updateValue() {
         this.state.value = _.map(this.refs, item => {
-            return item.getValue();
-        }).join(',');
+            return item.getValue()
+        }).join(',')
     },
 
     getValue() {
-        this.updateValue();
-        return this.state.value;
+        this.updateValue()
+        return this.state.value
     },
 
     validate() {
@@ -231,16 +231,16 @@ let ArrayControl = React.createClass({
     },
 
     handleAdd() {
-        this.state.counter++;
-        this.state.values.push({'c': this.state.counter, 'val': ''});
-        this.updateValue();
-        this.setState(this.state);
+        this.state.counter++
+        this.state.values.push({'c': this.state.counter, 'val': ''})
+        this.updateValue()
+        this.setState(this.state)
     },
 
     handleRemove(index) {
-        this.state.values.splice(index, 1);
-        this.updateValue();
-        this.setState(this.state);
+        this.state.values.splice(index, 1)
+        this.updateValue()
+        this.setState(this.state)
     },
 
     render() {
@@ -249,7 +249,7 @@ let ArrayControl = React.createClass({
             <div>
             {
                 this.state.values.map((item, i) => {
-                    var id = this.props.name + ((i==0) ? '' : '-' + i);
+                    var id = this.props.name + ((i==0) ? '' : '-' + i)
                     return <div key={item.c} className="input-group array-row">
                         {t({
                             id: id,

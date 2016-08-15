@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {Lease4Actions, Lease6Actions} from '../actions'
@@ -23,7 +23,7 @@ export var Lease4Store = Reflux.createStore({
   },
 
   onDelete(id) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: `/lease4/${id}`,
       method: 'DELETE',
@@ -46,7 +46,7 @@ export var Lease4Store = Reflux.createStore({
       }
     })
   }
-});
+})
 
 
 export var Lease6Store = Reflux.createStore({
@@ -68,7 +68,7 @@ export var Lease6Store = Reflux.createStore({
   },
 
   onDelete(id) {
-    var _this = this;
+    var _this = this
     $.ajax({
       url: `/lease6/${id}`,
       method: 'DELETE',
@@ -91,4 +91,4 @@ export var Lease6Store = Reflux.createStore({
       }
     })
   }
-});
+})

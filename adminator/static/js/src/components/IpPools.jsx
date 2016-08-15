@@ -6,7 +6,7 @@ export var IPPools = React.createClass({
     c: 0,
 
     componentWillReceiveProps(p) {
-        this.setState(p);
+        this.setState(p)
     },
 
     getInitialState() {
@@ -14,40 +14,40 @@ export var IPPools = React.createClass({
     },
 
     handleAdd() {
-        this.c++;
-        this.state.values.push({'range': [], 'uuid': 'new-' + this.c});
-        this.setState(this.state);
+        this.c++
+        this.state.values.push({'range': [], 'uuid': 'new-' + this.c})
+        this.setState(this.state)
     },
 
     handleRemove(index) {
-        this.state.values.splice(index, 1);
-        this.setState(this.state);
+        this.state.values.splice(index, 1)
+        this.setState(this.state)
     },
 
     validate() {
         return _.flatten(this.state.values.map((item) => {
             var result = []
 
-            var ip1 = this.refs[item.uuid + '-0'].value;
-            var ip2 = this.refs[item.uuid + '-1'].value;
+            var ip1 = this.refs[item.uuid + '-0'].value
+            var ip2 = this.refs[item.uuid + '-1'].value
 
             if (!isIP(ip1)) {
-                result.push(`${ip1} is not valid ip address (pools)`);
+                result.push(`${ip1} is not valid ip address (pools)`)
             }
             if (!isIP(ip2)) {
-                result.push(`${ip2} is not valid ip address (pools)`);
+                result.push(`${ip2} is not valid ip address (pools)`)
             }
 
             if (result.length != 0) {
-                return result;
+                return result
             }
 
             if (!isIPSameFamily(ip1, ip2)) {
-                result.push(`${ip1} and ${ip2} are not the same kind`);
-                return result;
+                result.push(`${ip1} and ${ip2} are not the same kind`)
+                return result
             }
 
-            return true;
+            return true
 
         })).filter(item => {return item !== true})
     },
@@ -57,12 +57,12 @@ export var IPPools = React.createClass({
             var result = {
                 'range': [this.refs[item.uuid + '-0'].value,
                           this.refs[item.uuid + '-1'].value]
-            };
-            if (item.uuid.indexOf('new-') !== 0) {
-                result.uuid = item.uuid;
             }
-            return result;
-        });
+            if (item.uuid.indexOf('new-') !== 0) {
+                result.uuid = item.uuid
+            }
+            return result
+        })
     },
 
     render() {
@@ -104,7 +104,7 @@ export var IPPools = React.createClass({
             </div>
 
         </div>
-        );
+        )
     }
 
 })

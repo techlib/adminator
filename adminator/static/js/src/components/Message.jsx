@@ -5,7 +5,7 @@ export var Message = React.createClass({
 
     renderExtra() {
         if (!this.props.extra) {
-            return null;
+            return null
         }
 
         if (Array.isArray(this.props.extra)) {
@@ -16,7 +16,7 @@ export var Message = React.createClass({
             </ul>
 
         } else {
-            return this.props.extra;
+            return this.props.extra
         }
     },
 
@@ -24,17 +24,17 @@ export var Message = React.createClass({
         var cls, title, icon
 
         if (this.props.type == 'success') {
-            cls = 'alert-success';
-            title = 'Success';
-            icon = 'pficon-ok';
+            cls = 'alert-success'
+            title = 'Success'
+            icon = 'pficon-ok'
         } else if (this.props.type == 'error') {
-            cls = 'alert-danger';
-            title = 'Error';
-            icon = 'pficon-error-circle-o';
+            cls = 'alert-danger'
+            title = 'Error'
+            icon = 'pficon-error-circle-o'
         }
 
-        var clsIco = classNames('pficon', icon);
-        var clsAlert = classNames('alert', cls);
+        var clsIco = classNames('pficon', icon)
+        var clsAlert = classNames('alert', cls)
 
         return (
             <div className={clsAlert}>

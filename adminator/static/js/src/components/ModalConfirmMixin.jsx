@@ -22,7 +22,7 @@ export var Confirm = React.createClass({
     },
 
     componentDidMount() {
-        this.promise = $.Deferred();
+        this.promise = $.Deferred()
         ReactDOM.findDOMNode(this.refs.confirm).focus()
     },
 
@@ -43,8 +43,8 @@ export var Confirm = React.createClass({
     },
 
     getFooter() {
-        var clsConfirm = classNames('btn', 'btn-' + this.props.confirmClass);
-        var clsAbort   = classNames('btn', 'btn-' + this.props.abortClass);
+        var clsConfirm = classNames('btn', 'btn-' + this.props.confirmClass)
+        var clsAbort   = classNames('btn', 'btn-' + this.props.abortClass)
 
         return (
             <Footer>
@@ -64,11 +64,11 @@ export var Confirm = React.createClass({
     },
 
     confirm() {
-        this.promise.resolve();
+        this.promise.resolve()
     },
 
     abort() {
-        this.promise.reject();
+        this.promise.reject()
     },
 
     render() {
@@ -80,7 +80,7 @@ export var Confirm = React.createClass({
                 {this.getBody()}
                 {this.getFooter()}
             </Modal>
-        );
+        )
     }
 })
 
@@ -93,18 +93,18 @@ export var ModalConfirmMixin = {
     },
 
     modalConfirm(title, text, others) {
-        var modal = this.getModal(title, text, others, true);
-        this.wrapper = document.body.appendChild(document.createElement('div'));
-        this.component = ReactDOM.render(modal, this.wrapper);
-        this.component.promise.always(this.cleanup).promise();
-        return this.component.promise;
+        var modal = this.getModal(title, text, others, true)
+        this.wrapper = document.body.appendChild(document.createElement('div'))
+        this.component = ReactDOM.render(modal, this.wrapper)
+        this.component.promise.always(this.cleanup).promise()
+        return this.component.promise
     },
 
     cleanup() {
-        ReactDOM.render(this.getModal(null,null,null, false), this.wrapper);
+        ReactDOM.render(this.getModal(null,null,null, false), this.wrapper)
         setTimeout(() => {
-            ReactDOM.unmountComponentAtNode(this.wrapper);
-            this.wrapper.remove();
+            ReactDOM.unmountComponentAtNode(this.wrapper)
+            this.wrapper.remove()
         })
     }
 }

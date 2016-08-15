@@ -9,11 +9,11 @@ export var NetworkAclEdit = React.createClass({
   mixins: [Reflux.connect(NetworkAclStore, 'acl')],
 
   componentDidMount() {
-    NetworkAclActions.read(this.props.params.id);
+    NetworkAclActions.read(this.props.params.id)
   },
 
   save(data) {
-      NetworkAclActions.update(this.props.params.id, data);
+      NetworkAclActions.update(this.props.params.id, data)
   },
 
   getInitialState() {
@@ -29,6 +29,6 @@ export var NetworkAclEdit = React.createClass({
              />
     )
   }
-});
+})
 
 

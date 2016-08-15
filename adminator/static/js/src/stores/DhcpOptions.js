@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import * as Reflux from 'reflux'
 import {DhcpOptionActions} from '../actions'
@@ -10,13 +10,13 @@ export var DhcpOptionsStore = Reflux.createStore({
 
   onList() {
     $.ajax({url: '/dhcp-options/', success: result => {
-        let res = {};
+        let res = {}
         _.each(result.result, (item) => {
             res[item.name] = item
-        });
-        this.trigger(res);
+        })
+        this.trigger(res)
       }
     })
   }
-});
+})
 

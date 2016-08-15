@@ -16,23 +16,23 @@ let NetLink = React.createClass({
                 {this.props.data}
             </Link>
   }
-});
+})
 
 let NetActions = React.createClass({
 
     mixins: [ModalConfirmMixin],
 
     handleDelete: function () {
-        var name = this.props.rowData.description;
+        var name = this.props.rowData.description
         this.modalConfirm('Confirm delete', `Delete ${name}?`,
                             {'confirmLabel': 'DELETE', 'confirmClass': 'danger'})
         .then(() => {
-            NetworkActions.delete(this.props.rowData.uuid);
+            NetworkActions.delete(this.props.rowData.uuid)
         })
     },
 
     render: function () {
-        var id = 'row' + this.props.rowData.uuid;
+        var id = 'row' + this.props.rowData.uuid
         return (
         <OverlayTrigger placement="top" overlay=<Tooltip id={id}>Delete</Tooltip>>
               <Button bsStyle="danger" onClick={this.handleDelete}>
@@ -48,12 +48,12 @@ export var NetworkList = React.createClass({
   mixins: [Reflux.connect(NetworkStore, 'data')],
 
   componentDidMount() {
-    NetworkActions.list();
+    NetworkActions.list()
   },
 
   getInitialState() {
     this.state = {'data': {'list': [], 'network': {}}}
-    return this.state;
+    return this.state
   },
 
   colMetadata: [
@@ -107,5 +107,5 @@ export var NetworkList = React.createClass({
         </div>
          )
    }
-});
+})
 

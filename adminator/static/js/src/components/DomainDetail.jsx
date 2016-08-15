@@ -96,5 +96,5 @@ export var DomainDetail = React.createClass({
   render() {
    return this.getDetail()
   }
-});
+})
 
