@@ -10,7 +10,8 @@
         "array-bracket-spacing": "off",
         "no-extra-semi": "off",
         "react/jsx-quotes": "off",
-        "react/jsx-uses-vars": "error"
+        "react/jsx-uses-vars": "error",
+        "react/wrap-multilines": "off"
     },
     "plugins": [
         "react"
