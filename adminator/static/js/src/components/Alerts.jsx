@@ -27,9 +27,10 @@ export var AlertDismissible = React.createClass({
     },
 
     icon: function(){
-      return {'success': 'pficon pficon-ok', 
-              'danger': 'pficon pficon-error-circle-o'}
-              [this.props.level]
+      return {
+              'success': 'pficon pficon-ok',
+              'danger': 'pficon pficon-error-circle-o'
+             }[this.props.level]
     },
 
     render: function() {
