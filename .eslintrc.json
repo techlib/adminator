@@ -1,6 +1,5 @@
 {
     "rules": {
-        "space-before-blocks": "error",
         "quotes": "off",
         "curly": "off",
         "object-curly-spacing": "off",
