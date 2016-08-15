@@ -21,8 +21,8 @@ import {FeedbackActions} from '../actions'
 import {TopologyList} from './TopologyList'
 
 function onRouterUpdate() {
-    FeedbackActions.clear();
-};
+    FeedbackActions.clear()
+}
 
 ReactDOM.render((
   <Router onUpdate={onRouterUpdate} history={hashHistory}>
