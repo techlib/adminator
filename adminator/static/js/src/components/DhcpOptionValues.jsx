@@ -178,7 +178,7 @@ let DhcpRow = React.createClass({
             <div className='row form-group'>
                 <label htmlFor={this.props.optionDesc.name} 
                        className="col-xs-5 control-label">
-                    {this.props.optionDesc.name}&nbsp
+                    {this.props.optionDesc.name}&nbsp;
                     <a onClick={this.handleRemove}>
                         <i className="fa fa-trash"></i>
                     </a>

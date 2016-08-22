@@ -299,7 +299,7 @@ export var RecordCreate = React.createClass({
                  <button type="button"
                          className="close"
                          onClick={this.props.hideHandler}>
-                    <span>&times</span>
+                    <span>&times;</span>
                 </button>
                 </h3>
               </div>
