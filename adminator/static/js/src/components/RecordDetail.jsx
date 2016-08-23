@@ -193,7 +193,7 @@ export var RecordDetail = React.createClass({
                   value={this.state.data.record.content} />
             </div>
           )
-      } else if (_.contains(['A', 'AAAA', 'CNAME', 'PTR', 'NS', 'SOA'], type)) {
+      } else if (_.includes(['A', 'AAAA', 'CNAME', 'PTR', 'NS', 'SOA'], type)) {
         return (
           <div className='form-group'>
               <Input
