@@ -18,6 +18,12 @@ export var DeviceEdit = React.createClass({
     },
 
     handleSave(data) {
+        if(data.type != 'staff'){
+            data.user = null
+        } else if (data.type != 'visitor'){
+            data.valid = null
+        }
+
         data.uuid = this.props.params.id
         DeviceActions.update(data)
     },
