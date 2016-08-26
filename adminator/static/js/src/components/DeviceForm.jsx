@@ -61,8 +61,8 @@ export var DeviceForm = React.createClass({
 
     validate() {
         var r = []
-        if (!minLen(this.state.description, 4)) {
-            r.push(`Description ${this.state.description} is too short (4 chars min)`)
+        if (!minLen(this.state.description, 2)) {
+            r.push(`Description ${this.state.description} is too short (2 chars min)`)
         }
         if (this.state.type == 'staff') {
             if (!this.state.user) {
