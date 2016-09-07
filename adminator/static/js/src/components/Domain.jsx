@@ -85,11 +85,16 @@ export var Domain = React.createClass({
 
      return (
         <div className='container-fluid col-xs-12'>
-            <h1>Domains
-            <a className='btn btn-success pull-right' href='#/domainEdit/new'>
-              <i className='fa fa-plus'></i> New domain
-            </a>
-            </h1>
+            <div className="row">
+                <div className="col-xs-12 col-sm-10">
+                    <h1>Domains</h1>
+                </div>
+                <div className="col-xs-12 col-sm-2 h1 text-right">
+                    <a className='btn btn-success' href='#/domainEdit/new'>
+                    <i className='fa fa-plus'></i> New domain
+                    </a>
+                </div>
+            </div>
             <Griddle results={this.state.data['list']}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}
