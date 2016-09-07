@@ -8,7 +8,6 @@ import * as _ from 'lodash'
 import {ButtonGroup, OverlayTrigger, Button, Tooltip, Tabs, Tab} from 'react-bootstrap'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
-import {formatMac} from '../util/simple-validators'
 import {ModalConfirmMixin} from './ModalConfirmMixin'
 
 var Lease4ActionsComponent = React.createClass({
@@ -81,7 +80,7 @@ var LeaseStateComponent = React.createClass({
 
 var LeaseMacComponent = React.createClass({
     render() {
-        return <span>{formatMac(this.props.data)}</span>
+        return <span>{this.props.data}</span>
     }
 })
 

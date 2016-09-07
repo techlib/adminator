@@ -5,6 +5,7 @@ from adminator.utils import object_to_dict
 from adminator.model import Model
 import ipaddress
 import binascii
+import re
 
 __all__ = ['Lease4']
 
@@ -27,6 +28,7 @@ class Lease4(Model):
 
             obj['client_id'] = str(obj['client_id'])
             obj['hwaddr'] = binascii.hexlify(bytes(obj['hwaddr'])).decode('ascii')
+            obj['hwaddr'] = re.sub(r'([a-f0-9]{2})', '\g<1>:', obj['hwaddr'], flags=re.IGNORECASE)[:17]
 
             items.append(obj)
 
