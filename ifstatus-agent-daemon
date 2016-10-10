@@ -1,0 +1,113 @@
+#!/usr/bin/python3 -tt
+
+# Twisted hosts our website and helps with async tasks.
+# The application threads are structured in the following way:
+#
+#  reactor
+#   `-- agent (1 thread)
+#   `-- workers (2 threads)
+#
+from twisted.internet import reactor
+# from twisted.web.wsgi import WSGIResource
+# from twisted.web.server import Site
+# from twisted.python.threadpool import ThreadPool
+from twisted.python import log
+
+# Data are accessed through SQLSoup, using SQLAlchemy.
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import create_engine
+from sqlsoup import SQLSoup
+
+# Command line arguments follow the GNU conventions.
+from getopt import gnu_getopt
+from sys import argv, stderr
+
+# Configuration is stored in a simple ini file.
+from configparser import ConfigParser
+
+# Import all the application handles.
+from adminator import IFStatusAgent
+
+
+if __name__ == '__main__':
+    def do_start(config):
+        # Start Twisted logging to console.
+        log.startLogging(stderr)
+
+        # Read database configuration options.
+        db_url = config.get('database', 'url')
+
+        # Default to much saner database query defaults and always
+        # commit and/or flush statements explicitly.
+        # unused
+        # factory = sessionmaker(autocommit=False, autoflush=False)
+
+        # Prepare database connection with table reflection.
+        engine = create_engine(db_url)
+        session = scoped_session(
+            sessionmaker(autocommit=False, autoflush=False)
+        )
+        db = SQLSoup(engine, session=session)
+        db.schema = 'topology'
+
+        # Extract agent options, sans the pool_size we handle here.
+        # agent_opts = dict(config.items('ifstatus'))
+        agent_opts = dict()
+        agent_pool = int(agent_opts.pop('pool_size', 2))
+
+        # Set the correct thread pool size for the agent.
+        reactor.suggestThreadPoolSize(agent_pool)
+
+        # Prepare the agent that runs in an exclusive thread.
+        agent = IFStatusAgent(db, **agent_opts)
+
+        # Run the startup code as the first thing.
+        reactor.callLater(0, agent.start)
+
+        # Run the Twisted reactor until the user terminates us.
+        reactor.run()
+
+    def do_help(*args, **kwargs):
+        print('Usage: ifstatus-agent-daemon [--config=/etc/adminator.ini]')
+        print('')
+        print('The agent synchronizes interface status to database.')
+        print('')
+        print('OPTIONS:')
+        print('  --help, -h          Display this help.')
+        print('  --version, -V       Display version info.')
+        print('')
+        print('  --config, -c file   Load alternative configuration file.')
+        print('')
+        print('Report bugs at <http://github.com/techlib/adminator>.')
+
+    def do_version(*args, **kwargs):
+        print('ifstatus-agent-daemon (NTK) 0.1')
+
+    # Parse command line arguments.
+    opts, args = gnu_getopt(argv, 'hVc:', ['help', 'version', 'config='])
+
+    action = do_start
+    config_path = '/etc/adminator.ini'
+
+    for k, v in opts:
+        if k in ('--help', '-h'):
+            action = do_help
+        elif k in ('--version', '-V'):
+            action = do_version
+        elif k in ('--config', '-c'):
+            config_path = v
+
+    # Load the configuration from file.
+    if action not in (do_help, do_version):
+        config = ConfigParser()
+        config.read(config_path)
+
+    # Load the configuration from file.
+    config = ConfigParser()
+    config.read(config_path)
+
+    # Perform the selected action.
+    action(config=config)
+
+# vim:set sw=4 ts=4 et:
+# -*- coding: utf-8 -*-
