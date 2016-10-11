@@ -51,8 +51,8 @@ if __name__ == '__main__':
         db.schema = 'topology'
 
         # Extract agent options, sans the pool_size we handle here.
-        # agent_opts = dict(config.items('ifstatus'))
-        agent_opts = dict()
+        agent_opts = dict(config.items('ifstatus'))
+        # agent_opts = dict()
         agent_pool = int(agent_opts.pop('pool_size', 2))
 
         # Set the correct thread pool size for the agent.

@@ -6,25 +6,30 @@ from twisted.python import log
 
 import subprocess
 import datetime
-from sqlalchemy import and_
 import threading
 import time
+
+from sqlalchemy import and_
+from sqlalchemy.orm.exc import NoResultFound
 
 __all__ = ['IFStatusAgent']
 
 
 class IFStatusAgent(object):
-	def __init__(self, db):
+	#~ def __init__(self, db, snmpwalk_path='/usr/bin/snmpwalk', update_period=600, query_timeout=150):
+	def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
 		self.db = db
-		self._lock = threading.Lock()
+		self.snmpwalk_path = snmpwalk_path
+		self.update_period = int(update_period)
+		self.query_timeout = int(query_timeout)
 
 	def start(self):
 		"""Start the periodic checking."""
 		self.periodic = task.LoopingCall(self.update)
-		self.periodic.start(600, True)
+		self.periodic.start(self.update_period, True)
 
 	def get_interfaces(self, ip, version, community, timeout):
-		bashCommand = "snmpwalk -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}"
+		bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
 		oids = {
 			'Speed':('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
 			'AdminStatus':('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
@@ -44,8 +49,8 @@ class IFStatusAgent(object):
 			command = bashCommand.format(timeout, community, version, ip, oid)
 			#~ process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
 			#~ output = process.communicate()[0].decode('utf-8')
-			#~ TODO: timeout - diferent (oid, ip) need diferent timeout 
-			output = subprocess.check_output(command.split()).decode('utf-8')
+			#~ timeout - diferent (oid, ip) need diferent timeout => problem
+			output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
 			data[key] = []
 			for x in output.split('\n')[:-1]:
 				prefix_lenght = len(val[0]) + 2 
@@ -85,13 +90,23 @@ class IFStatusAgent(object):
 		return  mapped_vals[1]
 
 	def save_to_db(self, switch, data):
+		#~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
+		#~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
+		for key, val in data.items():
+			where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
+			try:
+				interface = self.db.interface.filter(where).one()
+			except NoResultFound as e:
+				self.db.interface.insert(
+					name = val['Name'],
+					switch = switch.uuid,
+				)
+		self.db.commit()
+
 		for key, val in data.items():
 			if not 'Vlan' in val:
 				val['Vlan'] = 0
 			where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
-			#~ TODO:
-			#~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
-			#~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
 			interface = self.db.interface.filter(where).one()
 
 			interface.admin_status = val['AdminStatus']
@@ -137,7 +152,11 @@ class IFStatusAgent(object):
 
 		for switch in self.db.switch.filter_by(enable = True).all():
 			if data[switch.uuid]:
-				self.save_to_db(switch, data[switch.uuid])
+				try:
+					self.save_to_db(switch, data[switch.uuid])
+				except Exception as e:
+					log.msg(('Error during saving data from {}({}) to db, {}'.format(switch.name, switch.ip_address, e)))
+
 		log.msg('Interface status sync finished ({:.03f} s)'.format(time.time() - start))
 
 
