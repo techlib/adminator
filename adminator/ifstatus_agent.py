@@ -16,148 +16,158 @@ __all__ = ['IFStatusAgent']
 
 
 class IFStatusAgent(object):
-	#~ def __init__(self, db, snmpwalk_path='/usr/bin/snmpwalk', update_period=600, query_timeout=150):
-	def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
-		self.db = db
-		self.snmpwalk_path = snmpwalk_path
-		self.update_period = int(update_period)
-		self.query_timeout = int(query_timeout)
+    def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
+        self.db = db
+        self.snmpwalk_path = snmpwalk_path
+        self.update_period = int(update_period)
+        self.query_timeout = int(query_timeout)
 
-	def start(self):
-		"""Start the periodic checking."""
-		self.periodic = task.LoopingCall(self.update)
-		self.periodic.start(self.update_period, True)
+    def start(self):
+        """Start the periodic checking."""
+        self.periodic = task.LoopingCall(self.update)
+        self.periodic.start(self.update_period, True)
 
-	def get_interfaces(self, ip, version, community, timeout):
-		bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
-		oids = {
-			'Speed':('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
-			'AdminStatus':('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-			'Description':('1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1),
-			'OperStatus':('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-			'LastChange':('1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (1284900111) 148 days, 17:10:01.11', '', 1),
-			'Name':('1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1),
-			'mapping-1':('1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913', 'INTEGER: ', 2),
-			'Vlan':('1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1),
-			'mapping-2':('1.3.6.1.2.1.17.4.3.1.2', '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3),
-		}
+    def get_interfaces(self, ip, version, community, timeout):
+        bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
+        oids = {
+            'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
+            'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+            'Description': (
+                '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+            ),
+            'OperStatus': ('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+            'LastChange': (
+                '1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (12849) 8 days, 17:10:01.11', '', 1
+            ),
+            'Name': (
+                '1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+            ),
+            'mapping-1': (
+                '1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913',
+                'INTEGER: ', 2
+            ),
+            'Vlan': (
+                '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
+            ),
+            'mapping-2': (
+                '1.3.6.1.2.1.17.4.3.1.2',
+                '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3
+            ),
+        }
 
-		data = {}
+        data = {}
 
-		for key, val in oids.items():
-			oid = val[0]
-			command = bashCommand.format(timeout, community, version, ip, oid)
-			#~ process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-			#~ output = process.communicate()[0].decode('utf-8')
-			#~ timeout - diferent (oid, ip) need diferent timeout => problem
-			output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
-			data[key] = []
-			for x in output.split('\n')[:-1]:
-				prefix_lenght = len(val[0]) + 2 
-				parsed_value = x[prefix_lenght:].split(' = ' + val[2])
-				data[key].append(parsed_value)
+        for key, val in oids.items():
+            oid = val[0]
+            command = bashCommand.format(timeout, community, version, ip, oid)
+            #~ timeout - diferent (oid, ip) need diferent timeout => problem
+            output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
+            data[key] = []
+            for x in output.split('\n')[:-1]:
+                prefix_lenght = len(val[0]) + 2
+                parsed_value = x[prefix_lenght:].split(' = ' + val[2])
+                data[key].append(parsed_value)
 
-		mapped_vals = {}
+        mapped_vals = {}
 
-		for prop, oid in oids.items():
-			if not oid[3] in mapped_vals:
-				mapped_vals[oid[3]] = {}
-			for val in data[prop]:
-				if not val[0] in mapped_vals[oid[3]] and len(val) is 2:
-					mapped_vals[oid[3]][val[0]] = {}
-				if len(val) is 2:
-					mapped_vals[oid[3]][val[0]][prop] = val[1]
+        for prop, oid in oids.items():
+            if not oid[3] in mapped_vals:
+                mapped_vals[oid[3]] = {}
+            for val in data[prop]:
+                if not val[0] in mapped_vals[oid[3]] and len(val) is 2:
+                    mapped_vals[oid[3]][val[0]] = {}
+                if len(val) is 2:
+                    mapped_vals[oid[3]][val[0]][prop] = val[1]
 
-		for key, val in mapped_vals[3].items():
-			if 'mapping-2' in val:
-				if val['mapping-2'] in mapped_vals[2]:
-					if not 'MACs' in mapped_vals[2][val['mapping-2']]:
-						mapped_vals[2][val['mapping-2']]['MACs'] = []
-					tmp_MAC = key.split('.')
-					MAC = "{:02X} {:02X} {:02X} {:02X} {:02X} {:02X}".format(int(tmp_MAC[0]), int(tmp_MAC[1]), int(tmp_MAC[2]), int(tmp_MAC[3]), int(tmp_MAC[4]), int(tmp_MAC[5]))
-					mapped_vals[2][val['mapping-2']]['MACs'].append(MAC)
+        for key, val in mapped_vals[3].items():
+            if 'mapping-2' in val:
+                if val['mapping-2'] in mapped_vals[2]:
+                    if not ('MACs' in mapped_vals[2][val['mapping-2']]):
+                        mapped_vals[2][val['mapping-2']]['MACs'] = []
+                    tmp_MAC = key.split('.')
+                    MAC = "{:02X} {:02X} {:02X} {:02X} {:02X} {:02X}".format(
+                        int(tmp_MAC[0]), int(tmp_MAC[1]), int(tmp_MAC[2]),
+                        int(tmp_MAC[3]), int(tmp_MAC[4]), int(tmp_MAC[5])
+                    )
+                    mapped_vals[2][val['mapping-2']]['MACs'].append(MAC)
 
-		for key, val in mapped_vals[2].items():
-			if not 'MACs' in val:
-				val['MACs'] = []
-			if val['mapping-1'] in mapped_vals[1]:
-				mapped_vals[1][val['mapping-1']]['MACs'] = val['MACs']
+        for key, val in mapped_vals[2].items():
+            if not ('MACs' in val):
+                val['MACs'] = []
+            if val['mapping-1'] in mapped_vals[1]:
+                mapped_vals[1][val['mapping-1']]['MACs'] = val['MACs']
 
-		for key, val in mapped_vals[1].items():
-			if not 'MACs' in val:
-				val['MACs'] = []
+        for key, val in mapped_vals[1].items():
+            if not ('MACs' in val):
+                val['MACs'] = []
 
-		return  mapped_vals[1]
+        return mapped_vals[1]
 
-	def save_to_db(self, switch, data):
-		#~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
-		#~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
-		for key, val in data.items():
-			where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
-			try:
-				interface = self.db.interface.filter(where).one()
-			except NoResultFound as e:
-				self.db.interface.insert(
-					name = val['Name'],
-					switch = switch.uuid,
-				)
-		self.db.commit()
+    def save_to_db(self, switch, data):
+        #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
+        #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
+        for key, val in data.items():
+            where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
+            try:
+                interface = self.db.interface.filter(where).one()
+            except NoResultFound:
+                self.db.interface.insert(name=val['Name'], switch=switch.uuid)
+        self.db.commit()
 
-		for key, val in data.items():
-			if not 'Vlan' in val:
-				val['Vlan'] = 0
-			where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
-			interface = self.db.interface.filter(where).one()
+        for key, val in data.items():
+            if not ('Vlan' in val):
+                val['Vlan'] = 0
+            where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
+            interface = self.db.interface.filter(where).one()
 
-			interface.admin_status = val['AdminStatus']
-			interface.oper_status = val['OperStatus']
-			interface.speed = int(val['Speed'])
-			interface.vlan = int(val['Vlan'])
-			self.db.mac_address.filter_by(interface = interface.uuid).delete()
-			if interface.ignore_macs is False:
-				for mac in val['MACs']:
-					self.db.mac_address.insert(
-						mac_address = mac,
-						interface = interface.uuid,
-					)
-		switch.last_update = datetime.datetime.now()
-		self.db.commit()
+            interface.admin_status = val['AdminStatus']
+            interface.oper_status = val['OperStatus']
+            interface.speed = int(val['Speed'])
+            interface.vlan = int(val['Vlan'])
+            self.db.mac_address.filter_by(interface=interface.uuid).delete()
+            if interface.ignore_macs is False:
+                for mac in val['MACs']:
+                    self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
+        switch.last_update = datetime.datetime.now()
+        self.db.commit()
 
-	def parallel_update(self, switch, snmp_profile, output):
-		start = time.time()
-		try:
-			output[switch.uuid] = self.get_interfaces(
-				switch.ip_address, snmp_profile.version,
-				snmp_profile.community, snmp_profile.timeout
-			)
-		except Exception as e:
-			log.msg(('Error while getting data from {}({}), {}'.format(switch.name, switch.ip_address, e)))
-			return
-		log.msg('{} finished ({:.03f} s)'.format(switch.name, time.time() - start))
+    def parallel_update(self, switch, snmp_profile, output):
+        start = time.time()
+        try:
+            output[switch.uuid] = self.get_interfaces(
+                switch.ip_address, snmp_profile.version,
+                snmp_profile.community, snmp_profile.timeout
+            )
+        except Exception as e:
+            log.msg(('Error while getting data from {}({}), {}'.format(switch.name, switch.ip_address, e)))
+            return
+        log.msg('{} finished ({:.03f} s)'.format(switch.name, time.time() - start))
 
-	def update(self):
-		log.msg('Interface status sync started')
-		start = time.time()
-		threads = []
-		data = {}
-		for switch in self.db.switch.filter_by(enable = True).all():
-			data[switch.uuid] = None
-			snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
-			t = threading.Thread(target=self.parallel_update, args=(switch,snmp_profile,data))
-			t.start()
-			threads.append(t)
+    def update(self):
+        log.msg('Interface status sync started')
+        start = time.time()
+        threads = []
+        data = {}
+        for switch in self.db.switch.filter_by(enable=True).all():
+            data[switch.uuid] = None
+            snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
+            t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
+            t.start()
+            threads.append(t)
 
-		for t in threads:
-			t.join()
+        for t in threads:
+            t.join()
 
-		for switch in self.db.switch.filter_by(enable = True).all():
-			if data[switch.uuid]:
-				try:
-					self.save_to_db(switch, data[switch.uuid])
-				except Exception as e:
-					log.msg(('Error during saving data from {}({}) to db, {}'.format(switch.name, switch.ip_address, e)))
+        for switch in self.db.switch.filter_by(enable=True).all():
+            if data[switch.uuid]:
+                try:
+                    self.save_to_db(switch, data[switch.uuid])
+                except Exception as e:
+                    log.msg(('Error during saving data from {}({}) to db, {}'.format(
+                        switch.name, switch.ip_address, e,
+                    )))
 
-		log.msg('Interface status sync finished ({:.03f} s)'.format(time.time() - start))
+        log.msg('Interface status sync finished ({:.03f} s)'.format(time.time() - start))
 
 
 # vim:set sw=4 ts=4 et:
