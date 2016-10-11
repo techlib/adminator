@@ -21,7 +21,7 @@ class IFStatusAgent(object):
 	def start(self):
 		"""Start the periodic checking."""
 		self.periodic = task.LoopingCall(self.update)
-		self.periodic.start(300, True)
+		self.periodic.start(600, True)
 
 	def get_interfaces(self, ip, version, community, timeout):
 		bashCommand = "snmpwalk -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}"
@@ -42,9 +42,10 @@ class IFStatusAgent(object):
 		for key, val in oids.items():
 			oid = val[0]
 			command = bashCommand.format(timeout, community, version, ip, oid)
-			#~ TODO: timeout
-			process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-			output = process.communicate()[0].decode('utf-8')
+			#~ process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+			#~ output = process.communicate()[0].decode('utf-8')
+			#~ TODO: timeout - diferent (oid, ip) need diferent timeout 
+			output = subprocess.check_output(command.split()).decode('utf-8')
 			data[key] = []
 			for x in output.split('\n')[:-1]:
 				prefix_lenght = len(val[0]) + 2 
@@ -57,7 +58,7 @@ class IFStatusAgent(object):
 			if not oid[3] in mapped_vals:
 				mapped_vals[oid[3]] = {}
 			for val in data[prop]:
-				if not val[0] in mapped_vals[oid[3]]:
+				if not val[0] in mapped_vals[oid[3]] and len(val) is 2:
 					mapped_vals[oid[3]][val[0]] = {}
 				if len(val) is 2:
 					mapped_vals[oid[3]][val[0]][prop] = val[1]
@@ -109,10 +110,14 @@ class IFStatusAgent(object):
 
 	def parallel_update(self, switch, snmp_profile, output):
 		start = time.time()
-		output[switch.uuid] = self.get_interfaces(
-			switch.ip_address, snmp_profile.version,
-			snmp_profile.community, snmp_profile.timeout
-		)
+		try:
+			output[switch.uuid] = self.get_interfaces(
+				switch.ip_address, snmp_profile.version,
+				snmp_profile.community, snmp_profile.timeout
+			)
+		except Exception as e:
+			log.msg(('Error while getting data from {}({}), {}'.format(switch.name, switch.ip_address, e)))
+			return
 		log.msg('{} finished ({:.03f} s)'.format(switch.name, time.time() - start))
 
 	def update(self):
@@ -131,7 +136,8 @@ class IFStatusAgent(object):
 			t.join()
 
 		for switch in self.db.switch.filter_by(enable = True).all():
-			self.save_to_db(switch, data[switch.uuid])
+			if data[switch.uuid]:
+				self.save_to_db(switch, data[switch.uuid])
 		log.msg('Interface status sync finished ({:.03f} s)'.format(time.time() - start))
 
 
