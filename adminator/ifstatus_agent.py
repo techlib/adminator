@@ -12,6 +12,7 @@ import time
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
+
 __all__ = ['IFStatusAgent']
 
 
@@ -26,6 +27,34 @@ class IFStatusAgent(object):
         """Start the periodic checking."""
         self.periodic = task.LoopingCall(self.update)
         self.periodic.start(self.update_period, True)
+
+    def get_switch_status(self, ip, version, community, timeout):
+        bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
+        oid = '1.3.6.1.2.1.1'
+        informations = {
+            '1.0': ('1.3.6.1.2.1.1.1.0', 'description', 'STRING: '),
+            '2.0': ('1.3.6.1.2.1.1.2.0', 'objectID', 'OID: '),
+            '3.0': ('1.3.6.1.2.1.1.3.0', 'uptime', ''),
+            '4.0': ('1.3.6.1.2.1.1.4.0', 'contact', 'STRING: '),
+            '5.0': ('1.3.6.1.2.1.1.5.0', 'name', 'STRING: '),
+            '6.0': ('1.3.6.1.2.1.1.6.0', 'location', 'STRING: '),
+            '7.0': ('1.3.6.1.2.1.1.7.0', 'services', 'INTEGER: '),
+        }
+
+        data = {}
+
+        command = bashCommand.format(timeout, community, version, ip, oid)
+        #~ timeout - diferent (oid, ip) need diferent timeout => problem
+        output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
+        for line in output.split('\n')[:-1]:
+            prefix_lenght = len(oid) + 2
+            parsed_value = line[prefix_lenght:].split(' = ')
+            if parsed_value[0] in informations:
+                key = informations[parsed_value[0]][1]
+                data_prefix = informations[parsed_value[0]][2]
+                val = parsed_value[1][len(data_prefix):]
+                data[key] = val
+        return data
 
     def get_interfaces(self, ip, version, community, timeout):
         bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
@@ -104,6 +133,19 @@ class IFStatusAgent(object):
         return mapped_vals[1]
 
     def save_to_db(self, switch, data):
+        self.save_if_to_db(switch, data['interfaces'])
+        sw_info = data['switch']
+        switch.uptime = '{} seconds'.format(int(int(sw_info['uptime']) // 100))
+        switch.sys_description = sw_info['description']
+        switch.sys_objectID = sw_info['objectID']
+        switch.sys_contact = sw_info['contact']
+        switch.sys_name = sw_info['name']
+        switch.sys_location = sw_info['location']
+        switch.sys_services = int(sw_info['services'])
+        switch.last_update = datetime.datetime.now()
+        self.db.commit()
+
+    def save_if_to_db(self, switch, data):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
         for key, val in data.items():
@@ -124,17 +166,21 @@ class IFStatusAgent(object):
             interface.oper_status = val['OperStatus']
             interface.speed = int(val['Speed'])
             interface.vlan = int(val['Vlan'])
+            interface.last_change = '{} seconds'.format(int(int(val['LastChange']) // 100))
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:
                 for mac in val['MACs']:
                     self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
-        switch.last_update = datetime.datetime.now()
         self.db.commit()
 
     def parallel_update(self, switch, snmp_profile, output):
         start = time.time()
         try:
-            output[switch.uuid] = self.get_interfaces(
+            output[switch.uuid]['switch'] = self.get_switch_status(
+                switch.ip_address, snmp_profile.version,
+                snmp_profile.community, snmp_profile.timeout
+            )
+            output[switch.uuid]['interfaces'] = self.get_interfaces(
                 switch.ip_address, snmp_profile.version,
                 snmp_profile.community, snmp_profile.timeout
             )
@@ -149,7 +195,7 @@ class IFStatusAgent(object):
         threads = []
         data = {}
         for switch in self.db.switch.filter_by(enable=True).all():
-            data[switch.uuid] = None
+            data[switch.uuid] = {'switch': None, 'interfaces': None}
             snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
             t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
             t.start()
