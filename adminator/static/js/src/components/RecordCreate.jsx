@@ -306,7 +306,7 @@ export var RecordCreate = React.createClass({
 
               <div className="panel-body">
 
-                 <div className='col-xs-12 col-sm-8'>
+                 <div className='col-xs-12 col-md-4 vcenter'>
                    <div className='form-group'>
                      <ButtonGroup>
                        {this.renderTypeButton('A')}
@@ -322,8 +322,8 @@ export var RecordCreate = React.createClass({
                    </div>
                  </div>
 
-                 <div className='col-xs-12 col-sm-4'>
-                   <BootstrapSelect ref='domain' addonBefore='Domain' onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
+                 <div className='col-xs-12 col-md-4 vcenter'>
+                   <BootstrapSelect ref='domain' addonBefore='Domain' data-live-search="true" onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
                      {this.state.data['list'].map((domain) => {
                        return <option value={domain.id} data-name={domain.name} key={domain.name}>{domain.name}</option>
                      })}
