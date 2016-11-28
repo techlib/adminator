@@ -127,6 +127,7 @@ export var RecordCreate = React.createClass({
             <Input
               type='text'
               label='Name'
+              placeholder='domain.example.com'
               ref='name'
               name='name'
               onChange={this.handleChange}
@@ -136,6 +137,7 @@ export var RecordCreate = React.createClass({
             <Input
               type='text'
               label='Value'
+              placeholder='10.0.0.123'
               ref='content'
               name='content'
               onChange={this.handleChange}
@@ -152,6 +154,7 @@ export var RecordCreate = React.createClass({
               label='IP'
               ref='ip'
               name='ip'
+              placeholder='10.0.0.123'
               onChange={this.handlePtrChange}
               value={this.state.record.ip} />
           </div>
@@ -161,6 +164,7 @@ export var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
+              placeholder='123.0.0.10.in-addr.arpa'
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -170,6 +174,7 @@ export var RecordCreate = React.createClass({
               label='Value'
               ref='content'
               name='content'
+              placeholder='domain.example.com'
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
@@ -184,6 +189,7 @@ export var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
+              placeholder='example.com'
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -202,6 +208,7 @@ export var RecordCreate = React.createClass({
               label='Value'
               ref='content'
               name='content'
+              placeholder='mailserver.example.com'
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
@@ -216,6 +223,7 @@ export var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
+              placeholder='_service._tcp.example.com'
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -243,6 +251,7 @@ export var RecordCreate = React.createClass({
               label='Value'
               ref='value'
               name='value'
+              placeholder='domain.example.com'
               onChange={this.handleSrvChange}
               value={this.state.record.content.value} />
           </div>
