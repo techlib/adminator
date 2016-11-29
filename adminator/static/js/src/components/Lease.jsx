@@ -4,6 +4,7 @@ import {Lease4Actions, Lease6Actions} from '../actions'
 import {Lease4Store, Lease6Store} from '../stores/Lease'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
+import {Link} from 'react-router'
 import * as _ from 'lodash'
 import {ButtonGroup, OverlayTrigger, Button, Tooltip, Tabs, Tab} from 'react-bootstrap'
 import {regexGridFilter} from '../util/griddle-components'
@@ -80,7 +81,20 @@ var LeaseStateComponent = React.createClass({
 
 var LeaseMacComponent = React.createClass({
     render() {
-        return <span>{this.props.data}</span>
+        if(this.props.rowData.device){
+          return  <OverlayTrigger placement="right" overlay=
+                      <Tooltip id={this.props.data}>
+                        {this.props.rowData.description}
+                      </Tooltip>>
+                      <code>
+                      <Link to={`/device/${this.props.rowData.device}`}>
+                        {this.props.data}
+                      </Link>
+                      </code>
+                </OverlayTrigger>
+        } else {
+            return <code>{this.props.data}</code>
+        }
     }
 })
 

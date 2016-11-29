@@ -30,6 +30,12 @@ class Device(Model):
     def get_item(self, key, privileges):
         item = self.e().filter_by(**{self.pkey: key}).one()
         item = object_to_dict(item, include=self.include_relations.get('item'))
+        for interface in item['interfaces']:
+            lease4 = self.db.execute("SELECT (SELECT '0.0.0.0'::inet + address) as address \
+                                      FROM lease4 \
+                                      WHERE encode(hwaddr, 'hex')::macaddr = '%s'" % interface['macaddr']).fetchone()
+            if lease4:
+                interface['lease4'] = lease4.address
 
         # Check ACLs
         acl = self.network_acls(privileges)
@@ -89,8 +95,15 @@ class Device(Model):
                         device['valid'].upper
                 ]
 
+        # TODO add support for IPv6
         for interface in \
-            self.db.execute('select i.*, n.vlan, n.description as network_name from interface as i left join network as n on i.network = n.uuid').fetchall():
+            self.db.execute("SELECT i.*, \
+                                (SELECT '0.0.0.0'::inet + l4.address) as lease4, \
+                                n.vlan, \
+                                n.description AS network_name \
+                              FROM interface AS i \
+                              LEFT JOIN network AS n ON i.network = n.uuid \
+                              LEFT JOIN lease4 AS l4 ON i.macaddr = encode(l4.hwaddr, 'hex')::macaddr").fetchall():
 
             # Check ACLs
             if str(interface.device) in devices:

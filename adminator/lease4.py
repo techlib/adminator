@@ -20,15 +20,25 @@ class Lease4(Model):
 
     def list(self):
         items = []
-        for item in self.db.execute('select * from kea.lease4').fetchall():
+        for item in self.db.execute("SELECT address, \
+                                     encode(client_id, 'hex') as client_id, \
+                                     valid_lifetime, \
+                                     expire, subnet_id, \
+                                     fqdn_fwd, \
+                                     fqdn_rev, \
+                                     lease4.hostname, \
+                                     state, \
+                                     encode(hwaddr, 'hex')::macaddr AS hwaddr, \
+                                     interface.device, \
+                                     device.description \
+                                    FROM lease4 \
+                                    LEFT JOIN interface ON interface.macaddr = encode(hwaddr, 'hex')::macaddr \
+                                    LEFT JOIN device ON interface.device = device.uuid \
+                                    ").fetchall():
             obj = (dict(zip(item.keys(), item.values())))
 
             if obj['address']:
                 obj['address'] = str(ipaddress.IPv4Address(obj['address']))
-
-            obj['client_id'] = str(obj['client_id'])
-            obj['hwaddr'] = binascii.hexlify(bytes(obj['hwaddr'])).decode('ascii')
-            obj['hwaddr'] = re.sub(r'([a-f0-9]{2})', '\g<1>:', obj['hwaddr'], flags=re.IGNORECASE)[:17]
 
             items.append(obj)
 

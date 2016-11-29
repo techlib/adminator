@@ -78,6 +78,11 @@ export var DeviceInterface = React.createClass({
             delimiter = <hr />
         }
 
+        var ipv4placeholder = 'Dynamic'
+        if(this.state.lease4){
+            ipv4placeholder = 'Dynamic (' + this.state.lease4 + ')'
+        }
+
         return (
             <div className='form-horizontal'>
                 <Input
@@ -99,7 +104,7 @@ export var DeviceInterface = React.createClass({
                     label='IPv4 address'
                     ref='ip4addr'
                     name='ip4addr'
-                    placeholder='Dynamic'
+                    placeholder={ipv4placeholder}
                     value={this.state.ip4addr}
                     {...commonProps} />
 

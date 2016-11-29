@@ -57,8 +57,8 @@ var DeviceInterfacesComponent = React.createClass({
             <OverlayTrigger placement="right" overlay=
               <Tooltip id={item.uuid}>
                 {item.hostname? item.hostname: 'No hostname'} <br/> 
-                {item.ip4addr? item.ip4addr: 'Dynamic IPv4'} <br/> 
-                {item.ip6addr? item.ip6addr: 'Dynamic IPv6'} <br/>
+                {item.ip4addr? item.ip4addr: 'Dynamic IPv4 ' + (item.lease4 ? '('+item.lease4+')' : '')} <br/> 
+                {item.ip6addr? item.ip6addr: 'Dynamic IPv6 '} <br/>
                 {net}
               </Tooltip>>
                 <code>
