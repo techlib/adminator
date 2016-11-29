@@ -30,10 +30,12 @@ class Lease4(Model):
                                      state, \
                                      encode(hwaddr, 'hex')::macaddr AS hwaddr, \
                                      interface.device, \
-                                     device.description \
+                                     device.description, \
+                                     \"user\".display_name \
                                     FROM lease4 \
                                     LEFT JOIN interface ON interface.macaddr = encode(hwaddr, 'hex')::macaddr \
                                     LEFT JOIN device ON interface.device = device.uuid \
+                                    LEFT JOIN \"user\" ON device.user = \"user\".cn \
                                     ").fetchall():
             obj = (dict(zip(item.keys(), item.values())))
 
