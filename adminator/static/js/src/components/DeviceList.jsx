@@ -76,14 +76,27 @@ var DeviceInterfacesComponent = React.createClass({
 
 var DeviceValidComponent = React.createClass({
   render() {
-    if (this.props.rowData.type != 'visitor') {
-        return null
+
+
+    var isExpired = (this.props.rowData.type == 'visitor') &&
+        !moment().isBetween(this.props.rowData.valid[0], this.props.rowData.valid[1])
+
+    var expiredStatus  = ''
+    if ((this.props.rowData.users && !this.props.rowData.users.enabled) || isExpired) {
+        expiredStatus = 'invalid'
+    } else {
+        expiredStatus = 'valid'
     }
 
-    var start = moment(this.props.data[0]).format('YYYY-MM-DD HH:mm:ss')
-    var end = moment(this.props.data[1]).format('YYYY-MM-DD HH:mm:ss')
+    if (this.props.rowData.type != 'visitor') {
+        return <span>{expiredStatus}</span>
+    } else {
+        var start = moment(this.props.data[0]).format('YYYY-MM-DD HH:mm:ss')
+        var end = moment(this.props.data[1]).format('YYYY-MM-DD HH:mm:ss')
+        return <span>{start} - {end} ({expiredStatus})</span>
+    }
 
-    return <span>{start} - {end}</span>
+
   }
 })
 
@@ -105,7 +118,19 @@ var DeviceUserComponent = React.createClass({
 
 
 export var DeviceList = React.createClass({
-  mixins: [Reflux.connect(DeviceStore, 'data')],
+  mixins: [Reflux.listenTo(DeviceStore, 'handleData')],
+
+  handleData(data) {
+    var devices = []
+    _.each(data.list, (item) => {
+		var isExpired = (item.type == 'visitor') &&
+			!moment().isBetween(item.valid[0], item.valid[1])
+		item.expired = ((item.users && !item.users.enabled) || isExpired) ? 'invalid' : 'valid'
+		devices.push(item)
+    })
+    this.state.data.list = devices
+    this.setState(this.state)
+  },
 
   componentDidMount() {
     DeviceActions.list()
@@ -152,7 +177,7 @@ export var DeviceList = React.createClass({
     var rowMetadata = {
         'bodyCssClassName': function (rowData) {
             var isExpired = (rowData.type == 'visitor') &&
-                moment(rowData.valid[1]).isBefore()
+                !moment().isBetween(rowData.valid[0], rowData.valid[1])
 
             if ((rowData.users && !rowData.users.enabled) || isExpired) {
                 return 'warning'
