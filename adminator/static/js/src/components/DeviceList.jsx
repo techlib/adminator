@@ -77,23 +77,12 @@ var DeviceInterfacesComponent = React.createClass({
 var DeviceValidComponent = React.createClass({
   render() {
 
-
-    var isExpired = (this.props.rowData.type == 'visitor') &&
-        !moment().isBetween(this.props.rowData.valid[0], this.props.rowData.valid[1])
-
-    var expiredStatus  = ''
-    if ((this.props.rowData.users && !this.props.rowData.users.enabled) || isExpired) {
-        expiredStatus = 'invalid'
-    } else {
-        expiredStatus = 'valid'
-    }
-
     if (this.props.rowData.type != 'visitor') {
-        return <span>{expiredStatus}</span>
+        return <span>{this.props.rowData.active}</span>
     } else {
         var start = moment(this.props.data[0]).format('YYYY-MM-DD HH:mm:ss')
         var end = moment(this.props.data[1]).format('YYYY-MM-DD HH:mm:ss')
-        return <span>{start} - {end} ({expiredStatus})</span>
+        return <span>{start} - {end} ({this.props.rowData.active})</span>
     }
 
 
@@ -125,7 +114,7 @@ export var DeviceList = React.createClass({
     _.each(data.list, (item) => {
 		var isExpired = (item.type == 'visitor') &&
 			!moment().isBetween(item.valid[0], item.valid[1])
-		item.expired = ((item.users && !item.users.enabled) || isExpired) ? 'invalid' : 'valid'
+		item.active = ((item.users && !item.users.enabled) || isExpired) ? 'inactive' : 'active'
 		devices.push(item)
     })
     this.state.data.list = devices
@@ -176,10 +165,7 @@ export var DeviceList = React.createClass({
 
     var rowMetadata = {
         'bodyCssClassName': function (rowData) {
-            var isExpired = (rowData.type == 'visitor') &&
-                !moment().isBetween(rowData.valid[0], rowData.valid[1])
-
-            if ((rowData.users && !rowData.users.enabled) || isExpired) {
+            if (rowData.active=='inactive') {
                 return 'warning'
             }
             return 'default-row'
