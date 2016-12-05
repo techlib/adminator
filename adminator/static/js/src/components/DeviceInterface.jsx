@@ -79,7 +79,7 @@ export var DeviceInterface = React.createClass({
         }
 
         var ipv4placeholder = 'Dynamic'
-        if(this.state.lease4){
+        if(this.state.lease4) {
             ipv4placeholder = 'Dynamic (' + this.state.lease4 + ')'
         }
 

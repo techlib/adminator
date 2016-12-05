@@ -10,6 +10,7 @@ import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
+import _ from 'lodash'
 
 var DeviceDescComponent = React.createClass({
   render() {

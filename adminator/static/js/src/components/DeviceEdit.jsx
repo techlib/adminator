@@ -18,9 +18,9 @@ export var DeviceEdit = React.createClass({
     },
 
     handleSave(data) {
-        if(data.type != 'staff'){
+        if(data.type != 'staff') {
             data.user = null
-        } else if (data.type != 'visitor'){
+        } else if (data.type != 'visitor') {
             data.valid = null
         }
 

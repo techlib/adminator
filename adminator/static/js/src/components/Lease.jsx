@@ -81,7 +81,7 @@ var LeaseStateComponent = React.createClass({
 
 var LeaseMacComponent = React.createClass({
     render() {
-        if(this.props.rowData.device){
+        if(this.props.rowData.device) {
           return  <OverlayTrigger placement="right" overlay=
                       <Tooltip id={this.props.data}>
                         {this.props.rowData.description} <br/>
