@@ -43,6 +43,7 @@ export var DeviceInterface = React.createClass({
     getValues() {
         var r = this.state
         delete r.uuid
+        delete r.networks
         return r
     },
 
