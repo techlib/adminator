@@ -25,7 +25,7 @@ export var DeviceForm = React.createClass({
 
     getInitialState() {
         return {type: this.props.allowedTypes[0], valid: [
-            moment().format('YYYY-MM-DDTHH:mm:ss'),
+            moment().startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
             moment().endOf('day').format('YYYY-MM-DDTHH:mm:ss')
         ]}
     },
