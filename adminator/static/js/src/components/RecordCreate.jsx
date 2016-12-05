@@ -386,7 +386,7 @@ export var RecordCreate = React.createClass({
               </div>
 
               <div className="panel-body">
-
+                <div className="row col-sm-12">
                  <div className='col-xs-12 col-md-4 vcenter'>
                    <div className='form-group'>
                      <ButtonGroup>
@@ -410,6 +410,7 @@ export var RecordCreate = React.createClass({
                      })}
                    </BootstrapSelect>
                  </div>
+               </div>
 
                 <div className={'row col-sm-12' + (this.state.record.type ? '': 'hidden')}>
                   {this.renderInput()}
