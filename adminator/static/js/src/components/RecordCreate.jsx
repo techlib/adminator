@@ -9,12 +9,33 @@ import * as _ from 'lodash'
 import classNames from 'classnames'
 import {inRange, isIP4, isIP6} from '../util/simple-validators'
 import {ipToPtr} from '../util/general'
+import Typeahead from 'react-bootstrap-typeahead'
 
 export var RecordCreate = React.createClass({
   mixins: [Reflux.connect(DomainStore, 'data'), Reflux.listenTo(DomainStore,'onDomainStoreChange')],
 
   componentDidMount() {
     DomainActions.list()
+    this.parseIpv4()
+    this.range = _.map(_.range(1, 255), function (item) {
+      return item.toString()
+    })
+  },
+
+  parseIpv4() {
+    var res = {}
+    _.each(this.props.records, function (item) {
+      if (item.type == 'A') {
+        var parts = item.content.split('.')
+        var newItem = {}
+        newItem[parts[0]] = {}
+        newItem[parts[0]][parts[1]] = {}
+        newItem[parts[0]][parts[1]][parts[2]] = {}
+        newItem[parts[0]][parts[1]][parts[2]][parts[3]] = item.name
+        _.merge(res, newItem)
+      }
+    })
+    this.parsedIps = res
   },
 
   onDomainStoreChange(data) {
@@ -24,7 +45,7 @@ export var RecordCreate = React.createClass({
   },
 
   getInitialState() {
-    return {record: {type: ''}, data: {list: []}, domainName: ''}
+    return {record: {type: ''}, data: {list: []}, domainName: '', availableIpv4: []}
   },
 
   setType(type) {
@@ -66,6 +87,26 @@ export var RecordCreate = React.createClass({
     this.setState({record: this.state.record})
   },
 
+  handleChangeIpv4(string) {
+    var parts = string.split('.')
+    var res = []
+
+    if (parts.length ==  4) {
+      if (_.has(this.parsedIps, parts.slice(0,3))) {
+        var ips = this.parsedIps[parts[0]][parts[1]][parts[2]]
+        res = _.map(_.difference(this.range,_.keys(ips)), function (item) {
+          return parts.slice(0,3).join('.') + '.' + item
+        })
+      }
+    }
+
+    var s = this.state
+
+    s.record.content = string
+    s.availableIpv4 = res
+    this.setState(s)
+  },
+
   validate() {
       var data = this.state.record
       var errors = []
@@ -92,6 +133,11 @@ export var RecordCreate = React.createClass({
       return errors
   },
 
+  t(text) {
+    var val = (this.state.record.content || '').split('.').pop()
+    return _.startsWith(text, val)
+  },
+
   handleSubmit(e) {
     e.preventDefault()
 
@@ -116,7 +162,33 @@ export var RecordCreate = React.createClass({
 
   renderInput() {
      switch (this.state.record.type) {
-      case 'A':
+     case 'A':
+     return (
+      <div className='form-group'>
+          <div className='col-xs-8 col-sm-4'>
+            <Input
+              type='text'
+              label='Name'
+              placeholder='domain.example.com'
+              ref='name'
+              name='name'
+              onChange={this.handleChange}
+              value={this.state.record.name} />
+          </div>
+          <div className='col-xs-8 col-sm-4'>
+            <label className='control-label'>Value</label>
+            <Typeahead
+              type='text'
+              label='Value'
+              placeholder='10.0.0.0'
+              options={this.state.availableIpv4}
+              ref='content'
+              name='content'
+              onInputChange={this.handleChangeIpv4}
+              value={this.state.record.content} />
+          </div>
+        </div>
+      )
       case 'AAAA':
       case 'CNAME':
       case 'NS':

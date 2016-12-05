@@ -105,7 +105,8 @@ export var Record = React.createClass({
 
   getNewRecordForm() {
     if (this.state.showNewForm) {
-        return <RecordCreate hideHandler={this.hideNewRecord}/>
+      return <RecordCreate hideHandler={this.hideNewRecord}
+        records={this.state.data['list']}/>
     }
   },
 
