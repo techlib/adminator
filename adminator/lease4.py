@@ -28,12 +28,12 @@ class Lease4(Model):
                                      fqdn_rev, \
                                      lease4.hostname, \
                                      state, \
-                                     encode(hwaddr, 'hex')::macaddr AS hwaddr, \
+                                     COALESCE(NULLIF(ENCODE(lease4.hwaddr, 'hex'), ''), '000000000000')::macaddr AS hwaddr, \
                                      interface.device, \
                                      device.description, \
                                      \"user\".display_name \
                                     FROM lease4 \
-                                    LEFT JOIN interface ON interface.macaddr = encode(hwaddr, 'hex')::macaddr \
+                                    LEFT JOIN interface ON interface.macaddr = COALESCE(NULLIF(encode(hwaddr, 'hex'), ''), '000000000000')::macaddr \
                                     LEFT JOIN device ON interface.device = device.uuid \
                                     LEFT JOIN \"user\" ON device.user = \"user\".cn \
                                     ").fetchall():

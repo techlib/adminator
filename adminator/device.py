@@ -103,7 +103,8 @@ class Device(Model):
                                 n.description AS network_name \
                               FROM interface AS i \
                               LEFT JOIN network AS n ON i.network = n.uuid \
-                              LEFT JOIN lease4 AS l4 ON i.macaddr = encode(l4.hwaddr, 'hex')::macaddr").fetchall():
+                              LEFT JOIN lease4 AS l4 ON i.macaddr = encode(l4.hwaddr, 'hex')::macaddr \
+                              WHERE l4.hwaddr != ''").fetchall():
 
             # Check ACLs
             if str(interface.device) in devices:
