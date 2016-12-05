@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from adminator.model import Model
-from adminator.utils import object_to_dict
+from adminator.utils import object_to_dict, audit
 from sqlalchemy import and_
 
 __all__ = ['Device']
@@ -24,7 +24,6 @@ class Device(Model):
         for privilege in privileges:
             for acl in self.db.network_acl.filter(self.db.network_acl.role==privilege).all():
                 acls[acl.network] = acl.device_types
-        print(acls)
         return acls
 
     def get_item(self, key, privileges):
@@ -46,7 +45,8 @@ class Device(Model):
 
         return item
 
-    def delete(self, key, privileges):
+    @audit
+    def delete(self, key, privileges, uid):
         # Check ACLs by getting the item
         self.get_item(key, privileges)
 
@@ -54,7 +54,8 @@ class Device(Model):
         self.db.commit()
         return {'deleted': rows}
 
-    def insert(self, data, privileges):
+    @audit
+    def insert(self, data, privileges, uid):
         # Check ACLs
         acl = self.network_acls(privileges)
         if 'admin' not in privileges:
@@ -116,7 +117,8 @@ class Device(Model):
 
         return list(devices.values())
 
-    def patch(self, data, privileges):
+    @audit
+    def patch(self, data, privileges, uid):
         assert data.get(self.pkey) is not None, 'Primary key is not set'
 
         # Check ACLs

@@ -8,6 +8,8 @@ from psycopg2._range import Range
 from sqlalchemy.orm import class_mapper
 from psycopg2.extras import Inet
 
+from functools import wraps
+
 __all__ = ['object_to_dict']
 
 
@@ -32,5 +34,28 @@ def object_to_dict(obj, found=None, include=[]):
             else:
                 out[name] = object_to_dict(related_obj, found)
     return out
+
+def audit(f):
+    @wraps(f)
+    def func_wrapper(self, *args, **kwargs):
+        uid  = kwargs['uid'] if 'uid' in kwargs else args[2]
+        data = kwargs['data'] if 'data' in kwargs else args[0]
+        if f.__name__ in ('patch', 'delete'):
+            if f.__name__ == 'patch':
+                data = kwargs['data'] if 'data' in kwargs else args[0]
+                key = data[self.pkey]
+            elif f.__name__ == 'delete':
+                key = kwargs['key'] if 'key' in kwargs else args[0]
+                data = None
+            old = self.e().filter_by(**{self.pkey: key}).one()
+            old = object_to_dict(old, include=self.include_relations.get('item'))
+        elif f.__name__ == 'insert':
+            old = None
+            data = kwargs['data'] if 'data' in kwargs else args[0]
+
+        audit = self.db.entity('audit')
+        audit.insert(entity=self.table_name, old=old, new=data, actor=uid)
+        return f(self, *args, **kwargs)
+    return func_wrapper
 
 # vim:set sw=4 ts=4 et:

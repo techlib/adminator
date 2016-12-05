@@ -111,7 +111,7 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.device.list(kwargs.get('privileges')))
         if 'POST' == flask.request.method:
-            return flask.jsonify(manager.device.insert(flask.request.get_json(force=True), kwargs.get('privileges')))
+            return flask.jsonify(manager.device.insert(flask.request.get_json(force=True), kwargs.get('privileges'), uid=kwargs.get('uid')))
 
 
     @app.route('/device/<uuid>', methods=['GET', 'DELETE', 'PATCH'])
@@ -121,11 +121,11 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.device.get_item(uuid, kwargs.get('privileges')))
         if 'DELETE' == flask.request.method:
-            return flask.jsonify(manager.device.delete(uuid, kwargs.get('privileges')))
+            return flask.jsonify(manager.device.delete(uuid, kwargs.get('privileges'), uid=kwargs.get('uid')))
         if 'PATCH' == flask.request.method:
             device = flask.request.get_json(force=True)
             device['uuid'] = uuid
-            return flask.jsonify(manager.device.patch(device, kwargs.get('privileges')))
+            return flask.jsonify(manager.device.patch(device, kwargs.get('privileges'), uid=kwargs.get('uid')))
 
     # Interfaces
     @app.route('/interface/', methods=['GET', 'POST'])
