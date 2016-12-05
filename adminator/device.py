@@ -33,7 +33,7 @@ class Device(Model):
         for interface in item['interfaces']:
             lease4 = self.db.execute("SELECT (SELECT '0.0.0.0'::inet + address) as address \
                                       FROM lease4 \
-                                      WHERE encode(hwaddr, 'hex')::macaddr = '%s'" % interface['macaddr']).fetchone()
+                                      WHERE COALESCE(NULLIF(ENCODE(hwaddr, 'hex'), ''), '000000000000')::macaddr = '%s'" % interface['macaddr']).fetchone()
             if lease4:
                 interface['lease4'] = lease4.address
 
