@@ -47,7 +47,7 @@ export var UserInfoStore = Reflux.createStore({
             })
         })
 
-        this.data.networks = _.pick(result, (value) => {
+        this.data.networks = _.pickBy(result, (value) => {
             return value.length > 0
         })
 
