@@ -21,7 +21,7 @@ export var InterfaceActions = Reflux.createActions([
 ])
 
 export var UserActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+  'create', 'read', 'update', 'delete', 'list', 'listEnabled'
 ])
 
 export var Lease6Actions = Reflux.createActions([

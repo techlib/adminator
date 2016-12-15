@@ -2,6 +2,7 @@
 
 import * as Reflux from 'reflux'
 import {UserActions} from '../actions'
+import * as _ from 'lodash'
 
 export var UserStore = Reflux.createStore({
   listenables: [UserActions],
@@ -56,6 +57,14 @@ export var UserStore = Reflux.createStore({
   onList() {
     $.ajax({url: '/user/', success: result => {
         this.data.list = result.result
+        this.trigger(this.data)
+      }
+    })
+  },
+
+  onListEnabled() {
+    $.ajax({url: '/user/', success: result => {
+        this.data.list = _.filter(result.result, (item) => { return item.enabled })
         this.trigger(this.data)
       }
     })

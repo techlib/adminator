@@ -20,7 +20,7 @@ export var Device = React.createClass({
     componentDidMount() {
         UserInfoStore.listen(this.setUserConstraints)
         NetworkActions.list()
-        UserActions.list()
+        UserActions.listEnabled()
     },
 
     setUserConstraints() {
