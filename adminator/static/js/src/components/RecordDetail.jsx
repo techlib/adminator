@@ -1,22 +1,35 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
 import * as _ from 'lodash'
-import {RecordActions, FeedbackActions} from '../actions'
+import {RecordActions, FeedbackActions, DomainActions} from '../actions'
 import {RecordStore} from '../stores/Record'
+import {DomainStore} from '../stores/Domain'
 import {Feedback} from './Feedback'
 import {Input} from 'react-bootstrap'
 import {inRange, isIP4, isIP6} from '../util/simple-validators'
+import {BootstrapSelect} from './Select'
 
 export var RecordDetail = React.createClass({
-  mixins: [Reflux.connect(RecordStore, 'data')],
+  mixins: [Reflux.connect(RecordStore, 'data'), Reflux.connect(DomainStore, 'domains')],
+
 
   componentDidMount() {
     let { id } = this.props.params
     RecordActions.read(id)
+    DomainActions.list()
   },
 
   getInitialState() {
-    return {data: {record: {type: ''}}}
+    return {data: {record: {type: ''}}, domains: {list: [], domain:{}}}
+  },
+
+  handleDomainChange(e) {
+    var currentDomain = _.filter(this.state.domains.list, (item) => {return item.id == this.state.data.record.domain_id}).pop()
+    var newDomain     = _.filter(this.state.domains.list, (item) => {return item.id == e.target.value}).pop()
+
+    this.state.data.record.name = this.state.data.record.name.replace(currentDomain.name, newDomain.name)
+    this.state.data.record.domain_id = e.target.value
+    this.setState({data: this.state.data})
   },
 
   handleChange() {
@@ -233,7 +246,16 @@ export var RecordDetail = React.createClass({
               </div>
               <div className="panel-body">
               {this.renderInput()}
+              <div className='form-group'>
+                  <label className="control-label col-xs-2">Domain</label>
+                  <BootstrapSelect ref='domain' className="col-xs-8"
+                    data-live-search="true" onChange={this.handleDomainChange} updateOnLoad value={this.state.data.record.domain_id}>
+                    {this.state.domains['list'].map((domain) => {
+                      return <option value={domain.id} data-name={domain.name} key={domain.name}>{domain.name}</option>
+                    })}
+                  </BootstrapSelect>
               </div>
+             </div>
             <div className="panel-footer">
               <button type="submit" className='btn btn-primary'>Save</button>
             </div>
