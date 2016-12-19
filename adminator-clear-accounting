@@ -1,0 +1,64 @@
+#!/usr/bin/python -tt
+
+# Data are stored in a PostgreSQL database.
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import create_engine
+from sqlsoup import SQLSoup
+from sqlalchemy.orm.exc import NoResultFound
+
+# Command line arguments follow the GNU conventions.
+from getopt import gnu_getopt
+from sys import argv, exit
+
+# Configuration is stored in a boring ini file.
+from ConfigParser import ConfigParser
+
+if __name__ == '__main__':
+    def do_clear(config):
+        engine = create_engine(config.get('database', 'url'),
+                               isolation_level='SERIALIZABLE')
+        session = scoped_session(sessionmaker(autocommit=False,
+                                              autoflush=False))
+        db = SQLSoup(engine, session=session)
+
+        retention = config.get('logs', 'accounting_retention')
+        db.execute("DELETE FROM accounting WHERE stop_time < CURRENT_DATE - INTERVAL '%s' DAY;" % retention)
+
+        db.commit()
+
+    def do_help(*args, **kwargs):
+        print 'Usage: adminator-clear-accounting'
+        print 'Syncs people from LDAP server to PostgreSQL.'
+        print ''
+        print 'OPTIONS:'
+        print '  --help, -h          Display this help.'
+        print '  --version, -V       Display version info.'
+        print ''
+        print '  --config, -c file   Load alternative configuration file.'
+        print '                      Defaults to /etc/ntk/adminator.ini.'
+        print ''
+        print 'Report bugs at <http://github.com/techlib/adminator>.'
+
+    # Parse command line arguments.
+    opts, args = gnu_getopt(argv, 'hVc:', ['help', 'version', 'config='])
+
+    action = do_clear
+    config_path = '/etc/ntk/adminator.ini'
+
+    for k, v in opts:
+        if k in ('--help', '-h'):
+            action = do_help
+        elif k in ('--version', '-V'):
+            action = do_version
+        elif k in ('--config', '-c'):
+            config_path = v
+
+    # Load the configuration from file.
+    config = ConfigParser()
+    config.read(config_path)
+
+    # Perform the selected action.
+    action(config=config)
+
+# vim:set sw=4 ts=4 et:
+# -*- coding: utf-8 -*-
