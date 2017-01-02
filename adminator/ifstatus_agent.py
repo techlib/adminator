@@ -156,6 +156,7 @@ class IFStatusAgent(object):
                 self.db.interface.insert(name=val['Name'], switch=switch.uuid)
         self.db.commit()
 
+        update_time = datetime.datetime.now()
         for key, val in data.items():
             if not ('Vlan' in val):
                 val['Vlan'] = 0
@@ -169,8 +170,17 @@ class IFStatusAgent(object):
             interface.last_change = '{} seconds'.format(int(int(val['LastChange']) // 100))
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:
+                if len(val['MACs']) > 0:
+                    self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
                 for mac in val['MACs']:
                     self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
+                    self.db.last_macs_on_interface.insert(mac_address=mac, interface=interface.uuid, time=update_time)
+                    try:
+                        db_mac = self.db.last_interface_for_mac.filter(self.db.last_interface_for_mac.mac_address == mac).one()
+                        db_mac.interface = interface.uuid
+                        db_mac.time=update_time
+                    except NoResultFound:
+                        self.db.last_interface_for_mac.insert(mac_address=mac, interface=interface.uuid, time=update_time)
         self.db.commit()
 
     def parallel_update(self, switch, snmp_profile, output):
