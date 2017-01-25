@@ -183,7 +183,7 @@ class TopologyAgent(object):
     def update_analyzer_group(self, ag_updater):
         try:
             ag_updater.update()
-        except (RequestException, AGUpdateException) as e:
+        except (RequestException, AGUpdateException, Exception) as e:
             log.msg(
                 'Failed to update analyzer group {0}, error: {1!r}'
                 .format(ag_updater.ag.name, e)
