@@ -197,7 +197,7 @@ def make_site(db, manager, access_model, debug=False):
     @pass_user_info
     def network_get_handler(**kwargs):
         return flask.jsonify(result=manager.network.list(kwargs.get('privileges')))
-     
+
     @app.route('/network/', methods=['POST'])
     @authorized_only(privilege='admin')
     def network_handler():
@@ -258,7 +258,7 @@ def make_site(db, manager, access_model, debug=False):
             domain = flask.request.get_json(force=True)
             domain['id'] = id
             return flask.jsonify(manager.domain.update(domain))
- 
+
 
     @app.route('/record/', methods=['GET', 'POST'])
     @authorized_only(privilege='admin')
@@ -350,6 +350,18 @@ def make_site(db, manager, access_model, debug=False):
     def connection_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.connection.get_item(uuid))
+
+    @app.route('/switch/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def switch_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.switch.list())
+
+    @app.route('/switch/<uuid>', methods=['GET'])
+    @authorized_only(privilege='user')
+    def switch_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.switch.get_item(uuid))
 
     return app
 
