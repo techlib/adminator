@@ -48,6 +48,7 @@ if __name__ == '__main__':
             sessionmaker(autocommit=False, autoflush=False)
         )
         db = SQLSoup(engine, session=session)
+        db.schema = 'topology'
 
         # Extract agent options, sans the pool_size we handle here.
         # agent_opts = dict(config.items('topology'))
