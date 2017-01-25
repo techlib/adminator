@@ -149,19 +149,19 @@ class IFStatusAgent(object):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
         for key, val in data.items():
-            where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
+            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
             try:
-                interface = self.db.interface.filter(where).one()
+                interface = self.db.sw_interface.filter(where).one()
             except NoResultFound:
-                self.db.interface.insert(name=val['Name'], switch=switch.uuid)
+                self.db.sw_interface.insert(name=val['Name'], switch=switch.uuid)
         self.db.commit()
 
         update_time = datetime.datetime.now()
         for key, val in data.items():
             if not ('Vlan' in val):
                 val['Vlan'] = 0
-            where = and_(self.db.interface.switch == switch.uuid, self.db.interface.name == val['Name'])
-            interface = self.db.interface.filter(where).one()
+            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
+            interface = self.db.sw_interface.filter(where).one()
 
             interface.admin_status = val['AdminStatus']
             interface.oper_status = val['OperStatus']
