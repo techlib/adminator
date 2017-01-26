@@ -363,6 +363,18 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.switch.get_item(uuid))
 
+    @app.route('/mac_history/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def mac_history_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.mac_history.list())
+
+    @app.route('/mac_history/<mac>', methods=['GET'])
+    @authorized_only(privilege='user')
+    def mac_history_item_handler(mac):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.mac_history.get_item(mac))
+
     return app
 
 
