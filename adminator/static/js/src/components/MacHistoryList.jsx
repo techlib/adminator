@@ -3,6 +3,7 @@ import * as Reflux from 'reflux'
 import {MacHistoryStore} from '../stores/MacHistory'
 import {MacHistoryActions} from '../actions'
 import {Link} from 'react-router'
+import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
@@ -23,6 +24,28 @@ var DeviceDescComponent = React.createClass({
   }
 })
 
+var DeviceInterfacesComponent = React.createClass({
+  render() {
+    var net = `${this.props.rowData.network_name} (${this.props.rowData.vlan})`
+    return <div>
+          <div key={this.props.rowData.uuid}>
+            <OverlayTrigger placement="right" overlay=
+              <Tooltip id={this.props.rowData.uuid}>
+                {this.props.rowData.hostname? this.props.rowData.hostname: 'No hostname'} <br/>
+                {this.props.rowData.ip4addr? this.props.rowData.ip4addr: 'Dynamic IPv4'} <br/>
+                {this.props.rowData.ip6addr? this.props.rowData.ip6addr: 'Dynamic IPv6'} <br/>
+                {net}
+              </Tooltip>>
+                <code>
+                  {this.props.rowData.mac_address}
+                </code>
+            </OverlayTrigger>
+          </div>
+    </div>
+  }
+
+})
+
 export var MacHistoryList = React.createClass({
   mixins: [Reflux.connect(MacHistoryStore, 'data')],
 
@@ -40,6 +63,7 @@ export var MacHistoryList = React.createClass({
       {
         columnName: 'mac_address',
         displayName: 'MAC address',
+        customComponent: DeviceInterfacesComponent
       },
       {
         columnName: 'sw_name',
@@ -57,10 +81,6 @@ export var MacHistoryList = React.createClass({
         columnName: 'dev_desc',
         displayName: 'Description',
         customComponent: DeviceDescComponent
-      },
-      {
-        columnName: 'ip4addr',
-        displayName: 'Static IP',
       },
       {
         columnName: 'time',
@@ -94,7 +114,6 @@ export var MacHistoryList = React.createClass({
                          'if_name',
                          'port_name',
                          'dev_desc',
-                         'ip4addr',
                          'time',
                          'c'
                      ]}
