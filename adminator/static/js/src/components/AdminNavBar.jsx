@@ -73,6 +73,14 @@ export var AdminNavBar = React.createClass({
         )
     }
 
+    if (UserInfoStore.isAllowed('swInterface')) {
+        res.push(
+            <LinkContainer to='/swInterface/' key='swInterface'>
+                <NavItem eventKey={2}>SwitchInterface</NavItem>
+            </LinkContainer>
+        )
+    }
+
     return res
   },
 

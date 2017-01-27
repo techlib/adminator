@@ -8,9 +8,9 @@ from psycopg2.extras import Inet
 __all__ = ['SwitchInterface']
 
 def process_value(val):
-    if isinstance(val, datetime):
-        return val.isoformat()
-    elif isinstance(val, timedelta):
+    # if isinstance(val, datetime):
+        # return val.isoformat()
+    if isinstance(val, timedelta):
         return str(val)
     elif isinstance(val, Inet):
         return val.addr
@@ -45,13 +45,13 @@ class SwitchInterface(Model):
             for col in row:
                 row[col] = process_value(row[col])
             row['patterns'] = []
-            res[str(row[self.pkey])] = row
+            res[row[self.pkey].int] = row
 
         query2 ='SELECT {1}.interface, {2}.name FROM {0}.{1}, {0}.{2} \
                 WHERE {1}.if_config_pattern = {2}.uuid'.format(self.schema, self.if_to_pat_table, self.pattern_table)
         for pattern in self.db.execute(query2).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
-            res[str(row['interface'])]['patterns'].append(row['name'])
+            res[row['interface'].int]['patterns'].append(row['name'])
 
         return list(res.values())
 

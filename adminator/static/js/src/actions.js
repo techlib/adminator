@@ -59,3 +59,7 @@ export var TopologyActions = Reflux.createActions([
 export var MacHistoryActions = Reflux.createActions([
   'list'
 ])
+
+export var SwitchInterfaceActions = Reflux.createActions([
+  'list'
+])
