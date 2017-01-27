@@ -47,11 +47,11 @@ class SwitchInterface(Model):
             row['patterns'] = []
             res[row[self.pkey].int] = row
 
-        query2 ='SELECT {1}.interface, {2}.name FROM {0}.{1}, {0}.{2} \
+        query2 ='SELECT {1}.interface, {2}.name, {2}.marker FROM {0}.{1}, {0}.{2} \
                 WHERE {1}.if_config_pattern = {2}.uuid'.format(self.schema, self.if_to_pat_table, self.pattern_table)
         for pattern in self.db.execute(query2).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
-            res[row['interface'].int]['patterns'].append(row['name'])
+            res[row['interface'].int]['patterns'].append([row['name'], row['marker']])
 
         return list(res.values())
 

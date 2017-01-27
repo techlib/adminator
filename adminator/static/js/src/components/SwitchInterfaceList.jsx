@@ -2,8 +2,6 @@ import * as React from 'react'
 import * as Reflux from 'reflux'
 import {SwitchInterfaceStore} from '../stores/SwitchInterface'
 import {SwitchInterfaceActions} from '../actions'
-// import {Link} from 'react-router'
-// import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
@@ -14,7 +12,7 @@ var EmptyTr = React.createClass({
   }
 })
 
-export var LinkStatusComponent = React.createClass({
+export var SwitchInterfaceLinkComponent = React.createClass({
   render() {
     var className = 'label label-'
     if (this.props.rowData.admin_status == '2') {
@@ -26,26 +24,53 @@ export var LinkStatusComponent = React.createClass({
   }
 })
 
-var DeviceInterfacesComponent = React.createClass({
+export var SwitchInterfaceVlanComponent = React.createClass({
   render() {
-    var net = `${this.props.rowData.network_name} (${this.props.rowData.vlan})`
+    return (
+      <div>
+        {((this.props.data > 4096) || (this.props.data < 1)) ? '' : this.props.data}
+      </div>
+    )
+  }
+})
+
+export var SwitchInterfaceSpeedComponent = React.createClass({
+  render() {
+    var className = 'label label-'
+    var profiles = {
+      4294967295: ['primary', '24G'],
+      1000000000: ['success', '1G'],
+       100000000: ['warning', '100M'],
+        10000000: ['info', '10M'],
+         1000000: ['danger', '1M'],
+               0: ['default', '0'],
+    }
+    var key = this.props.data
+    // var key = this.props.rowData.speed
+    if (key in profiles) return <span className={className+profiles[key][0]}>{profiles[key][1]}</span>
+    return <span className={className+'default'}>{key}</span>
+  }
+})
+
+var SwitchInterfacePatternsComponent = React.createClass({
+  render() {
+    var className = 'label label-'
+    var profiles = {
+      0: 'default',
+      1: 'primary',
+      2: 'success',
+      3: 'info',
+      4: 'warning',
+      5: 'danger',
+    }
+    if (this.props.data.length == 0) return <div><span className={className+'danger'}>{'None'}</span></div>
     return <div>
-          <div key={this.props.rowData.uuid}>
-            <OverlayTrigger placement="right" overlay=
-              <Tooltip id={this.props.rowData.uuid}>
-                {this.props.rowData.hostname? this.props.rowData.hostname: 'No hostname'} <br/>
-                {this.props.rowData.ip4addr? this.props.rowData.ip4addr: 'Dynamic IPv4'} <br/>
-                {this.props.rowData.ip6addr? this.props.rowData.ip6addr: 'Dynamic IPv6'} <br/>
-                {net}
-              </Tooltip>>
-                <code>
-                  {this.props.rowData.mac_address}
-                </code>
-            </OverlayTrigger>
-          </div>
+      {this.props.data.map((item) => {
+        var style = item[1] in profiles ? profiles[item[1]] : 'default'
+        return <span><span className={className+style}>{item[0]}</span>&nbsp;</span>
+      })}
     </div>
   }
-
 })
 
 export var SwitchInterfaceList = React.createClass({
@@ -70,8 +95,43 @@ export var SwitchInterfaceList = React.createClass({
       {
         columnName: 'admin_status',
         displayName: 'Link',
-        customComponent: LinkStatusComponent
-      }
+        customComponent: SwitchInterfaceLinkComponent
+      },
+      {
+        columnName: 'speed',
+        displayName: 'Speed',
+        customComponent: SwitchInterfaceSpeedComponent
+      },
+      {
+        columnName: 'vlan',
+        displayName: 'VLAN',
+        customComponent: SwitchInterfaceVlanComponent
+      },
+      {
+      columnName: 'sw_name',
+      displayName: 'Switch name',
+      },
+      {
+        columnName: 'name',
+        displayName: 'Interface',
+      },
+      {
+        columnName: 'port_name',
+        displayName: 'Port',
+      },
+      {
+        columnName: 'last_change',
+        displayName: 'Last change',
+      },
+      {
+        columnName: 'last_update',
+        displayName: 'Last update',
+      },
+      {
+        columnName: 'patterns',
+        displayName: 'Patterns',
+        customComponent: SwitchInterfacePatternsComponent
+      },
     ]
 
     return (
