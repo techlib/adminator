@@ -23,6 +23,7 @@ from adminator.port import Port
 from adminator.connection import Connection
 from adminator.switch import Switch
 from adminator.mac_history import MacHistory
+from adminator.switch_interface import SwitchInterface
 
 
 class Manager(object):
@@ -49,6 +50,7 @@ class Manager(object):
         self.connection = Connection(self)
         self.switch = Switch(self)
         self.mac_history = MacHistory(self)
+        self.switch_interface = SwitchInterface(self)
 
 
 # vim:set sw=4 ts=4 et:

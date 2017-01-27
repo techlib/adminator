@@ -375,6 +375,11 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.mac_history.get_item(mac))
 
+    @app.route('/switch_interface/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def switch_interface_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.switch_interface.list())
     return app
 
 
