@@ -65,6 +65,22 @@ export var AdminNavBar = React.createClass({
         )
     }
 
+    if (UserInfoStore.isAllowed('macHistory')) {
+        res.push(
+            <LinkContainer to='/macHistory/' key='macHistory'>
+                <NavItem eventKey={2}>MacHistory</NavItem>
+            </LinkContainer>
+        )
+    }
+
+    if (UserInfoStore.isAllowed('swInterface')) {
+        res.push(
+            <LinkContainer to='/swInterface/' key='swInterface'>
+                <NavItem eventKey={2}>SwitchInterface</NavItem>
+            </LinkContainer>
+        )
+    }
+
     return res
   },
 
@@ -93,4 +109,3 @@ export var AdminNavBar = React.createClass({
     )
   }
 })
-

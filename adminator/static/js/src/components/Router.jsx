@@ -19,6 +19,8 @@ import {Record} from './Record'
 import {Lease} from './Lease'
 import {FeedbackActions} from '../actions'
 import {TopologyList} from './TopologyList'
+import {MacHistoryList} from './MacHistoryList'
+import {SwitchInterfaceList} from './SwitchInterfaceList'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -44,6 +46,8 @@ ReactDOM.render((
         <Route path="record" component={Record} />
         <Route path="/lease/" component={Lease} />
         <Route path="/topology/" component={TopologyList} />
+        <Route path="/macHistory/" component={MacHistoryList} />
+        <Route path="/swInterface/" component={SwitchInterfaceList} />
     </Route>
   </Router>
  ), document.getElementById('AdminatorApp')

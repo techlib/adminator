@@ -1,7 +1,7 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from pprint import pprint as pp
 import inspect
 from psycopg2._range import Range
@@ -14,6 +14,8 @@ __all__ = ['object_to_dict']
 def process_value(obj, c):
     if isinstance(getattr(obj, c), datetime):
         return (c, getattr(obj, c).isoformat())
+    elif isinstance(getattr(obj, c), timedelta):
+        return (c, str(getattr(obj, c)))
     elif isinstance(getattr(obj, c), Inet):
         return (c, getattr(obj, c).addr)
     else:
