@@ -145,6 +145,23 @@ class IFStatusAgent(object):
         switch.last_update = datetime.datetime.now()
         self.db.commit()
 
+    def process_speed(self, data):
+        speed = int(data)
+        if speed == 4294967295:
+            speed = 24000
+        else:
+            speed //= 1000
+        if speed == 0:
+            speed = None
+
+        return speed
+
+    def process_vlan(self, data):
+        vlan = int(data)
+        if vlan < 1 or vlan > 4096:
+            vlan = None
+        return vlan
+
     def save_if_to_db(self, switch, data):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
@@ -163,10 +180,10 @@ class IFStatusAgent(object):
             where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
             interface = self.db.sw_interface.filter(where).one()
 
-            interface.admin_status = val['AdminStatus']
-            interface.oper_status = val['OperStatus']
-            interface.speed = int(val['Speed'])
-            interface.vlan = int(val['Vlan'])
+            interface.admin_status = int(val['AdminStatus'])-1
+            interface.oper_status = int(val['OperStatus'])-1
+            interface.speed = self.process_speed(val['Speed'])
+            interface.vlan = self.process_vlan(val['Vlan'])
             interface.last_change = '{} seconds'.format(int(int(val['LastChange']) // 100))
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:
