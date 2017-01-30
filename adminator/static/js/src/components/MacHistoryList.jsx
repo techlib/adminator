@@ -27,7 +27,8 @@ var DeviceDescComponent = React.createClass({
 
 var DeviceInterfacesComponent = React.createClass({
   render() {
-    var net = `${this.props.rowData.network_name} (${this.props.rowData.vlan})`
+    if (this.props.rowData.vlan == null) var net = 'No VLAN'
+    else var net = `${this.props.rowData.network_name} (${this.props.rowData.vlan})`
     return <div>
           <div key={this.props.rowData.uuid}>
             <OverlayTrigger placement="right" overlay=

@@ -548,11 +548,11 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-link-speed-10g {
-  background-color: #33cc33;
+  background-color: #009933;
 }
 
 .label-link-speed-24g {
-  background-color: #00cc99;
+  background-color: #009999;
 }
 
 .label-link-speed-40g {
@@ -576,7 +576,7 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-ifpattern-poe {
-  background-color: #33cc33;
+  background-color: #009933;
 }
 
 .label-ifpattern-vlan-interface {
@@ -600,7 +600,7 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-link-status-up {
-  background-color: #33cc33;
+  background-color: #009933;
 }
 
 .label-link-status-unknown {
