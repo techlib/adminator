@@ -8,10 +8,10 @@ from psycopg2.extras import Inet
 __all__ = ['SwitchInterface']
 
 def process_value(val):
-    # if isinstance(val, datetime):
-        # return val.isoformat()
+    if isinstance(val, datetime):
+        return val.isoformat()
     if isinstance(val, timedelta):
-        return str(val)
+        return val.total_seconds()
     elif isinstance(val, Inet):
         return val.addr
     else:

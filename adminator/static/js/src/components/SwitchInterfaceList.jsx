@@ -5,6 +5,7 @@ import {SwitchInterfaceActions} from '../actions'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
+import moment from 'moment'
 
 var EmptyTr = React.createClass({
   render() {
@@ -73,6 +74,21 @@ var SwitchInterfacePatternsComponent = React.createClass({
   }
 })
 
+var SwitchInterfaceDateComponent = React.createClass({
+    render() {
+        var txt = moment.parseZone(this.props.data).format('YYYY-MM-DD HH:mm:ss')
+        return <span>{txt}</span>
+    }
+})
+
+var SwitchInterfaceTimedeltaComponent = React.createClass({
+    render() {
+        // var txt = moment().subtract(this.props.data, 's').fromNow()
+        var txt = moment.duration(-1 * this.props.data, 's').humanize(true)
+        return <span>{txt}</span>
+    }
+})
+
 export var SwitchInterfaceList = React.createClass({
   mixins: [Reflux.connect(SwitchInterfaceStore, 'data')],
 
@@ -121,11 +137,13 @@ export var SwitchInterfaceList = React.createClass({
       },
       {
         columnName: 'last_change',
-        displayName: 'Last change',
+        displayName: 'Last link change',
+        customComponent: SwitchInterfaceTimedeltaComponent
       },
       {
         columnName: 'last_update',
         displayName: 'Last update',
+        customComponent: SwitchInterfaceDateComponent
       },
       {
         columnName: 'patterns',
@@ -153,11 +171,11 @@ export var SwitchInterfaceList = React.createClass({
                          'sw_name',
                          'name',
                          'admin_status',
+                         'last_change',
                          'speed',
                          'vlan',
                          'port_name',
                          'patterns',
-                         'last_change',
                          'last_update',
                          'c'
                      ]}

@@ -7,6 +7,7 @@ import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
+import moment from 'moment'
 
 var EmptyTr = React.createClass({
   render() {
@@ -44,6 +45,13 @@ var DeviceInterfacesComponent = React.createClass({
     </div>
   }
 
+})
+
+var DeviceDateComponent = React.createClass({
+    render() {
+        var txt = moment.parseZone(this.props.data).format('YYYY-MM-DD HH:mm:ss')
+        return <span>{txt}</span>
+    }
 })
 
 export var MacHistoryList = React.createClass({
@@ -85,6 +93,7 @@ export var MacHistoryList = React.createClass({
       {
         columnName: 'time',
         displayName: 'Detected',
+        customComponent: DeviceDateComponent
       },
       {
         columnName: 'c',

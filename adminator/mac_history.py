@@ -3,9 +3,20 @@
 
 from adminator.model import Model
 from sqlalchemy import Table
+from datetime import datetime, timedelta
+from psycopg2.extras import Inet
 
 __all__ = ['MacHistory']
 
+def process_value(val):
+    if isinstance(val, datetime):
+        return val.isoformat()
+    if isinstance(val, timedelta):
+        return val.total_seconds()
+    elif isinstance(val, Inet):
+        return val.addr
+    else:
+        return val
 
 class MacHistory(Model):
     def init(self):
@@ -28,8 +39,11 @@ class MacHistory(Model):
         query = 'select * from %s.%s' % (self.schema, self.table_name)
         res = []
 
-        for connection in self.db.execute(query).fetchall():
-           res.append(dict(zip(connection.keys(), connection.values())))
+        for mac_address in self.db.execute(query).fetchall():
+            row = dict(zip(mac_address.keys(), mac_address.values()))
+            for col in row:
+                row[col] = process_value(row[col])
+            res.append(row)
 
         return res
 
