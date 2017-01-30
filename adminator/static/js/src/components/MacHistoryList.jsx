@@ -30,19 +30,19 @@ var DeviceInterfacesComponent = React.createClass({
     if (this.props.rowData.vlan == null) var net = 'No VLAN'
     else var net = `${this.props.rowData.network_name} (${this.props.rowData.vlan})`
     return <div>
-          <div key={this.props.rowData.uuid}>
-            <OverlayTrigger placement="right" overlay=
-              <Tooltip id={this.props.rowData.uuid}>
-                {this.props.rowData.hostname? this.props.rowData.hostname: 'No hostname'} <br/>
-                {this.props.rowData.ip4addr? this.props.rowData.ip4addr: 'Dynamic IPv4'} <br/>
-                {this.props.rowData.ip6addr? this.props.rowData.ip6addr: 'Dynamic IPv6'} <br/>
-                {net}
-              </Tooltip>>
-                <code>
-                  {this.props.rowData.mac_address}
-                </code>
-            </OverlayTrigger>
-          </div>
+      <div key={this.props.rowData.uuid}>
+        <OverlayTrigger placement="right" overlay=
+          <Tooltip id={this.props.rowData.uuid}>
+            {this.props.rowData.hostname? this.props.rowData.hostname: 'No hostname'} <br/>
+            {this.props.rowData.ip4addr? this.props.rowData.ip4addr: 'Dynamic IPv4'} <br/>
+            {this.props.rowData.ip6addr? this.props.rowData.ip6addr: 'Dynamic IPv6'} <br/>
+            {net}
+          </Tooltip>>
+          <code>
+            {this.props.rowData.mac_address}
+          </code>
+        </OverlayTrigger>
+      </div>
     </div>
   }
 
@@ -92,6 +92,10 @@ export var MacHistoryList = React.createClass({
         customComponent: DeviceDescComponent
       },
       {
+        columnName: 'display_name',
+        displayName: 'Owner',
+      },
+      {
         columnName: 'time',
         displayName: 'Detected',
         customComponent: DeviceDateComponent
@@ -124,6 +128,7 @@ export var MacHistoryList = React.createClass({
                          'if_name',
                          'port_name',
                          'dev_desc',
+                         'display_name',
                          'time',
                          'c'
                      ]}

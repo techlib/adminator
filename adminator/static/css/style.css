@@ -539,7 +539,6 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-link-speed-100m {
-  /*background-color: #e6e600;*/
   background-color: #edb45e;
 }
 
@@ -588,7 +587,7 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-ifpattern-special {
-  background-color: #cccccc;
+  background-color: #999999;
 }
 
 .label-link-status-admdown {

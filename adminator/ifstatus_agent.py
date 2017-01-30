@@ -162,6 +162,10 @@ class IFStatusAgent(object):
             vlan = None
         return vlan
 
+    def process_last_change(self, data):
+        last_change = int(data)
+        return None if last_change < 1 else '{} seconds'.format(last_change//100)
+
     def save_if_to_db(self, switch, data):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
@@ -187,7 +191,7 @@ class IFStatusAgent(object):
             interface.speed = self.process_speed(val['Speed'])
             interface.vlan = self.process_vlan(val['Vlan'])
 
-            interface.last_change = '{} seconds'.format(int(int(val['LastChange']) // 100))
+            interface.last_change = self.process_last_change(val['LastChange'])
 
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:
