@@ -150,7 +150,7 @@ class IFStatusAgent(object):
         if speed == 4294967295:
             speed = 24000
         else:
-            speed //= 1000
+            speed //= 1000000
         if speed == 0:
             speed = None
 
@@ -180,11 +180,15 @@ class IFStatusAgent(object):
             where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
             interface = self.db.sw_interface.filter(where).one()
 
-            interface.admin_status = int(val['AdminStatus'])-1
-            interface.oper_status = int(val['OperStatus'])-1
+            # SNMP up = 1, down = 2
+            interface.admin_status = 2-int(val['AdminStatus'])
+            interface.oper_status = 2-int(val['OperStatus'])
+
             interface.speed = self.process_speed(val['Speed'])
             interface.vlan = self.process_vlan(val['Vlan'])
+
             interface.last_change = '{} seconds'.format(int(int(val['LastChange']) // 100))
+
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:
                 if len(val['MACs']) > 0:
