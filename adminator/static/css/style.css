@@ -539,7 +539,8 @@ th:last-child .btn-group, td:last-child .btn-group {
 }
 
 .label-link-speed-100m {
-  background-color: #e6e600;
+  /*background-color: #e6e600;*/
+  background-color: #edb45e;
 }
 
 .label-link-speed-1g {
@@ -560,4 +561,48 @@ th:last-child .btn-group, td:last-child .btn-group {
 
 .label-link-speed-100g {
   background-color: #9966ff;
+}
+
+.label-ifpattern-bad {
+  background-color: #cc0000
+}
+
+.label-ifpattern-primary {
+  background-color: #33ccff;
+}
+
+.label-ifpattern-down {
+  background-color: #edb45e;
+}
+
+.label-ifpattern-poe {
+  background-color: #33cc33;
+}
+
+.label-ifpattern-vlan-interface {
+  background-color: #9966ff;
+}
+
+.label-ifpattern-lacp {
+  background-color: #99cc00;
+}
+
+.label-ifpattern-special {
+  background-color: #cccccc;
+}
+
+.label-link-status-admdown {
+  background-color: #cc0000
+}
+
+.label-link-status-down {
+  background-color: #edb45e;
+}
+
+.label-link-status-up {
+  background-color: #33cc33;
+}
+
+.label-link-status-unknown {
+  background-color: #cccccc;
 }

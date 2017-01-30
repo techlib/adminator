@@ -15,15 +15,14 @@ var EmptyTr = React.createClass({
 
 export var SwitchInterfaceLinkStatusComponent = React.createClass({
   render() {
-    // TODO css style
-    var className = 'label label-'
     var styles = {
-      'Adm. down': 'danger',
-      'Down': 'warning',
-      'Up': 'success',
-      'Unknown': 'default',
+      'Adm. down': 'admdown',
+      'Down': 'down',
+      'Up': 'up',
+      'Unknown': 'unknown',
     }
-    return <span className={className+styles[this.props.data]}>{this.props.data}</span>
+    var className = 'label label-link-status-' + styles[this.props.data]
+    return <span className={className}>{this.props.data}</span>
   }
 })
 
@@ -39,20 +38,10 @@ export var SwitchInterfaceSpeedComponent = React.createClass({
 
 var SwitchInterfacePatternsComponent = React.createClass({
   render() {
-    // TODO css style
-    var className = 'label label-'
-    var profiles = {
-      0: 'default',
-      1: 'primary',
-      2: 'success',
-      3: 'info',
-      4: 'warning',
-      5: 'danger',
-    }
     return <div>
       {this.props.data.map((item) => {
-        var style = item[1] in profiles ? profiles[item[1]] : 'default'
-        return <span><span className={className+style}>{item[0]}</span>&nbsp;</span>
+        var className = 'label label-ifpattern-' + item[1].toLowerCase()
+        return <span><span className={className}>{item[0]}</span>&nbsp;</span>
       })}
     </div>
   }
