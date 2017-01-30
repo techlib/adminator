@@ -13,48 +13,33 @@ var EmptyTr = React.createClass({
   }
 })
 
-export var SwitchInterfaceLinkComponent = React.createClass({
+export var SwitchInterfaceLinkStatusComponent = React.createClass({
   render() {
+    // TODO css style
     var className = 'label label-'
-    if (this.props.rowData.admin_status == '2') {
-      return <span className={className+'danger'}>Adm down</span>
-    } else {
-      if (this.props.rowData.oper_status == '2') return <span className={className+'warning'}>Down</span>
-      else return <span className={className+'success'}>Up</span>
+    var styles = {
+      'Adm. down': 'danger',
+      'Down': 'warning',
+      'Up': 'success',
+      'Unknown': 'default',
     }
-  }
-})
-
-export var SwitchInterfaceVlanComponent = React.createClass({
-  render() {
-    return (
-      <div>
-        {((this.props.data > 4096) || (this.props.data < 1)) ? '' : this.props.data}
-      </div>
-    )
+    return <span className={className+styles[this.props.data]}>{this.props.data}</span>
   }
 })
 
 export var SwitchInterfaceSpeedComponent = React.createClass({
   render() {
-    var className = 'label label-'
-    var profiles = {
-      4294967295: ['primary', '24G'],
-      1000000000: ['success', '1G'],
-       100000000: ['warning', '100M'],
-        10000000: ['info', '10M'],
-         1000000: ['danger', '1M'],
-               0: ['default', '0'],
+    if(this.props.data == null) {
+      return null
     }
-    var key = this.props.data
-    // var key = this.props.rowData.speed
-    if (key in profiles) return <span className={className+profiles[key][0]}>{profiles[key][1]}</span>
-    return <span className={className+'default'}>{key}</span>
+    var className = 'label label-link-speed-' + this.props.data.toLowerCase()
+    return <span className={className}>{this.props.data}</span>
   }
 })
 
 var SwitchInterfacePatternsComponent = React.createClass({
   render() {
+    // TODO css style
     var className = 'label label-'
     var profiles = {
       0: 'default',
@@ -64,7 +49,6 @@ var SwitchInterfacePatternsComponent = React.createClass({
       4: 'warning',
       5: 'danger',
     }
-    if (this.props.data.length == 0) return <div><span className={className+'danger'}>{'None'}</span></div>
     return <div>
       {this.props.data.map((item) => {
         var style = item[1] in profiles ? profiles[item[1]] : 'default'
@@ -83,7 +67,6 @@ var SwitchInterfaceDateComponent = React.createClass({
 
 var SwitchInterfaceTimedeltaComponent = React.createClass({
     render() {
-        // var txt = moment().subtract(this.props.data, 's').fromNow()
         var txt = moment.duration(-1 * this.props.data, 's').humanize(true)
         return <span>{txt}</span>
     }
@@ -109,9 +92,9 @@ export var SwitchInterfaceList = React.createClass({
         customComponent: EmptyTr
       },
       {
-        columnName: 'admin_status',
+        columnName: 'link_status',
         displayName: 'Link',
-        customComponent: SwitchInterfaceLinkComponent
+        customComponent: SwitchInterfaceLinkStatusComponent
       },
       {
         columnName: 'speed',
@@ -121,7 +104,7 @@ export var SwitchInterfaceList = React.createClass({
       {
         columnName: 'vlan',
         displayName: 'VLAN',
-        customComponent: SwitchInterfaceVlanComponent
+        // customComponent: SwitchInterfaceVlanComponent
       },
       {
       columnName: 'sw_name',
@@ -170,7 +153,7 @@ export var SwitchInterfaceList = React.createClass({
                      columns={[
                          'sw_name',
                          'name',
-                         'admin_status',
+                         'link_status',
                          'last_change',
                          'speed',
                          'vlan',

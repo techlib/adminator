@@ -31,6 +31,22 @@ class SwitchInterface(Model):
         self.pattern_table = 'if_config_pattern'
         self.if_to_pat_table = 'if_to_pattern'
 
+    def fill_link_status(self, data):
+        if data['admin_status'] == 1 and data['oper_status'] == 1:
+            data['link_status'] = 'Up'
+        elif data['admin_status'] == 1 and data['oper_status'] == 0:
+            data['link_status'] = 'Down'
+        elif data['admin_status'] == 0 and data['oper_status'] == 0:
+            data['link_status'] = 'Adm. down'
+        else:
+             data['link_status'] = 'Unknown'
+
+    def link_speed_humanize(self, speed):
+        if speed is None: return None
+        if speed >= 1000:
+            return '{}G'.format(speed//1000)
+        return '{}M'.format(speed)
+
     def list(self):
         query = 'SELECT {1}.uuid, {1}.name, {1}.admin_status, {1}.oper_status, {1}.switch, {1}.vlan, {1}.speed, \
                  {1}.last_change, {2}.last_update, {2}.name AS sw_name, {3}.name AS port_name \
@@ -39,7 +55,6 @@ class SwitchInterface(Model):
                  WHERE {1}.switch = {2}.uuid'.format(self.schema, self.table_name, self.switch_table, self.port_table)
         res = {}
 
-        # print(query)
         for interface in self.db.execute(query).fetchall():
             row = dict(zip(interface.keys(), interface.values()))
             for col in row:
@@ -52,6 +67,12 @@ class SwitchInterface(Model):
         for pattern in self.db.execute(query2).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
             res[row['interface'].int]['patterns'].append([row['name'], row['marker']])
+
+        for key, data in res.items():
+            if len(data['patterns']) == 0:
+                data['patterns'].append(['Exotic',5])
+            self.fill_link_status(data)
+            data['speed'] = self.link_speed_humanize(data['speed'])
 
         return list(res.values())
 
