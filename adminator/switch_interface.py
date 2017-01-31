@@ -4,6 +4,7 @@
 from adminator.model import Model
 from datetime import datetime, timedelta
 from psycopg2.extras import Inet
+from adminator.utils import object_to_dict
 
 __all__ = ['SwitchInterface']
 
@@ -30,6 +31,8 @@ class SwitchInterface(Model):
         self.switch_table = 'switch'
         self.pattern_table = 'if_config_pattern'
         self.if_to_pat_table = 'if_to_pattern'
+        self.last_interface_for_mac_advance = 'last_interface_for_mac_advance'
+        self.last_macs_on_interface_advance = 'last_macs_on_interface_advance'
 
     def fill_link_status(self, data):
         if data['admin_status'] == 1 and data['oper_status'] == 1:
@@ -75,5 +78,44 @@ class SwitchInterface(Model):
             data['speed'] = self.link_speed_humanize(data['speed'])
 
         return list(res.values())
+
+    def get_item(self, key):
+        interface = self.e().get(key)
+        item = object_to_dict(interface)
+
+        switch = self.e(self.switch_table).get(interface.switch)
+        item['switch'] = object_to_dict(switch)
+
+        ptrn_query = "SELECT {2}.name, {2}.style FROM {0}.{1}, {0}.{2} WHERE {1}.if_config_pattern = {2}.uuid and \
+            {1}.interface = '{3}'".format(self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid)
+        item['patterns'] = []
+        for pattern in self.db.execute(ptrn_query).fetchall():
+            row = dict(zip(pattern.keys(), pattern.values()))
+            item['patterns'].append([row['name'], row['style']])
+
+        mac1_query = "SELECT * FROM {0}.{1} where sw_if_uuid = '{2}'".format(
+            self.schema, self.last_interface_for_mac_advance, interface.uuid)
+        item['last_interface_for_mac'] = []
+        for mac in self.db.execute(mac1_query).fetchall():
+            row = dict(zip(mac.keys(), mac.values()))
+            for col in row:
+                row[col] = process_value(row[col])
+            item['last_interface_for_mac'].append(row)
+
+        mac2_query = "SELECT * FROM {0}.{1} where sw_if_uuid = '{2}'".format(
+            self.schema, self.last_macs_on_interface_advance, interface.uuid)
+        item['last_macs_on_interface'] = []
+        for mac in self.db.execute(mac2_query).fetchall():
+            row = dict(zip(mac.keys(), mac.values()))
+            for col in row:
+                row[col] = process_value(row[col])
+            item['last_macs_on_interface'].append(row)
+
+        if len(item['patterns']) == 0:
+            item['patterns'].append(['Exotic','bad'])
+        self.fill_link_status(item)
+        item['speed'] = self.link_speed_humanize(item['speed'])
+
+        return item
 
 # vim:set sw=4 ts=4 et:
