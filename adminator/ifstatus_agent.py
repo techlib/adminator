@@ -31,6 +31,9 @@ class IFStatusAgent(object):
     def get_switch_status(self, ip, version, community, timeout):
         bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
         oid = '1.3.6.1.2.1.1'
+        # 1.3.6.1.6.3.10.2.1.3 - snmp engine uptime in secs max value cca 50000 days
+        # 1.3.6.1.2.1.1.3.0 - sysuptime in Timeticks max value cca 500 days
+
         informations = {
             '1.0': ('1.3.6.1.2.1.1.1.0', 'description', 'STRING: '),
             '2.0': ('1.3.6.1.2.1.1.2.0', 'objectID', 'OID: '),
@@ -54,6 +57,13 @@ class IFStatusAgent(object):
                 data_prefix = informations[parsed_value[0]][2]
                 val = parsed_value[1][len(data_prefix):]
                 data[key] = val
+
+        oid_engine_time = '1.3.6.1.6.3.10.2.1.3'
+        command = bashCommand.format(timeout, community, version, ip, oid_engine_time)
+        output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
+        parsed_value = output.split('\n')[0].split(' = INTEGER: ')
+        data['engineUptime'] = parsed_value[1]
+
         return data
 
     def get_interfaces(self, ip, version, community, timeout):
@@ -135,7 +145,7 @@ class IFStatusAgent(object):
     def save_to_db(self, switch, data):
         sw_info = data['switch']
         self.save_if_to_db(switch, data['interfaces'], sw_info['uptime'])
-        switch.uptime = '{} seconds'.format(int(int(sw_info['uptime']) // 100))
+        switch.uptime = '{} seconds'.format(int(sw_info['engineUptime']))
         switch.sys_description = sw_info['description']
         switch.sys_objectID = sw_info['objectID']
         switch.sys_contact = sw_info['contact']
@@ -165,7 +175,14 @@ class IFStatusAgent(object):
     def process_last_change(self, data, sw_uptime):
         last_change = int(data)
         uptime = int(sw_uptime)
-        return None if last_change < 1 else '{} seconds'.format((uptime - last_change)//100)
+        if last_change < 1:
+            return None
+        if last_change > uptime:
+            # limitation of SNMP Timeticks datatype (max value = 4294967295 eq. 500 days)
+            # print(uptime, last_change, uptime - last_change)
+            uptime += 4294967296
+            # print(uptime, last_change, uptime - last_change)
+        return '{} seconds'.format((uptime - last_change)//100)
 
     def save_if_to_db(self, switch, data, sw_uptime):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
