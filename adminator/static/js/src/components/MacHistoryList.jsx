@@ -25,6 +25,16 @@ var DeviceDescComponent = React.createClass({
   }
 })
 
+var SwitchInterfaceNameComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/swInterface/${this.props.rowData.sw_if_uuid}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
 var DeviceInterfacesComponent = React.createClass({
   render() {
     if (this.props.rowData.vlan == null) var net = 'No VLAN'
@@ -81,6 +91,7 @@ export var MacHistoryList = React.createClass({
       {
         columnName: 'if_name',
         displayName: 'Interface',
+        customComponent: SwitchInterfaceNameComponent
       },
       {
         columnName: 'port_name',

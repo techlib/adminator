@@ -21,6 +21,7 @@ import {FeedbackActions} from '../actions'
 import {TopologyList} from './TopologyList'
 import {MacHistoryList} from './MacHistoryList'
 import {SwitchInterfaceList} from './SwitchInterfaceList'
+import {SwitchInterfaceDetail} from './SwitchInterfaceDetail'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -48,6 +49,7 @@ ReactDOM.render((
         <Route path="/topology/" component={TopologyList} />
         <Route path="/macHistory/" component={MacHistoryList} />
         <Route path="/swInterface/" component={SwitchInterfaceList} />
+        <Route path="/swInterface/:id" component={SwitchInterfaceDetail} />
     </Route>
   </Router>
  ), document.getElementById('AdminatorApp')

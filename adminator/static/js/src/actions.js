@@ -61,5 +61,5 @@ export var MacHistoryActions = Reflux.createActions([
 ])
 
 export var SwitchInterfaceActions = Reflux.createActions([
-  'list'
+  'read', 'list'
 ])

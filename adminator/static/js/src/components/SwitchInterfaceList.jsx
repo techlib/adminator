@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as Reflux from 'reflux'
 import {SwitchInterfaceStore} from '../stores/SwitchInterface'
 import {SwitchInterfaceActions} from '../actions'
+import {Link} from 'react-router'
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
@@ -81,6 +82,16 @@ var SwitchInterfaceTimedeltaComponent = React.createClass({
     }
 })
 
+var SwitchInterfaceNameComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/swInterface/${this.props.rowData.uuid}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
 export var SwitchInterfaceList = React.createClass({
   mixins: [Reflux.connect(SwitchInterfaceStore, 'data')],
 
@@ -122,6 +133,7 @@ export var SwitchInterfaceList = React.createClass({
       {
         columnName: 'name',
         displayName: 'Interface',
+        customComponent: SwitchInterfaceNameComponent
       },
       {
         columnName: 'port_name',
