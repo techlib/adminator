@@ -133,8 +133,8 @@ class IFStatusAgent(object):
         return mapped_vals[1]
 
     def save_to_db(self, switch, data):
-        self.save_if_to_db(switch, data['interfaces'])
         sw_info = data['switch']
+        self.save_if_to_db(switch, data['interfaces'], sw_info['uptime'])
         switch.uptime = '{} seconds'.format(int(int(sw_info['uptime']) // 100))
         switch.sys_description = sw_info['description']
         switch.sys_objectID = sw_info['objectID']
@@ -162,11 +162,12 @@ class IFStatusAgent(object):
             vlan = None
         return vlan
 
-    def process_last_change(self, data):
+    def process_last_change(self, data, sw_uptime):
         last_change = int(data)
-        return None if last_change < 1 else '{} seconds'.format(last_change//100)
+        uptime = int(sw_uptime)
+        return None if last_change < 1 else '{} seconds'.format((uptime - last_change)//100)
 
-    def save_if_to_db(self, switch, data):
+    def save_if_to_db(self, switch, data, sw_uptime):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
         for key, val in data.items():
@@ -191,7 +192,7 @@ class IFStatusAgent(object):
             interface.speed = self.process_speed(val['Speed'])
             interface.vlan = self.process_vlan(val['Vlan'])
 
-            interface.last_change = self.process_last_change(val['LastChange'])
+            interface.last_change = self.process_last_change(val['LastChange'], sw_uptime)
 
             self.db.mac_address.filter_by(interface=interface.uuid).delete()
             if interface.ignore_macs is False:

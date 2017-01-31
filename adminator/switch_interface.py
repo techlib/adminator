@@ -86,6 +86,14 @@ class SwitchInterface(Model):
         switch = self.e(self.switch_table).get(interface.switch)
         item['switch'] = object_to_dict(switch)
 
+        if interface.port:
+            try:
+                port = self.e(self.port_table).filter_by(connect_to = interface.port).one()
+                item['port'] = object_to_dict(port)
+            except:
+                item['port'] = None
+
+
         ptrn_query = "SELECT {2}.name, {2}.style FROM {0}.{1}, {0}.{2} WHERE {1}.if_config_pattern = {2}.uuid and \
             {1}.interface = '{3}'".format(self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid)
         item['patterns'] = []
