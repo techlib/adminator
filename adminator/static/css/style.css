@@ -605,3 +605,13 @@ th:last-child .btn-group, td:last-child .btn-group {
 .label-link-status-unknown {
   background-color: #cccccc;
 }
+
+.td-overflowed {
+  max-width: 0
+}
+
+.div-overflowed {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

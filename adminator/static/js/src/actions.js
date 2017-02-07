@@ -63,3 +63,7 @@ export var MacHistoryActions = Reflux.createActions([
 export var SwitchInterfaceActions = Reflux.createActions([
   'read', 'list'
 ])
+
+export var ConfigPatternActions = Reflux.createActions([
+  'list'
+])
