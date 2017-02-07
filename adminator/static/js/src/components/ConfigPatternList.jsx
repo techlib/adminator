@@ -7,7 +7,6 @@ import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
-// import moment from 'moment'
 
 var EmptyTr = React.createClass({
   render() {
@@ -22,9 +21,34 @@ var ConfigPatternStyleComponent = React.createClass({
   }
 })
 
-var ConfigPatternArrayComponent = React.createClass({
+var ConfigPatternMandatoryComponent = React.createClass({
   render() {
-    return <div className='div-overflowed'>{this.props.data.join(', ')}</div>
+    return <div className='div-overflowed' key={'mandatory' + this.props.rowData.uuid}>
+      <OverlayTrigger placement="left" overlay=
+        <Tooltip id={'mandatory' + this.props.rowData.uuid}>
+          {this.props.data.map((item) => { return <span>{item}<br/></span> })}
+        </Tooltip>>
+        <code>
+          {this.props.data.join(', ')}
+        </code>
+      </OverlayTrigger>
+    </div>
+
+  }
+})
+
+var ConfigPatternOptimalComponent = React.createClass({
+  render() {
+    return <div className='div-overflowed' key={'optimal' + this.props.rowData.uuid}>
+      <OverlayTrigger placement="left" overlay=
+        <Tooltip id={'optimal' + this.props.rowData.uuid}>
+          {this.props.data.map((item) => { return <span>{item}<br/></span> })}
+        </Tooltip>>
+        <code>
+          {this.props.data.join(', ')}
+        </code>
+      </OverlayTrigger>
+    </div>
   }
 })
 
@@ -62,13 +86,13 @@ export var ConfigPatternList = React.createClass({
         columnName: 'mandatory',
         displayName: 'Mandatory',
         cssClassName: 'col-xs-6 td-overflowed',
-        customComponent: ConfigPatternArrayComponent
+        customComponent: ConfigPatternMandatoryComponent
       },
       {
         columnName: 'optimal',
         displayName: 'Optimal',
         cssClassName: 'col-xs-4 td-overflowed',
-        customComponent: ConfigPatternArrayComponent
+        customComponent: ConfigPatternOptimalComponent
       },
       {
         columnName: 'style',
