@@ -21,8 +21,8 @@ def process_value(val):
 class MacHistory(Model):
     def init(self):
         self.schema = 'topology'
-        # self.table_name = 'mac_history'
-        self.table_name = 'last_interface_for_mac_advance'
+        self.table_name = 'mac_history'
+        # self.table_name = 'last_interface_for_mac_advance'
         self.pkey = 'mac_address'
 
     def e(self, table_name=None):
