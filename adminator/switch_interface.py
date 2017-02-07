@@ -75,7 +75,7 @@ class SwitchInterface(Model):
             if len(data['patterns']) == 0:
                 data['patterns'].append(['Exotic','bad'])
             self.fill_link_status(data)
-            data['speed'] = self.link_speed_humanize(data['speed'])
+            data['speed_label'] = self.link_speed_humanize(data['speed'])
 
         return list(res.values())
 
@@ -122,7 +122,7 @@ class SwitchInterface(Model):
         if len(item['patterns']) == 0:
             item['patterns'].append(['Exotic','bad'])
         self.fill_link_status(item)
-        item['speed'] = self.link_speed_humanize(item['speed'])
+        item['speed_label'] = self.link_speed_humanize(item['speed'])
 
         return item
 

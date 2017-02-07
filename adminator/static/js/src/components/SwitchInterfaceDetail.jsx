@@ -47,6 +47,13 @@ var DeviceInterfacesComponent = React.createClass({
   }
 })
 
+var DeviceDateComponent = React.createClass({
+    render() {
+        var txt = moment.parseZone(this.props.data).format('YYYY-MM-DD HH:mm:ss')
+        return <span>{txt}</span>
+    }
+})
+
 export var SwitchInterfaceDetail = React.createClass({
   mixins: [Reflux.connect(SwitchInterfaceStore, 'data')],
 
@@ -126,18 +133,13 @@ export var SwitchInterfaceDetail = React.createClass({
   },
 
   renderConfig(config){
-    return <div className='row'>
-      <label className="control-label col-xs-4">Configuration:</label>
-      <div className="col-xs-12">
-        {config.map((item) => {return <div><code>{item}</code></div>})}
-      </div>
-    </div>
+    return <pre><code>{config.join('\n')}</code></pre>
   },
 
   renderInterface(sw_interface) {
     return <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 class="panel-title">Interface</h3>
+        <h3 className="panel-title">Interface</h3>
       </div>
       <div className="panel-body">
         <div className="form-horizontal">
@@ -151,7 +153,7 @@ export var SwitchInterfaceDetail = React.createClass({
           </div>
           <div className='row'>
             <label className="control-label col-xs-5">Link speed</label>
-            <div className="col-xs-7">{this.renderLinkSpeed(sw_interface.speed)}</div>
+            <div className="col-xs-7">{this.renderLinkSpeed(sw_interface.speed_label)}</div>
           </div>
           <div className='row'>
             <label className="control-label col-xs-5">Last link change</label>
@@ -178,9 +180,11 @@ export var SwitchInterfaceDetail = React.createClass({
             <div className="col-xs-7">{this.renderPatterns(sw_interface.patterns)}</div>
           </div>
         </div>
-      </div>
-      <div className="panel-footer">
-        {this.renderConfig(sw_interface.configuration)}
+        <hr></hr>
+        <div className='row'>
+          <label className="control-label col-xs-12">Configuration</label>
+          <div className="col-xs-12">{this.renderConfig(sw_interface.configuration)}</div>
+        </div>
       </div>
     </div>
   },
@@ -188,7 +192,7 @@ export var SwitchInterfaceDetail = React.createClass({
   renderSwitch(switch_data) {
     return <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 class="panel-title">Switch</h3>
+        <h3 className="panel-title">Switch</h3>
       </div>
       <div className="panel-body">
         <div className="form-horizontal">
@@ -222,8 +226,6 @@ export var SwitchInterfaceDetail = React.createClass({
           </div>
         </div>
       </div>
-      <div className="panel-footer">
-      </div>
     </div>
   },
 
@@ -244,6 +246,11 @@ export var SwitchInterfaceDetail = React.createClass({
         displayName: 'Owner',
       },
       {
+        columnName: 'time',
+        displayName: 'Detected',
+        customComponent: DeviceDateComponent
+      },
+      {
         columnName: 'c',
         displayName: '',
         customComponent: EmptyTr
@@ -262,6 +269,7 @@ export var SwitchInterfaceDetail = React.createClass({
         'mac_address',
         'dev_desc',
         'display_name',
+        'time',
         'c'
       ]}
       resultsPerPage='10'
@@ -271,27 +279,17 @@ export var SwitchInterfaceDetail = React.createClass({
     />
   },
 
-  renderRelatedMACS2(last_if_for_mac, last_mac_on_if) {
-    return <div className="col-xs-12 col-md-4">
-      <div>
-        <div className="row">
-          <h1>Last interface for MAC</h1>
-        </div>
-        {this.renderMacList(last_if_for_mac)}
-      </div>
-    </div>
-  },
   renderRelatedMACS(last_if_for_mac, last_mac_on_if) {
     return <div>
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 class="panel-title">Last interface for MACs</h3>
+          <h3 className="panel-title">Last interface for MACs</h3>
         </div>
         {this.renderMacList(last_if_for_mac)}
       </div>
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 class="panel-title">Last MACs on interface</h3>
+          <h3 className="panel-title">Last MACs on interface</h3>
         </div>
         {this.renderMacList(last_mac_on_if)}
       </div>

@@ -30,11 +30,11 @@ export var SwitchInterfaceLinkStatusComponent = React.createClass({
 
 export var SwitchInterfaceSpeedComponent = React.createClass({
   render() {
-    if(this.props.data == null) {
+    if(this.props.rowData.speed_label == null) {
       return null
     }
-    var className = 'label label-link-speed-' + this.props.data.toLowerCase()
-    return <span className={className}>{this.props.data}</span>
+    var className = 'label label-link-speed-' + this.props.rowData.speed_label.toLowerCase()
+    return <span className={className}>{this.props.rowData.speed_label}</span>
   }
 })
 
