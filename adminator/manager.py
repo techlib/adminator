@@ -24,6 +24,7 @@ from adminator.connection import Connection
 from adminator.switch import Switch
 from adminator.mac_history import MacHistory
 from adminator.switch_interface import SwitchInterface
+from adminator.config_pattern import ConfigPatttern
 
 
 class Manager(object):
@@ -51,6 +52,7 @@ class Manager(object):
         self.switch = Switch(self)
         self.mac_history = MacHistory(self)
         self.switch_interface = SwitchInterface(self)
+        self.config_pattern = ConfigPatttern(self)
 
 
 # vim:set sw=4 ts=4 et:

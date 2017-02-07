@@ -387,6 +387,19 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.switch_interface.get_item(uuid))
 
+    @app.route('/config_pattern/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.config_pattern.list())
+
+    @app.route('/config_pattern/<uuid>', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.get_item(uuid))
+
+
     return app
 
 # vim:set sw=4 ts=4 et:
