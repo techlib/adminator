@@ -27,7 +27,9 @@ export var ConfigPatternOptions = React.createClass({
   },
 
   getValues() {
-    return this.state.options.map((item) => {return this.refs[item.id].value})
+    var data = this.state.options.map((item) => {return this.refs[item.id].value})
+    // remoce null, '', etc
+    return data.filter((item) => {return item})
   },
 
   render() {

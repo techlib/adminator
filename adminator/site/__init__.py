@@ -387,17 +387,25 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.switch_interface.get_item(uuid))
 
-    @app.route('/config_pattern/', methods=['GET'])
+    @app.route('/config_pattern/', methods=['GET', 'POST'])
     @authorized_only(privilege='user')
     def config_pattern_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.config_pattern.list())
+        if 'POST' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.insert(flask.request.get_json(force=True)))
 
-    @app.route('/config_pattern/<uuid>', methods=['GET'])
+    @app.route('/config_pattern/<uuid>', methods=['GET', 'PUT', 'DELETE'])
     @authorized_only(privilege='user')
     def config_pattern_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.config_pattern.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.delete(uuid))
+        if 'PUT' == flask.request.method:
+            pattern = flask.request.get_json(force=True)
+            pattern['uuid'] = uuid
+            return flask.jsonify(manager.config_pattern.update(pattern))
 
 
     return app

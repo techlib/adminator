@@ -22,8 +22,9 @@ import {TopologyList} from './TopologyList'
 import {MacHistoryList} from './MacHistoryList'
 import {SwitchInterfaceList} from './SwitchInterfaceList'
 import {SwitchInterfaceDetail} from './SwitchInterfaceDetail'
-import {ConfigPatternList} from './ConfigPatternList'
-import {ConfigPatternDetail} from './ConfigPatternDetail'
+import {ConfigPatternList} from './ConfigPattern/ConfigPatternList'
+import {ConfigPatternNew} from './ConfigPattern/ConfigPatternNew'
+import {ConfigPatternDetail} from './ConfigPattern/ConfigPatternDetail'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -53,6 +54,7 @@ ReactDOM.render((
         <Route path="/swInterface/" component={SwitchInterfaceList} />
         <Route path="/swInterface/:id" component={SwitchInterfaceDetail} />
         <Route path="/cfgPattern/" component={ConfigPatternList} />
+        <Route path="/cfgPattern/new" component={ConfigPatternNew} />
         <Route path="/cfgPattern/:id" component={ConfigPatternDetail} />
     </Route>
   </Router>

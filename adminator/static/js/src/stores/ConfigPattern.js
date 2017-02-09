@@ -18,6 +18,43 @@ export var ConfigPatternStore = Reflux.createStore({
     })
   },
 
+  onUpdate(pattern) {
+    $.ajax({
+      url: `/config_pattern/${pattern.uuid}`,
+      method: 'PUT',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(pattern)
+    })
+  },
+
+  onDelete(id) {
+    var _this = this
+    $.ajax({
+      url: `/config_pattern/${id}`,
+      method: 'DELETE',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: () => {
+        _this.onList()
+      }
+    })
+  },
+
+  onCreate(pattern) {
+    var _this = this
+    $.ajax({
+      url: '/config_pattern/',
+      method: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(pattern),
+      success: () => {
+        _this.onList()
+      }
+    })
+  },
+
   onList() {
     $.ajax({url: '/config_pattern/', success: result => {
       this.data.errors = []

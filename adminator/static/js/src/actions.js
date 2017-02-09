@@ -65,5 +65,5 @@ export var SwitchInterfaceActions = Reflux.createActions([
 ])
 
 export var ConfigPatternActions = Reflux.createActions([
-  'read', 'list'
+  'create', 'read', 'update', 'delete', 'list'
 ])

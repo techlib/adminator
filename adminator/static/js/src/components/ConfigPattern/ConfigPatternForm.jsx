@@ -12,6 +12,10 @@ export var ConfigPatternForm = React.createClass({
     return {'name': '', 'style': ''}
   },
 
+  getValues() {
+    return this.state
+  },
+
   handleChange(evt) {
     this.state[evt.target.name] = evt.target.value
     this.setState(this.state)
@@ -61,6 +65,8 @@ export var ConfigPatternForm = React.createClass({
         </div>
       </div>
       <div className="panel-footer">
+        <button onClick={this.props.saveHandler}
+                className="btn btn-primary">Save</button>
       </div>
     </div>
   }

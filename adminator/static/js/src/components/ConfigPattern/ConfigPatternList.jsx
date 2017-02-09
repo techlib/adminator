@@ -1,18 +1,36 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
-import {ConfigPatternStore} from '../stores/ConfigPattern'
-import {ConfigPatternActions} from '../actions'
+import {ConfigPatternStore} from '../../stores/ConfigPattern'
+import {ConfigPatternActions} from '../../actions'
+import {ModalConfirmMixin} from '../ModalConfirmMixin'
 import {Link} from 'react-router'
-import {OverlayTrigger, Tooltip} from 'react-bootstrap'
+import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
-import {Pager} from './Pager'
-import {regexGridFilter} from '../util/griddle-components'
+import {Pager} from './../Pager'
+import {regexGridFilter} from '../../util/griddle-components'
 
-var EmptyTr = React.createClass({
+var ConfigPatternActionsComponent = React.createClass({
+
+    mixins: [ModalConfirmMixin],
+
+  deleteConfigPattern() {
+    var name = this.props.rowData.name
+    this.modalConfirm(
+      'Confirm delete', `Delete pattern ${name}?`, {'confirmLabel': 'DELETE', 'confirmClass': 'danger'}
+    ).then(() => { ConfigPatternActions.delete(this.props.rowData.uuid)})
+  },
+
   render() {
-    return null
+    return <ButtonGroup>
+      <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Delete</Tooltip>>
+        <Button bsStyle='danger' onClick={this.deleteConfigPattern}>
+          <i className="fa fa-trash-o"></i>
+        </Button>
+      </OverlayTrigger>
+    </ButtonGroup>
   }
 })
+
 
 var ConfigPatternStyleComponent = React.createClass({
   render() {
@@ -54,11 +72,9 @@ var ConfigPatternOptimalComponent = React.createClass({
 
 var ConfigPatternNameComponent = React.createClass({
   render() {
-    return (
-      <Link to={`/cfgPattern/${this.props.rowData.uuid}`}>
-        {this.props.data}
-      </Link>
-    )
+    return <Link to={`/cfgPattern/${this.props.rowData.uuid}`}>
+      {this.props.data}
+    </Link>
   }
 })
 
@@ -72,7 +88,6 @@ export var ConfigPatternList = React.createClass({
   getInitialState() {
     return {data: {list: []}}
   },
-
 
   render() {
     var columnMeta = [
@@ -103,38 +118,41 @@ export var ConfigPatternList = React.createClass({
       {
         columnName: 'c',
         displayName: '',
-        customComponent: EmptyTr
+        customComponent: ConfigPatternActionsComponent
       }
     ]
 
-    return (
-        <div className='container-fluid col-xs-12'>
-            <div className="row">
-                <div className="col-xs-12 col-sm-10">
-                    <h1>Interface configuration patterns</h1>
-                </div>
-            </div>
-            <Griddle results={this.state.data.list}
-                     tableClassName='table table-bordered table-striped table-hover'
-                     useGriddleStyles={false}
-                     showFilter={true}
-                     useCustomPagerComponent='true'
-                     customPagerComponent={Pager}
-                     sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
-                     sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-                     columns={[
-                      'name',
-                      'style',
-                      'mandatory',
-                      'optimal',
-                      'c'
-                     ]}
-                     resultsPerPage='20'
-                     customFilterer={regexGridFilter}
-                     useCustomFilterer='true'
-                     columnMetadata={columnMeta}
-                     />
-          </div>
-    )
+    return <div className='container-fluid col-xs-12'>
+      <div className="row">
+        <div className="col-xs-12 col-sm-10">
+          <h1>Interface configuration patterns</h1>
+        </div>
+        <div className="col-xs-12 col-sm-2 h1 text-right">
+          <Link className='btn btn-success' to="/cfgPattern/new">
+            <i className='fa fa-plus'></i> New pattern
+          </Link>
+        </div>
+      </div>
+      <Griddle results={this.state.data.list}
+               tableClassName='table table-bordered table-striped table-hover'
+               useGriddleStyles={false}
+               showFilter={true}
+               useCustomPagerComponent='true'
+               customPagerComponent={Pager}
+               sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
+               sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
+               columns={[
+                'name',
+                'style',
+                'mandatory',
+                'optimal',
+                'c'
+               ]}
+               resultsPerPage='20'
+               customFilterer={regexGridFilter}
+               useCustomFilterer='true'
+               columnMetadata={columnMeta}
+               />
+    </div>
   }
 })
