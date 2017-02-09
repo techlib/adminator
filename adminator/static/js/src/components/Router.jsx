@@ -23,6 +23,7 @@ import {MacHistoryList} from './MacHistoryList'
 import {SwitchInterfaceList} from './SwitchInterfaceList'
 import {SwitchInterfaceDetail} from './SwitchInterfaceDetail'
 import {ConfigPatternList} from './ConfigPatternList'
+import {ConfigPatternDetail} from './ConfigPatternDetail'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -52,6 +53,7 @@ ReactDOM.render((
         <Route path="/swInterface/" component={SwitchInterfaceList} />
         <Route path="/swInterface/:id" component={SwitchInterfaceDetail} />
         <Route path="/cfgPattern/" component={ConfigPatternList} />
+        <Route path="/cfgPattern/:id" component={ConfigPatternDetail} />
     </Route>
   </Router>
  ), document.getElementById('AdminatorApp')

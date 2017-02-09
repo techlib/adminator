@@ -2,61 +2,27 @@
 
 import * as Reflux from 'reflux'
 import {ConfigPatternActions} from '../actions'
+import {ErrorMixin} from './Mixins'
 
 export var ConfigPatternStore = Reflux.createStore({
+  mixins: [ErrorMixin],
   listenables: [ConfigPatternActions],
-  data: {'pattern': [], 'list': []},
+  data: {'pattern': {}, 'list': []},
 
-  // onRead(id) {
-  //   $.ajax({url: `/record/${id}`, success: result => {
-  //       this.data['record'] = result
-  //       this.trigger(this.data)
-  //     }
-  //   })
-  // },
-  //
-  // onDelete(id) {
-  //   var _this = this
-  //   $.ajax({
-  //     url: `/record/${id}`,
-  //     method: 'DELETE',
-  //     dataType: 'json',
-  //     contentType: 'application/json',
-  //     success: () => {
-  //       _this.onList()
-  //     }
-  //   })
-  // },
-  //
-  //
-  // onUpdate(record) {
-  //   $.ajax({
-  //     url: `/record/${record.id}`,
-  //     method: 'PUT',
-  //     dataType: 'json',
-  //     contentType: 'application/json',
-  //     data: JSON.stringify(record)
-  //   })
-  // },
-  //
-  // onCreate(record) {
-  //   var _this = this
-  //   $.ajax({
-  //     url: '/record/',
-  //     method: 'POST',
-  //     dataType: 'json',
-  //     contentType: 'application/json',
-  //     data: JSON.stringify(record),
-  //     success: () => {
-  //       _this.onList()
-  //     }
-  //   })
-  // },
+  onRead(id) {
+    $.ajax({url: `/config_pattern/${id}`, success: result => {
+      this.data.errors = []
+      this.data.pattern = result
+      this.trigger(this.data)
+      }
+    })
+  },
 
   onList() {
     $.ajax({url: '/config_pattern/', success: result => {
-        this.data['list'] = result.result
-        this.trigger(this.data)
+      this.data.errors = []
+      this.data.list = result.result
+      this.trigger(this.data)
       }
     })
   }
