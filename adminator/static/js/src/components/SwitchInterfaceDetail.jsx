@@ -91,8 +91,16 @@ export var SwitchInterfaceDetail = React.createClass({
   renderPatterns(patterns) {
     return <div>
       {patterns.map((item) => {
-        var className = 'label label-ifpattern-' + item[1].toLowerCase()
-        return <span><span className={className}>{item[0]}</span>&nbsp;</span>
+        var className = 'label label-ifpattern-' + item.style.toLowerCase()
+        if (item.uuid) {
+          return <span>
+            <Link to={`/cfgPattern/${item.uuid}`}>
+              <span className={className}>{item.name}</span>
+            </Link>
+            &nbsp;
+          </span>
+        }
+        return <span><span className={className}>{item.name}</span>&nbsp;</span>
       })}
     </div>
   },

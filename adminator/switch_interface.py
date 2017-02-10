@@ -65,15 +65,17 @@ class SwitchInterface(Model):
             row['patterns'] = []
             res[row[self.pkey].int] = row
 
-        query2 ='SELECT {1}.interface, {2}.name, {2}.style FROM {0}.{1}, {0}.{2} \
+        query2 ='SELECT {1}.interface, {2}.name, {2}.style, {2}.uuid FROM {0}.{1}, {0}.{2} \
                 WHERE {1}.if_config_pattern = {2}.uuid'.format(self.schema, self.if_to_pat_table, self.pattern_table)
         for pattern in self.db.execute(query2).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
-            res[row['interface'].int]['patterns'].append([row['name'], row['style']])
+            interface = row.pop('interface')
+            res[interface.int]['patterns'].append(row)
 
         for key, data in res.items():
             if len(data['patterns']) == 0:
-                data['patterns'].append(['Exotic','bad'])
+                # data['patterns'].append(['Exotic','bad'])
+                data['patterns'].append({'name': 'Exotic', 'style': 'bad', 'uuid': None})
             self.fill_link_status(data)
             data['speed_label'] = self.link_speed_humanize(data['speed'])
 
@@ -94,12 +96,20 @@ class SwitchInterface(Model):
                 item['port'] = None
 
 
-        ptrn_query = "SELECT {2}.name, {2}.style FROM {0}.{1}, {0}.{2} WHERE {1}.if_config_pattern = {2}.uuid and \
-            {1}.interface = '{3}'".format(self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid)
+        ptrn_query = "SELECT {2}.name, {2}.style, {2}.uuid FROM {0}.{1}, {0}.{2} \
+            WHERE {1}.if_config_pattern = {2}.uuid and {1}.interface = '{3}'".format(
+                self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid
+            )
         item['patterns'] = []
         for pattern in self.db.execute(ptrn_query).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
-            item['patterns'].append([row['name'], row['style']])
+            item['patterns'].append(row)
+            # item['patterns'].append([row['name'], row['style']])
+
+        if len(item['patterns']) == 0:
+            # item['patterns'].append(['Exotic','bad'])
+            item['patterns'].append({'name': 'Exotic', 'style': 'bad', 'uuid': None})
+
 
         mac1_query = "SELECT * FROM {0}.{1} where sw_if_uuid = '{2}'".format(
             self.schema, self.last_interface_for_mac_advance, interface.uuid)
@@ -119,8 +129,6 @@ class SwitchInterface(Model):
                 row[col] = process_value(row[col])
             item['last_macs_on_interface'].append(row)
 
-        if len(item['patterns']) == 0:
-            item['patterns'].append(['Exotic','bad'])
         self.fill_link_status(item)
         item['speed_label'] = self.link_speed_humanize(item['speed'])
 
