@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as Reflux from 'reflux'
 import {ConfigPatternOptions} from './ConfigPatternOptions'
 import {ConfigPatternForm} from './ConfigPatternForm'
+import {Feedback} from '../Feedback'
 
 export var ConfigPattern = React.createClass({
   getInitialState() {
@@ -23,6 +24,7 @@ export var ConfigPattern = React.createClass({
   render() {
     return <div className='container-fluid'>
       <h1>{this.state.pattern.name}</h1>
+      <Feedback />
       <div className="row">
         <div className="col-xs-12 col-md-2">
           <ConfigPatternForm ref="basic"

@@ -8,6 +8,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
+import {Feedback} from '../Feedback'
 
 var ConfigPatternActionsComponent = React.createClass({
 
@@ -133,6 +134,7 @@ export var ConfigPatternList = React.createClass({
           </Link>
         </div>
       </div>
+      <Feedback />
       <Griddle results={this.state.data.list}
                tableClassName='table table-bordered table-striped table-hover'
                useGriddleStyles={false}

@@ -1,8 +1,9 @@
 'use strict'
 
 import * as Reflux from 'reflux'
-import {ConfigPatternActions} from '../actions'
+import {ConfigPatternActions, FeedbackActions} from '../actions'
 import {ErrorMixin} from './Mixins'
+import {hashHistory as BrowserHistory} from 'react-router'
 
 export var ConfigPatternStore = Reflux.createStore({
   mixins: [ErrorMixin],
@@ -14,6 +15,9 @@ export var ConfigPatternStore = Reflux.createStore({
       this.data.errors = []
       this.data.pattern = result
       this.trigger(this.data)
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -24,19 +28,29 @@ export var ConfigPatternStore = Reflux.createStore({
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(pattern)
+      data: JSON.stringify(pattern),
+      success: function success() {
+        BrowserHistory.push('/cfgPattern/')
+        FeedbackActions.set('success', 'Pattern updated')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
+      }
     })
   },
 
   onDelete(id) {
-    var _this = this
     $.ajax({
       url: `/config_pattern/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
       success: () => {
-        _this.onList()
+        BrowserHistory.push('/cfgPattern/')
+        FeedbackActions.set('success', 'Pattern deleted')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -49,8 +63,12 @@ export var ConfigPatternStore = Reflux.createStore({
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(pattern),
-      success: () => {
-        _this.onList()
+      success: function success(result) {
+        BrowserHistory.push('/cfgPattern/' + result.uuid)
+        FeedbackActions.set('success', 'Pattern created')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
