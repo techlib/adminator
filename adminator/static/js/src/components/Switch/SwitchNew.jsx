@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {SwitchActions} from '../../actions'
 import {SwitchForm} from './SwitchForm'
+import {Feedback} from '../Feedback'
 
 export var SwitchNew = React.createClass({
 
@@ -15,6 +16,7 @@ export var SwitchNew = React.createClass({
   render() {
     return <div className='container-fluid'>
       <h1>{this.state.switch.name}</h1>
+      <Feedback />
       <div className="row">
         <div className="col-xs-12 col-md-3"></div>
         <div className="col-xs-12 col-md-6">

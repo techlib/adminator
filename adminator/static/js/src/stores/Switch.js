@@ -1,8 +1,9 @@
 'use strict'
 
 import * as Reflux from 'reflux'
-import {SwitchActions} from '../actions'
+import {SwitchActions, FeedbackActions} from '../actions'
 import {ErrorMixin} from './Mixins'
+import {hashHistory as BrowserHistory} from 'react-router'
 
 export var SwitchStore = Reflux.createStore({
   mixins: [ErrorMixin],
@@ -14,6 +15,9 @@ export var SwitchStore = Reflux.createStore({
       this.data.errors = []
       this.data.switch = result
       this.trigger(this.data)
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
@@ -24,33 +28,46 @@ export var SwitchStore = Reflux.createStore({
       method: 'PUT',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(switch_data)
+      data: JSON.stringify(switch_data),
+      success: function success() {
+        BrowserHistory.push('/switch/')
+        FeedbackActions.set('success', 'Switch updated')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
+      }
     })
   },
 
   onDelete(id) {
-    var _this = this
     $.ajax({
       url: `/switch/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
       success: () => {
-        _this.onList()
+        BrowserHistory.push('/switch/')
+        FeedbackActions.set('success', 'Switch deleted')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },
 
   onCreate(switch_data) {
-    var _this = this
     $.ajax({
       url: '/switch/',
       method: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(switch_data),
-      success: () => {
-        _this.onList()
+      success: function success(result) {
+        BrowserHistory.push('/switch/' + result.uuid)
+        FeedbackActions.set('success', 'Switch created')
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
       }
     })
   },

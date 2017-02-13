@@ -10,6 +10,7 @@ import Griddle from 'griddle-react'
 import {Pager} from '../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
 import moment from 'moment'
+import {Feedback} from '../Feedback'
 
 var EmptyTr = React.createClass({
   render() {
@@ -140,6 +141,7 @@ export var SwitchDetail = React.createClass({
     ]
     return <div className='container-fluid'>
       <h1>{this.state.data.switch.name}</h1>
+      <Feedback />
       <div className="row">
         <div className="col-xs-12 col-md-6">
           <SwitchForm ref="configurable"
