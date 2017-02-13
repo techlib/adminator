@@ -102,6 +102,16 @@ var SwitchInterfaceNameComponent = React.createClass({
   }
 })
 
+var SwitchInterfaceSwitchComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/switch/${this.props.rowData.switch}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
 export var SwitchInterfaceList = React.createClass({
   mixins: [Reflux.connect(SwitchInterfaceStore, 'data')],
 
@@ -138,6 +148,7 @@ export var SwitchInterfaceList = React.createClass({
       {
       columnName: 'sw_name',
       displayName: 'Switch name',
+      customComponent: SwitchInterfaceSwitchComponent
       },
       {
         columnName: 'name',

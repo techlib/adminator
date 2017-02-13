@@ -209,7 +209,11 @@ export var SwitchInterfaceDetail = React.createClass({
         <div className="form-horizontal">
           <div className='row'>
             <label className="control-label col-xs-5">Name</label>
-            <div className="col-xs-7">{switch_data.name}</div>
+            <div className="col-xs-7">
+              <Link to={`/switch/${switch_data.uuid}`}>
+                {switch_data.name}
+              </Link>
+            </div>
           </div>
           <div className='row'>
             <label className="control-label col-xs-5">System name</label>
