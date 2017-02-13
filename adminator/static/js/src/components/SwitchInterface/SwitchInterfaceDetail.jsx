@@ -1,15 +1,15 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
-import {SwitchInterfaceStore} from '../stores/SwitchInterface'
-import {SwitchInterfaceActions} from '../actions'
+import {SwitchInterfaceStore} from '../../stores/SwitchInterface'
+import {SwitchInterfaceActions} from '../../actions'
 import {Link} from 'react-router'
 import {Input} from 'react-bootstrap'
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
-import {Pager} from './Pager'
-import {regexGridFilter} from '../util/griddle-components'
+import {Pager} from '../Pager'
+import {regexGridFilter} from '../../util/griddle-components'
 import moment from 'moment'
-import {Feedback} from './Feedback'
+import {Feedback} from '../Feedback'
 
 var EmptyTr = React.createClass({
   render() {
