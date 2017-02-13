@@ -226,16 +226,17 @@ class IFStatusAgent(object):
                         self.db.last_interface_for_mac.insert(mac_address=mac, interface=interface.uuid, time=update_time)
         self.db.commit()
 
-    def parallel_update(self, switch, snmp_profile, output):
+    # def parallel_update(self, switch, snmp_profile, output):
+    def parallel_update(self, switch, output):
         start = time.time()
         try:
             output[switch.uuid]['switch'] = self.get_switch_status(
-                switch.ip_address, snmp_profile.version,
-                snmp_profile.community, snmp_profile.timeout
+                switch.ip_address, switch.snmp_version,
+                switch.snmp_community, switch.snmp_timeout
             )
             output[switch.uuid]['interfaces'] = self.get_interfaces(
-                switch.ip_address, snmp_profile.version,
-                snmp_profile.community, snmp_profile.timeout
+                switch.ip_address, switch.snmp_version,
+                switch.snmp_community, switch.snmp_timeout
             )
         except Exception as e:
             log.msg(('Error while getting data from {}({}), {}'.format(switch.name, switch.ip_address, e)))
@@ -249,8 +250,9 @@ class IFStatusAgent(object):
         data = {}
         for switch in self.db.switch.filter_by(enable=True).all():
             data[switch.uuid] = {'switch': None, 'interfaces': None}
-            snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
-            t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
+            # snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
+            # t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
+            t = threading.Thread(target=self.parallel_update, args=(switch, data))
             t.start()
             threads.append(t)
 
