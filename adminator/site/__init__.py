@@ -351,17 +351,26 @@ def make_site(db, manager, access_model, debug=False):
     #     if 'GET' == flask.request.method:
     #         return flask.jsonify(manager.connection.get_item(uuid))
 
-    @app.route('/switch/', methods=['GET'])
+    @app.route('/switch/', methods=['GET', 'POST'])
     @authorized_only(privilege='user')
     def switch_handler():
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.switch.list())
+        if 'POST' == flask.request.method:
+            print(flask.request.get_json(force=True))
+            return flask.jsonify(manager.switch.insert(flask.request.get_json(force=True)))
 
-    @app.route('/switch/<uuid>', methods=['GET'])
+    @app.route('/switch/<uuid>', methods=['GET', 'PUT', 'DELETE'])
     @authorized_only(privilege='user')
     def switch_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.switch.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.switch.delete(uuid))
+        if 'PUT' == flask.request.method:
+            switch = flask.request.get_json(force=True)
+            switch['uuid'] = uuid
+            return flask.jsonify(manager.switch.update(switch))
 
     @app.route('/mac_history/', methods=['GET'])
     @authorized_only(privilege='user')

@@ -25,6 +25,9 @@ import {SwitchInterfaceDetail} from './SwitchInterfaceDetail'
 import {ConfigPatternList} from './ConfigPattern/ConfigPatternList'
 import {ConfigPatternNew} from './ConfigPattern/ConfigPatternNew'
 import {ConfigPatternDetail} from './ConfigPattern/ConfigPatternDetail'
+import {SwitchList} from './Switch/SwitchList'
+import {SwitchNew} from './Switch/SwitchNew'
+import {SwitchDetail} from './Switch/SwitchDetail'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -56,6 +59,9 @@ ReactDOM.render((
         <Route path="/cfgPattern/" component={ConfigPatternList} />
         <Route path="/cfgPattern/new" component={ConfigPatternNew} />
         <Route path="/cfgPattern/:id" component={ConfigPatternDetail} />
+        <Route path="/switch/" component={SwitchList} />
+        <Route path="/switch/new" component={SwitchNew} />
+        <Route path="/switch/:id" component={SwitchDetail} />
     </Route>
   </Router>
  ), document.getElementById('AdminatorApp')

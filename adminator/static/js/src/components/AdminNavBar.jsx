@@ -89,6 +89,14 @@ export var AdminNavBar = React.createClass({
         )
     }
 
+    if (UserInfoStore.isAllowed('switch')) {
+        res.push(
+            <LinkContainer to='/switch/' key='switch'>
+                <NavItem eventKey={2}>Switches</NavItem>
+            </LinkContainer>
+        )
+    }
+
     return res
   },
 
