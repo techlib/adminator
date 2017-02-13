@@ -3,11 +3,13 @@ import * as Reflux from 'reflux'
 import {SwitchInterfaceStore} from '../stores/SwitchInterface'
 import {SwitchInterfaceActions} from '../actions'
 import {Link} from 'react-router'
+import {Input} from 'react-bootstrap'
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
+import {Feedback} from './Feedback'
 
 var EmptyTr = React.createClass({
   render() {
@@ -81,6 +83,20 @@ export var SwitchInterfaceDetail = React.createClass({
     return <span className={className}>{link_status}</span>
   },
 
+  changeInterfaceHandler(evt) {
+    var target = evt.target
+    this.state.data.interface[target.name] = target.name === 'ignore_macs' ? !target.checked : target.value
+    this.setState(this.state)
+  },
+
+  saveHandler() {
+    var data = {
+      'uuid': this.state.data.interface.uuid,
+      'ignore_macs': this.state.data.interface.ignore_macs,
+    }
+    SwitchInterfaceActions.update(data)
+  },
+
   renderLinkSpeed(speed) {
     if(speed == null) {
       return null
@@ -148,6 +164,7 @@ export var SwitchInterfaceDetail = React.createClass({
   },
 
   renderInterface(sw_interface) {
+    var checkbox_margine = {'margin-left': '0px'}
     return <div className="panel panel-default">
       <div className="panel-heading">
         <h3 className="panel-title">Interface</h3>
@@ -175,10 +192,6 @@ export var SwitchInterfaceDetail = React.createClass({
             <div className="col-xs-7">{sw_interface.vlan}</div>
           </div>
           <div className='row'>
-            <label className="control-label col-xs-5">MAC detectin</label>
-            <div className="col-xs-7">{this.renderBoolIcon(!sw_interface.ignore_macs)}</div>
-          </div>
-          <div className='row'>
             <label className="control-label col-xs-5">Last update</label>
             <div className="col-xs-7">{this.renderDate(sw_interface.switch.last_update)}</div>
           </div>
@@ -190,12 +203,26 @@ export var SwitchInterfaceDetail = React.createClass({
             <label className="control-label col-xs-5">Config patterns</label>
             <div className="col-xs-7">{this.renderPatterns(sw_interface.patterns)}</div>
           </div>
+          <div className='row'>
+            <label className="control-label col-xs-5">MAC detection</label>
+            <div className="col-xs-7">
+              <Input type="checkbox"
+                style={checkbox_margine}
+                onChange={this.changeInterfaceHandler}
+                checked={!sw_interface.ignore_macs}
+                name='ignore_macs' />
+            </div>
+          </div>
         </div>
         <hr></hr>
         <div className='row'>
           <label className="control-label col-xs-12">Configuration</label>
           <div className="col-xs-12">{this.renderConfig(sw_interface.configuration)}</div>
         </div>
+      </div>
+      <div className="panel-footer">
+        <button onClick={this.saveHandler}
+                className="btn btn-primary">Save</button>
       </div>
     </div>
   },
@@ -315,6 +342,7 @@ export var SwitchInterfaceDetail = React.createClass({
     return (
         <div className='container-fluid'>
           <h1>{this.state.data.interface.switch.name + " " + this.state.data.interface.name}</h1>
+          <Feedback />
           <div className="row">
             <div className="col-xs-12 col-md-4">
               {this.renderInterface(this.state.data.interface)}

@@ -8,6 +8,7 @@ import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
+import {Feedback} from './Feedback'
 
 var EmptyTr = React.createClass({
   render() {
@@ -183,6 +184,7 @@ export var SwitchInterfaceList = React.createClass({
                     <h1>SwitchInterface</h1>
                 </div>
             </div>
+            <Feedback />
             <Griddle results={this.state.data.list}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}

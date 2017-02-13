@@ -390,11 +390,15 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.switch_interface.list())
 
-    @app.route('/switch_interface/<uuid>', methods=['GET'])
+    @app.route('/switch_interface/<uuid>', methods=['GET', 'PUT'])
     @authorized_only(privilege='user')
     def switch_interface_item_handler(uuid):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.switch_interface.get_item(uuid))
+        if 'PUT' == flask.request.method:
+            interface = flask.request.get_json(force=True)
+            interface['uuid'] = uuid
+            return flask.jsonify(manager.switch_interface.update(interface))
 
     @app.route('/config_pattern/', methods=['GET', 'POST'])
     @authorized_only(privilege='user')
