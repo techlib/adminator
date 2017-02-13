@@ -131,7 +131,9 @@ export var SwitchInterfaceDetail = React.createClass({
       <div key={tooltip_key}>
         <OverlayTrigger placement="right" overlay=
           <Tooltip id={tooltip_key}>
-            {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + (suffix ? ' ago' : '')}
+            {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + (suffix ? ' ago' : '')} <br/>
+            Value may be overflowed <br/>
+            Max value 497 days
           </Tooltip>>
           <code>
             {txt}

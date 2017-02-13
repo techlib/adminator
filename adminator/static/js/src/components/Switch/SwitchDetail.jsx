@@ -4,6 +4,85 @@ import {SwitchStore} from '../../stores/Switch'
 import {SwitchActions} from '../../actions'
 import {SwitchForm} from './SwitchForm'
 import {SwitchDetected} from './SwitchDetected'
+import {Link} from 'react-router'
+import {OverlayTrigger, Tooltip} from 'react-bootstrap'
+import Griddle from 'griddle-react'
+import {Pager} from '../Pager'
+import {regexGridFilter} from '../../util/griddle-components'
+import moment from 'moment'
+
+var EmptyTr = React.createClass({
+  render() {
+    return null
+  }
+})
+
+var SwitchInterfaceLinkStatusComponent = React.createClass({
+  render() {
+    var styles = {
+      'Adm. down': 'admdown',
+      'Down': 'down',
+      'Up': 'up',
+      'Unknown': 'unknown',
+    }
+    var className = 'label label-link-status-' + styles[this.props.data]
+    return <span className={className}>{this.props.data}</span>
+  }
+})
+
+var SwitchInterfaceSpeedComponent = React.createClass({
+  render() {
+    if(this.props.rowData.speed_label == null) {
+      return null
+    }
+    var className = 'label label-link-speed-' + this.props.rowData.speed_label.toLowerCase()
+    return <span className={className}>{this.props.rowData.speed_label}</span>
+  }
+})
+
+var SwitchInterfaceTimedeltaComponent = React.createClass({
+    render() {
+      if(this.props.data == null) return null
+      var duration = moment.duration(this.props.data, 's')
+      var txt = moment.duration(-1 * this.props.data, 's').humanize(true)
+      var d_seconds = ("0" + duration.seconds()).slice(-2)
+      var d_minutes = ("0" + duration.minutes()).slice(-2)
+      var d_hours = ("0" + duration.hours()).slice(-2)
+      var d_days = duration.asDays() < 1 ? '' : Math.floor(duration.asDays())
+      if (d_days != '') d_days += d_days > 1 ? ' days ' : ' day '
+      return <div>
+        <div key={this.props.rowData.uuid}>
+          <OverlayTrigger placement="right" overlay=
+            <Tooltip id={this.props.rowData.uuid}>
+              {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + ' ago'} <br/>
+              Value may be overflowed <br/>
+              Max value 497 days
+            </Tooltip>>
+            <code>
+              {txt}
+            </code>
+          </OverlayTrigger>
+        </div>
+      </div>
+    }
+})
+
+var SwitchInterfaceNameComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/swInterface/${this.props.rowData.uuid}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
+var SwitchInterfaceMACDetectComponent = React.createClass({
+  render() {
+    var className = 'glyphicon glyphicon-' + (!this.props.data ? 'ok text-success' : 'remove text-danger')
+    return <span className={className}></span>
+  }
+})
 
 export var SwitchDetail = React.createClass({
   mixins: [Reflux.connect(SwitchStore, 'data')],
@@ -23,6 +102,42 @@ export var SwitchDetail = React.createClass({
   },
 
   render() {
+    var columnMeta = [
+      {
+        columnName: 'c',
+        displayName: '',
+        customComponent: EmptyTr
+      },
+      {
+        columnName: 'link_status',
+        displayName: 'Link',
+        customComponent: SwitchInterfaceLinkStatusComponent
+      },
+      {
+        columnName: 'speed',
+        displayName: 'Speed',
+        customComponent: SwitchInterfaceSpeedComponent
+      },
+      {
+        columnName: 'vlan',
+        displayName: 'VLAN',
+      },
+      {
+        columnName: 'name',
+        displayName: 'Interface',
+        customComponent: SwitchInterfaceNameComponent
+      },
+      {
+        columnName: 'last_change',
+        displayName: 'Last link change',
+        customComponent: SwitchInterfaceTimedeltaComponent
+      },
+      {
+        columnName: 'ignore_macs',
+        displayName: 'MAC detection',
+        customComponent: SwitchInterfaceMACDetectComponent
+      },
+    ]
     return <div className='container-fluid'>
       <h1>{this.state.data.switch.name}</h1>
       <div className="row">
@@ -47,6 +162,31 @@ export var SwitchDetail = React.createClass({
             sys_objectID={this.state.data.switch.sys_objectID}
             sys_services={this.state.data.switch.sys_services}
             uptime={this.state.data.switch.uptime} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs-12">
+          <Griddle results={this.state.data.switch.interfaces}
+            tableClassName='table table-bordered table-striped table-hover'
+            useGriddleStyles={false}
+            showFilter={true}
+            useCustomPagerComponent='true'
+            customPagerComponent={Pager}
+            sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
+            sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
+            columns={[
+              'name',
+              'link_status',
+              'last_change',
+              'speed',
+              'vlan',
+              'ignore_macs',
+              'c'
+            ]}
+            resultsPerPage='10'
+            customFilterer={regexGridFilter}
+            useCustomFilterer='true'
+            columnMetadata={columnMeta} />
         </div>
       </div>
     </div>

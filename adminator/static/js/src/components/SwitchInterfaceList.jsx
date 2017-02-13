@@ -15,7 +15,7 @@ var EmptyTr = React.createClass({
   }
 })
 
-export var SwitchInterfaceLinkStatusComponent = React.createClass({
+var SwitchInterfaceLinkStatusComponent = React.createClass({
   render() {
     var styles = {
       'Adm. down': 'admdown',
@@ -28,7 +28,7 @@ export var SwitchInterfaceLinkStatusComponent = React.createClass({
   }
 })
 
-export var SwitchInterfaceSpeedComponent = React.createClass({
+var SwitchInterfaceSpeedComponent = React.createClass({
   render() {
     if(this.props.rowData.speed_label == null) {
       return null
@@ -79,7 +79,9 @@ var SwitchInterfaceTimedeltaComponent = React.createClass({
         <div key={this.props.rowData.uuid}>
           <OverlayTrigger placement="right" overlay=
             <Tooltip id={this.props.rowData.uuid}>
-              {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + ' ago'}
+              {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + ' ago'} <br/>
+              Value may be overflowed <br/>
+              Max value 497 days
             </Tooltip>>
             <code>
               {txt}
@@ -132,7 +134,6 @@ export var SwitchInterfaceList = React.createClass({
       {
         columnName: 'vlan',
         displayName: 'VLAN',
-        // customComponent: SwitchInterfaceVlanComponent
       },
       {
       columnName: 'sw_name',
