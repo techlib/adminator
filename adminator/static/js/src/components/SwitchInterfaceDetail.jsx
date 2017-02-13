@@ -15,6 +15,7 @@ var EmptyTr = React.createClass({
   }
 })
 
+// TODO: check name convention
 var DeviceDescComponent = React.createClass({
   render() {
     return (
