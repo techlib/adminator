@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
 import {SwitchStore} from '../../stores/Switch'
-import {SwitchActions} from '../../actions'
+import {SwitchActions, FeedbackActions} from '../../actions'
 import {SwitchForm} from './SwitchForm'
 import {SwitchDetected} from './SwitchDetected'
 import {Link} from 'react-router'
@@ -11,6 +11,7 @@ import {Pager} from '../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
 import moment from 'moment'
 import {Feedback} from '../Feedback'
+import {pseudoNaturalCompare} from '../../util/general'
 
 var EmptyTr = React.createClass({
   render() {
@@ -97,9 +98,14 @@ export var SwitchDetail = React.createClass({
   },
 
   saveHandler() {
-    var data = this.refs.configurable.getValues()
-    data['uuid'] = this.state.data.switch.uuid
-    SwitchActions.update(data)
+    var errors = this.refs.configurable.validate()
+    if (errors.length > 0) {
+      FeedbackActions.set('error', 'Form contains invalid data', errors)
+    } else {
+      var data = this.refs.configurable.getValues()
+      data['uuid'] = this.state.data.switch.uuid
+      SwitchActions.update(data)
+    }
   },
 
   render() {
@@ -126,7 +132,8 @@ export var SwitchDetail = React.createClass({
       {
         columnName: 'name',
         displayName: 'Interface',
-        customComponent: SwitchInterfaceNameComponent
+        customComponent: SwitchInterfaceNameComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'last_change',

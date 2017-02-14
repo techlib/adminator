@@ -10,6 +10,7 @@ import {Pager} from './../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
 import moment from 'moment'
 import {Feedback} from '../Feedback'
+import {pseudoNaturalCompare} from '../../util/general'
 
 var SwitchActionsComponent = React.createClass({
 
@@ -67,7 +68,7 @@ var SwitchEnableComponent = React.createClass({
 var SwitchTimeDeltaComponent = React.createClass({
   render() {
     var duration = moment.duration(this.props.data, 's')
-    var txt = moment.duration(-1 * this.props.data, 's').humanize(true)
+    var txt = moment.duration(-1 * this.props.data, 's').humanize(false)
     var d_seconds = ("0" + duration.seconds()).slice(-2)
     var d_minutes = ("0" + duration.minutes()).slice(-2)
     var d_hours = ("0" + duration.hours()).slice(-2)
@@ -77,7 +78,7 @@ var SwitchTimeDeltaComponent = React.createClass({
       <div key={this.props.rowData.uuid}>
         <OverlayTrigger placement="right" overlay=
           <Tooltip id={this.props.rowData.uuid}>
-            {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + ' ago'}
+            {d_days + d_hours + ':' + d_minutes + ':' + d_seconds}
           </Tooltip>>
           <code>
             {txt}
@@ -105,6 +106,7 @@ export var SwitchList = React.createClass({
         columnName: 'name',
         displayName: 'Name',
         customComponent: SwitchLinkComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'type',
@@ -118,6 +120,7 @@ export var SwitchList = React.createClass({
       {
         columnName: 'ip_address',
         displayName: 'IP address',
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'uptime',

@@ -25,3 +25,19 @@ export function ipToPtr(ip) {
         return ''
     }
 }
+
+
+export function pseudoNaturalCompare (a, b) {
+  var number_re = /(\d+)/g;
+  var aa = String(a).split(number_re)
+  var bb = String(b).split(number_re)
+  var min = Math.min(aa.length, bb.length)
+
+  for (var i = 0; i < min; i++) {
+    var x = parseInt(aa[i]) || aa[i].toLowerCase()
+    var y = parseInt(bb[i]) || bb[i].toLowerCase()
+    if (x < y) return -1
+    else if (x > y) return 1
+  }
+  return 0;
+}

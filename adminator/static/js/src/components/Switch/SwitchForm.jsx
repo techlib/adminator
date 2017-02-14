@@ -1,5 +1,6 @@
 import * as React from 'react'
 import {Input} from 'react-bootstrap'
+import {isIP} from '../../util/simple-validators'
 
 export var SwitchForm = React.createClass({
 
@@ -21,6 +22,14 @@ export var SwitchForm = React.createClass({
 
   getValues() {
     return this.state
+  },
+
+  validate() {
+    var result = []
+    if (!isIP(this.state.ip_address)) {
+      result.push(`${this.state.ip_address} is not valid ip address`)
+    }
+    return result
   },
 
   handleChange(evt) {

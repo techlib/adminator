@@ -9,6 +9,7 @@ import {Pager} from '../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
 import moment from 'moment'
 import {Feedback} from '../Feedback'
+import {pseudoNaturalCompare} from '../../util/general'
 
 var EmptyTr = React.createClass({
   render() {
@@ -149,16 +150,19 @@ export var SwitchInterfaceList = React.createClass({
       {
       columnName: 'sw_name',
       displayName: 'Switch name',
-      customComponent: SwitchInterfaceSwitchComponent
+      customComponent: SwitchInterfaceSwitchComponent,
+      customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'name',
         displayName: 'Interface',
-        customComponent: SwitchInterfaceNameComponent
+        customComponent: SwitchInterfaceNameComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'port_name',
         displayName: 'Port',
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'last_change',

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {SwitchActions} from '../../actions'
+import {SwitchActions, FeedbackActions} from '../../actions'
 import {SwitchForm} from './SwitchForm'
 import {Feedback} from '../Feedback'
 
@@ -10,7 +10,12 @@ export var SwitchNew = React.createClass({
   },
 
   saveHandler() {
-    SwitchActions.create(this.refs.configurable.getValues())
+    var errors = this.refs.configurable.validate()
+    if (errors.length > 0) {
+      FeedbackActions.set('error', 'Form contains invalid data', errors)
+    } else {
+      SwitchActions.create(this.refs.configurable.getValues())
+    }
   },
 
   render() {

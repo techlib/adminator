@@ -77,7 +77,7 @@ export var SwitchDetected = React.createClass({
         <div className="form-horizontal">
           <div className='row'>
             <label className="control-label col-xs-5">Uptime</label>
-            <div className="col-xs-7">{this.renderTimedelta(this.state.uptime, 'uptime')}</div>
+            <div className="col-xs-7">{this.renderTimedelta(this.state.uptime, 'uptime', false)}</div>
           </div>
         </div>
         <div className="form-horizontal">

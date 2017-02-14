@@ -8,6 +8,7 @@ import Griddle from 'griddle-react'
 import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
+import {pseudoNaturalCompare} from '../util/general'
 
 var EmptyTr = React.createClass({
   render() {
@@ -34,6 +35,17 @@ var SwitchInterfaceNameComponent = React.createClass({
     )
   }
 })
+
+var SwitchNameComponent = React.createClass({
+  render() {
+    return (
+      <Link to={`/switch/${this.props.rowData.sw_uuid}`}>
+        {this.props.data}
+      </Link>
+    )
+  }
+})
+
 
 var DeviceInterfacesComponent = React.createClass({
   render() {
@@ -87,11 +99,14 @@ export var MacHistoryList = React.createClass({
       {
         columnName: 'sw_name',
         displayName: 'Switch name',
+        customComponent: SwitchNameComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'if_name',
         displayName: 'Interface',
-        customComponent: SwitchInterfaceNameComponent
+        customComponent: SwitchInterfaceNameComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'port_name',
