@@ -8,6 +8,7 @@ from adminator.db import *
 from adminator.kea_agent import *
 from adminator.ldap_agent import *
 from adminator.topology_agent import TopologyAgent
-from adminator.ifstatus_agent import IFStatusAgent
+from adminator.snmp_3com_agent import SNMP3comAgent
+from adminator.snmp_hp_agent import SNMPHPAgent
 
 # vim:set sw=4 ts=4 et:

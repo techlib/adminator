@@ -13,10 +13,10 @@ from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
 
-__all__ = ['IFStatusAgent']
+__all__ = ['SNMP3comAgent']
 
 
-class IFStatusAgent(object):
+class SNMP3comAgent(object):
     def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
         self.db = db
         self.snmpwalk_path = snmpwalk_path
@@ -179,9 +179,7 @@ class IFStatusAgent(object):
             return None
         if last_change > uptime:
             # limitation of SNMP Timeticks datatype (max value = 4294967295 eq. 500 days)
-            # print(uptime, last_change, uptime - last_change)
             uptime += 4294967296
-            # print(uptime, last_change, uptime - last_change)
         return '{} seconds'.format((uptime - last_change)//100)
 
     def save_if_to_db(self, switch, data, sw_uptime):
@@ -219,11 +217,18 @@ class IFStatusAgent(object):
                     self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
                     self.db.last_macs_on_interface.insert(mac_address=mac, interface=interface.uuid, time=update_time)
                     try:
-                        db_mac = self.db.last_interface_for_mac.filter(self.db.last_interface_for_mac.mac_address == mac).one()
+                        db_mac = self.db.last_interface_for_mac.filter(
+                            self.db.last_interface_for_mac.mac_address == mac
+                        ).one()
                         db_mac.interface = interface.uuid
                         db_mac.time=update_time
                     except NoResultFound:
-                        self.db.last_interface_for_mac.insert(mac_address=mac, interface=interface.uuid, time=update_time)
+                        self.db.last_interface_for_mac.insert(
+                            mac_address=mac, interface=interface.uuid, time=update_time
+                        )
+            else:
+                self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
+                self.db.last_interface_for_mac.filter_by(interface=interface.uuid).delete()
         self.db.commit()
 
     # def parallel_update(self, switch, snmp_profile, output):
@@ -248,7 +253,7 @@ class IFStatusAgent(object):
         start = time.time()
         threads = []
         data = {}
-        for switch in self.db.switch.filter_by(enable=True).all():
+        for switch in self.db.switch.filter_by(enable=True, type='3com').all():
             data[switch.uuid] = {'switch': None, 'interfaces': None}
             # snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
             # t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
@@ -259,7 +264,7 @@ class IFStatusAgent(object):
         for t in threads:
             t.join()
 
-        for switch in self.db.switch.filter_by(enable=True).all():
+        for switch in self.db.switch.filter_by(enable=True, type='3com').all():
             if data[switch.uuid]:
                 try:
                     self.save_to_db(switch, data[switch.uuid])
