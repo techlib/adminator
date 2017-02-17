@@ -408,6 +408,12 @@ def make_site(db, manager, access_model, debug=False):
         if 'POST' == flask.request.method:
             return flask.jsonify(manager.config_pattern.insert(flask.request.get_json(force=True)))
 
+    @app.route('/config_pattern/recalculate', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_recalc_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.config_pattern.recalculate_all())
+
     @app.route('/config_pattern/<uuid>', methods=['GET', 'PUT', 'DELETE'])
     @authorized_only(privilege='user')
     def config_pattern_item_handler(uuid):
@@ -419,6 +425,12 @@ def make_site(db, manager, access_model, debug=False):
             pattern = flask.request.get_json(force=True)
             pattern['uuid'] = uuid
             return flask.jsonify(manager.config_pattern.update(pattern))
+
+    @app.route('/config_pattern/<uuid>/recalculate', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_item_recalc_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.recalculate(uuid))
 
 
     return app

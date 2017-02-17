@@ -10,6 +10,25 @@ import {Pager} from './../Pager'
 import {regexGridFilter} from '../../util/griddle-components'
 import {Feedback} from '../Feedback'
 
+var ConfigPatternRecalculateAllComponent = React.createClass({
+
+    mixins: [ModalConfirmMixin],
+
+  recalculateHandler() {
+    this.modalConfirm(
+      'Confirm recalculate',
+      'Do you want to recalculate all interface-pattern pairs? It may take a while (tens of seconds).',
+      {'confirmLabel': 'RECALCULATE', 'confirmClass': 'warning'}
+    ).then(() => { ConfigPatternActions.recalculateall()})
+  },
+
+  render() {
+    return<Button bsStyle='warning' onClick={this.recalculateHandler}>
+      <span className='glyphicon glyphicon-repeat'></span> Recalculate all
+    </Button>
+  }
+})
+
 var ConfigPatternActionsComponent = React.createClass({
 
     mixins: [ModalConfirmMixin],
@@ -21,9 +40,20 @@ var ConfigPatternActionsComponent = React.createClass({
     ).then(() => { ConfigPatternActions.delete(this.props.rowData.uuid)})
   },
 
+  recalculateConfigPattern(uuid) {
+    ConfigPatternActions.recalculate(this.props.rowData.uuid)
+  },
+
   render() {
     return <ButtonGroup>
-      <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Delete</Tooltip>>
+      <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid+'recalc'}>
+        Recalculate
+      </Tooltip>>
+        <Button bsStyle='warning' onClick={this.recalculateConfigPattern}>
+          <span className='glyphicon glyphicon-repeat'></span>
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid+'delete'}>Delete</Tooltip>>
         <Button bsStyle='danger' onClick={this.deleteConfigPattern}>
           <i className="fa fa-trash-o"></i>
         </Button>
@@ -47,7 +77,7 @@ var ConfigPatternMandatoryComponent = React.createClass({
         <Tooltip id={'mandatory' + this.props.rowData.uuid}>
           {this.props.data.map((item) => { return <span>{item}<br/></span> })}
         </Tooltip>>
-        <code>
+        <code className='black-yellow-code'>
           {this.props.data.join(', ')}
         </code>
       </OverlayTrigger>
@@ -63,7 +93,7 @@ var ConfigPatternOptimalComponent = React.createClass({
         <Tooltip id={'optimal' + this.props.rowData.uuid}>
           {this.props.data.map((item) => { return <span>{item}<br/></span> })}
         </Tooltip>>
-        <code>
+        <code className='black-yellow-code'>
           {this.props.data.join(', ')}
         </code>
       </OverlayTrigger>
@@ -132,6 +162,7 @@ export var ConfigPatternList = React.createClass({
           <Link className='btn btn-success' to="/cfgPattern/new">
             <i className='fa fa-plus'></i> New pattern
           </Link>
+          <ConfigPatternRecalculateAllComponent />
         </div>
       </div>
       <Feedback />

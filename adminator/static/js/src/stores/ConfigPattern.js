@@ -80,5 +80,27 @@ export var ConfigPatternStore = Reflux.createStore({
       this.trigger(this.data)
       }
     })
+  },
+
+  onRecalculate(id) {
+    $.ajax({url: `/config_pattern/${id}/recalculate`,
+      success: function success(result) {
+        var message = 'Pattern matching recalculated'
+        message += ', interfaces: ' + result.interfacses
+        message += ', matching interfaces: ' + result.matching
+        FeedbackActions.set('success', message)
+      },
+      error: result => {
+        FeedbackActions.set('error', result.responseJSON.message)
+      }
+    })
+  },
+
+  onRecalculateall() {
+    $.ajax({url: '/config_pattern/recalculate',
+      success: result => {
+        FeedbackActions.set('success', 'Pattern matching recalculated')
+      },
+    })
   }
 })
