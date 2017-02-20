@@ -80,7 +80,7 @@ var SwitchTimeDeltaComponent = React.createClass({
           <Tooltip id={this.props.rowData.uuid}>
             {d_days + d_hours + ':' + d_minutes + ':' + d_seconds}
           </Tooltip>>
-          <code>
+          <code className="gray-blue-code">
             {txt}
           </code>
         </OverlayTrigger>

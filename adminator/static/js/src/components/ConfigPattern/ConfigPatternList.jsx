@@ -77,7 +77,7 @@ var ConfigPatternMandatoryComponent = React.createClass({
         <Tooltip id={'mandatory' + this.props.rowData.uuid}>
           {this.props.data.map((item) => { return <span>{item}<br/></span> })}
         </Tooltip>>
-        <code className='black-yellow-code'>
+        <code className='gray-blue-code'>
           {this.props.data.join(', ')}
         </code>
       </OverlayTrigger>
@@ -93,7 +93,7 @@ var ConfigPatternOptimalComponent = React.createClass({
         <Tooltip id={'optimal' + this.props.rowData.uuid}>
           {this.props.data.map((item) => { return <span>{item}<br/></span> })}
         </Tooltip>>
-        <code className='black-yellow-code'>
+        <code className='gray-blue-code'>
           {this.props.data.join(', ')}
         </code>
       </OverlayTrigger>

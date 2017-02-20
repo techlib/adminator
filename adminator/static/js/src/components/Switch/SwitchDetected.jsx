@@ -42,7 +42,7 @@ export var SwitchDetected = React.createClass({
           <Tooltip id={tooltip_key}>
             {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + (suffix ? ' ago' : '')}
           </Tooltip>>
-          <code>
+          <code className='gray-blue-code'>
             {txt}
           </code>
         </OverlayTrigger>

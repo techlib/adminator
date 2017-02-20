@@ -134,7 +134,7 @@ export var SwitchInterfaceDetail = React.createClass({
     return <span className={className}></span>
   },
 
-  renderTimedelta(seconds, tooltip_key, suffix=true) {
+  renderTimedelta(seconds, tooltip_key, suffix=true, overflowed=false) {
     if(seconds == null) return null
     var duration = moment.duration(seconds, 's')
     var txt = moment.duration(-1 * seconds, 's').humanize(suffix)
@@ -148,10 +148,9 @@ export var SwitchInterfaceDetail = React.createClass({
         <OverlayTrigger placement="right" overlay=
           <Tooltip id={tooltip_key}>
             {d_days + d_hours + ':' + d_minutes + ':' + d_seconds + (suffix ? ' ago' : '')} <br/>
-            Value may be overflowed <br/>
-            Max value 497 days
+          {overflowed? 'Value may be overflowed, max value 497 days' : ''}
           </Tooltip>>
-          <code>
+          <code className='gray-blue-code'>
             {txt}
           </code>
         </OverlayTrigger>
@@ -185,7 +184,9 @@ export var SwitchInterfaceDetail = React.createClass({
           </div>
           <div className='row'>
             <label className="control-label col-xs-5">Last link change</label>
-            <div className="col-xs-7">{this.renderTimedelta(sw_interface.last_change, sw_interface.uuid)}</div>
+            <div className="col-xs-7">
+              {this.renderTimedelta(sw_interface.last_change, sw_interface.uuid, true, true)}
+            </div>
           </div>
           <div className='row'>
             <label className="control-label col-xs-5">Detected VLAN</label>

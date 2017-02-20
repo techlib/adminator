@@ -616,7 +616,7 @@ th:last-child .btn-group, td:last-child .btn-group {
   text-overflow: ellipsis;
 }
 
-.black-yellow-code {
-  color: #000000;
-  background-color: #f9f9ec;
+.gray-blue-code {
+  color: #4d4d4d;
+  background-color: #ecf9f9;
 }

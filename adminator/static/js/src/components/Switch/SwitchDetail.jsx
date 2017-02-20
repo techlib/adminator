@@ -60,7 +60,7 @@ var SwitchInterfaceTimedeltaComponent = React.createClass({
               Value may be overflowed <br/>
               Max value 497 days
             </Tooltip>>
-            <code>
+            <code className='gray-blue-code'>
               {txt}
             </code>
           </OverlayTrigger>
