@@ -245,11 +245,11 @@ class SNMPHPAgent(object):
     def parallel_update(self, switch, output):
         start = time.time()
         try:
-            output[switch.uuid]['switch'] = self.get_switch_status(
+            output[switch.uuid]['interfaces'] = self.get_interfaces(
                 switch.ip_address, switch.snmp_version,
                 switch.snmp_community, switch.snmp_timeout
             )
-            output[switch.uuid]['interfaces'] = self.get_interfaces(
+            output[switch.uuid]['switch'] = self.get_switch_status(
                 switch.ip_address, switch.snmp_version,
                 switch.snmp_community, switch.snmp_timeout
             )
