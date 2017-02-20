@@ -155,10 +155,10 @@ export var ConfigPatternList = React.createClass({
 
     return <div className='container-fluid col-xs-12'>
       <div className="row">
-        <div className="col-xs-12 col-sm-10">
+        <div className="col-xs-12 col-sm-8">
           <h1>Interface configuration patterns</h1>
         </div>
-        <div className="col-xs-12 col-sm-2 h1 text-right">
+        <div className="col-xs-12 col-sm-4 h1 text-right">
           <Link className='btn btn-success' to="/cfgPattern/new">
             <i className='fa fa-plus'></i> New pattern
           </Link>
