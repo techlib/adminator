@@ -13,7 +13,7 @@ from .parser import CfgParser
 from sqlalchemy.orm.exc import NoResultFound
 
 
-class Config3comAgent(object):
+class ConfigComwareAgent(object):
     def __init__(self, db, api_url, update_period):
         self.db = db
         # TODO: url from config
@@ -89,7 +89,9 @@ class Config3comAgent(object):
     def update(self):
         log.msg('Switch configuration sync started')
         start = time.time()
-        for switch in self.db.switch.filter_by(enable=True, type='3com').all():
+        switces = self.db.switch.filter_by(enable=True, type='3com').all()
+        switces.extend(self.db.switch.filter_by(enable=True, type='hp').all())
+        for switch in switces:
             try:
                 self.update_switch(switch)
             except Exception as e:
