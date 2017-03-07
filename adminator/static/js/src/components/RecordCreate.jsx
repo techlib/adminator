@@ -113,11 +113,11 @@ export var RecordCreate = React.createClass({
       if (!data['name']) {errors.push('Name is missing')}
 
       if(data['type'] == 'SRV') {
-        if(!data['prio']) {errors.push('Priority is missing')}
-        if(!inRange(data['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
-        if(!data['port']) {errors.push('Port is missing')}
-        if(!inRange(data['port'], 1, 65536)) {errors.push('Port must be a number 1-65536')}
-        if(!data['content']) {errors.push('Content is missing')}
+        if(!data['content']['prio']) {errors.push('Priority is missing')}
+        if(!inRange(data['content']['prio'], 0, 1000)) {errors.push('Priority must be a number 0-1000')}
+        if(!data['content']['port']) {errors.push('Port is missing')}
+        if(!inRange(data['content']['port'], 1, 65536)) {errors.push('Port must be a number 1-65536')}
+        if(!data['content']['value']) {errors.push('Content is missing')}
       } else if(data['type'] == 'A') {
           if(!data['content']) {errors.push('IPv4 address is missing')}
           if(data['content'] && !isIP4(data['content'])) {errors.push('IPv4 address is not in the correct format')}
@@ -152,7 +152,7 @@ export var RecordCreate = React.createClass({
         this.state.record.name = this.state.record.name + '.' + this.state.domainName
       }
       if (this.state.record.type == 'SRV') {
-        this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.value
+        this.state.record.content = this.state.record.content.prio + ' ' + this.state.record.content.port + ' ' + this.state.record.content.value
       }
 
       RecordActions.create(this.state.record)
