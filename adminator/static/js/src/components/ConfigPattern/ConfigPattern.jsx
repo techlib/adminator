@@ -6,7 +6,7 @@ import {Feedback} from '../Feedback'
 
 export var ConfigPattern = React.createClass({
   getInitialState() {
-      return {'pattern': {'mandatory': [], 'optimal': [],'name': '', 'sytle': ''}}
+      return {'pattern': {'mandatory': [], 'optional': [],'name': '', 'sytle': ''}}
   },
 
   componentWillReceiveProps(p) {
@@ -17,7 +17,7 @@ export var ConfigPattern = React.createClass({
     var data = this.refs.basic.getValues()
     data['uuid'] = this.state.pattern.uuid
     data['mandatory'] = this.refs.mandatory.getValues()
-    data['optimal'] = this.refs.optimal.getValues()
+    data['optional'] = this.refs.optional.getValues()
     this.props.save_handler(data)
   },
 
@@ -38,9 +38,9 @@ export var ConfigPattern = React.createClass({
             name="Mandatory" />
         </div>
         <div className="col-xs-12 col-md-5">
-          <ConfigPatternOptions ref="optimal"
-            options={this.state.pattern.optimal}
-            name="Optimal" />
+          <ConfigPatternOptions ref="optional"
+            options={this.state.pattern.optional}
+            name="Optional" />
         </div>
       </div>
     </div>

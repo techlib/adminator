@@ -29,7 +29,7 @@ class ConfigPatttern(Model):
 
         for i in range(cfg_len):
             if not cfg_state[i]:
-                for pos_pattern in pattern.optimal:
+                for pos_pattern in pattern.optional:
                     if not (re.fullmatch(pos_pattern, configuration[i]) == None):
                         cfg_state[i] = True
                         break

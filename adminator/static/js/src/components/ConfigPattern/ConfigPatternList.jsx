@@ -86,11 +86,11 @@ var ConfigPatternMandatoryComponent = React.createClass({
   }
 })
 
-var ConfigPatternOptimalComponent = React.createClass({
+var ConfigPatternOptionalComponent = React.createClass({
   render() {
-    return <div className='div-overflowed' key={'optimal' + this.props.rowData.uuid}>
+    return <div className='div-overflowed' key={'optional' + this.props.rowData.uuid}>
       <OverlayTrigger placement="left" overlay=
-        <Tooltip id={'optimal' + this.props.rowData.uuid}>
+        <Tooltip id={'optional' + this.props.rowData.uuid}>
           {this.props.data.map((item) => { return <span>{item}<br/></span> })}
         </Tooltip>>
         <code className='gray-blue-code'>
@@ -135,10 +135,10 @@ export var ConfigPatternList = React.createClass({
         customComponent: ConfigPatternMandatoryComponent
       },
       {
-        columnName: 'optimal',
-        displayName: 'Optimal',
+        columnName: 'optional',
+        displayName: 'Optional',
         cssClassName: 'col-xs-4 td-overflowed',
-        customComponent: ConfigPatternOptimalComponent
+        customComponent: ConfigPatternOptionalComponent
       },
       {
         columnName: 'style',
@@ -178,7 +178,7 @@ export var ConfigPatternList = React.createClass({
                 'name',
                 'style',
                 'mandatory',
-                'optimal',
+                'optional',
                 'c'
                ]}
                resultsPerPage='20'

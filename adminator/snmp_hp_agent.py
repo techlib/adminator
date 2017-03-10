@@ -97,7 +97,13 @@ class SNMPHPAgent(object):
 
         data = {}
 
+        ordered_oids = [('mapping-2', oids['mapping-2']),]
         for key, val in oids.items():
+            if key != 'mapping-2':
+                ordered_oids.append((key, val))
+
+        for key, val in ordered_oids:
+
             oid = val[0]
             command = bashCommand.format(timeout, community, version, ip, oid)
             #~ timeout - diferent (oid, ip) need diferent timeout => problem
