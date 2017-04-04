@@ -18,7 +18,36 @@ __all__ = ['SNMPHPAgent']
 
 
 class SNMPHPAgent(object):
-    def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
+    status_oid = '1.3.6.1.2.1.1'
+    oid_engine_time = '1.3.6.1.6.3.10.2.1.3'
+
+    inter_oids = {
+        'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
+        'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+        'Description': (
+            '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+        ),
+        'OperStatus': ('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+        'LastChange': (
+            '1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (12849) 8 days, 17:10:01.11', '', 1
+        ),
+        'Name': (
+            '1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+        ),
+        'mapping-1': (
+            '1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913',
+            'INTEGER: ', 2
+        ),
+        'Vlan': (
+            '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
+        ),
+        'mapping-2': (
+            '1.3.6.1.2.1.17.4.3.1.2',
+            '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3
+        ),
+    }
+
+    def __init__(self, db, snmpwalk_path, update_period, query_timeout):
         self.db = db
         self.snmpwalk_path = snmpwalk_path
         self.update_period = int(update_period)
@@ -31,7 +60,9 @@ class SNMPHPAgent(object):
 
     def get_switch_status(self, ip, version, community, timeout):
         bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
-        oid = '1.3.6.1.2.1.1'
+        # oid = '1.3.6.1.2.1.1'
+        oid = self.status_oid
+
         # 1.3.6.1.6.3.10.2.1.3 - snmp engine uptime in secs max value cca 50000 days
         # 1.3.6.1.2.1.1.3.0 - sysuptime in Timeticks max value cca 500 days
 
@@ -59,7 +90,8 @@ class SNMPHPAgent(object):
                 val = parsed_value[1][len(data_prefix):]
                 data[key] = val
 
-        oid_engine_time = '1.3.6.1.6.3.10.2.1.3'
+        # oid_engine_time = '1.3.6.1.6.3.10.2.1.3'
+        oid_engine_time = self.oid_engine_time
         command = bashCommand.format(timeout, community, version, ip, oid_engine_time)
         output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
         parsed_value = output.split('\n')[0].split(' = INTEGER: ')
@@ -69,31 +101,32 @@ class SNMPHPAgent(object):
 
     def get_interfaces(self, ip, version, community, timeout):
         bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
-        oids = {
-            'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
-            'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-            'Description': (
-                '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
-            ),
-            'OperStatus': ('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-            'LastChange': (
-                '1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (12849) 8 days, 17:10:01.11', '', 1
-            ),
-            'Name': (
-                '1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
-            ),
-            'mapping-1': (
-                '1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913',
-                'INTEGER: ', 2
-            ),
-            'Vlan': (
-                '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
-            ),
-            'mapping-2': (
-                '1.3.6.1.2.1.17.4.3.1.2',
-                '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3
-            ),
-        }
+        oids = self.inter_oids
+        # oids = {
+        #     'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
+        #     'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+        #     'Description': (
+        #         '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+        #     ),
+        #     'OperStatus': ('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
+        #     'LastChange': (
+        #         '1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (12849) 8 days, 17:10:01.11', '', 1
+        #     ),
+        #     'Name': (
+        #         '1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
+        #     ),
+        #     'mapping-1': (
+        #         '1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913',
+        #         'INTEGER: ', 2
+        #     ),
+        #     'Vlan': (
+        #         '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
+        #     ),
+        #     'mapping-2': (
+        #         '1.3.6.1.2.1.17.4.3.1.2',
+        #         '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3
+        #     ),
+        # }
 
         data = {}
 
@@ -113,7 +146,11 @@ class SNMPHPAgent(object):
                 prefix_lenght = len(val[0]) + 2
                 parsed_value = x[prefix_lenght:].split(' = ' + val[2])
                 data[key].append(parsed_value)
+        return self.join_data(data)
 
+
+    def join_data(self, data):
+        oids = self.inter_oids
         mapped_vals = {}
 
         for prop, oid in oids.items():

@@ -173,7 +173,7 @@ class TopologyAgent(object):
     def start(self):
         """Start the periodic checking."""
         self.periodic = task.LoopingCall(self.update)
-        self.periodic.start(300, True)
+        self.periodic.start(120, True)
 
     def update_analyzer_group(self, ag_updater):
         try:
