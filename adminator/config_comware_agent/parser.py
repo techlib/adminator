@@ -2,6 +2,7 @@ import ply.yacc as yacc
 
 from .lexer import CfgLexer
 
+
 class CfgParserError(Exception):
     def __init__(self, text, parser_info):
         self.text = text
@@ -26,7 +27,7 @@ class CfgParser(object):
         parts = p[1][0].split()
         for part in parts:
             if part != 'undo':
-                name=part
+                name = part
                 break
         p[0] = (name, p[1], True)
 
@@ -40,7 +41,7 @@ class CfgParser(object):
                 p[0].append(p[2])
         else:
             if type(p[2]) is list:
-                p[0] = [p[1],] + p[2]
+                p[0] = [p[1], ] + p[2]
             else:
                 p[0] = [p[1], p[2]]
 
@@ -54,7 +55,7 @@ class CfgParser(object):
                 p[0].append(p[2])
         else:
             if type(p[2]) is list:
-                p[0] = [p[1],] + p[2]
+                p[0] = [p[1], ] + p[2]
             else:
                 p[0] = [p[1], p[2]]
 
@@ -73,7 +74,7 @@ class CfgParser(object):
 
     def p_subblock_sublevel(self, p):
         'subblock : SUBLEVEL'
-        p[0] = [p[1][1:],]
+        p[0] = [p[1][1:], ]
 
     #~ def p_separator_separator_separatorloc(self, p):
         #~ 'separator : SEPARATOR SEPARATORLOC'
@@ -99,7 +100,7 @@ class CfgParser(object):
         'separator : separator separator'
         p[0] = p[1]
 
-    def p_error(self,p):
+    def p_error(self, p):
         raise CfgParserError('Parsing error', p)
 
     def __init__(self):
@@ -107,21 +108,21 @@ class CfgParser(object):
         self.tokens = self.lexer.tokens
         self.parser = yacc.yacc(module=self, write_tables=0, debug=False)
 
-    def parse(self,data):
+    def parse(self, data):
         # if data:
         return self.parser.parse(data, self.lexer.lexer, 0, 0, None) if data else []
         # else:
         #     return []
 
 
-if __name__ == '__main__':
-    import requests
-    from pprint import pprint
-    r = requests.get('http://127.0.0.1:5000/fd5-1-1/config/')
-    parser = CfgParser()
-    conf = []
-    for item in parser.parse(r.json()['configs']['1']):
-        conf.append({'name': item[0], 'options': item[1], 'syscfg': item[2]})
-    # pprint(list(filter(lambda i: i['syscfg'], conf)))
-    # pprint(list(filter(lambda i: not i['syscfg'], conf)))
-    pprint(list(filter(lambda i: i['name'].startswith('interface GigabitEthernet'), conf)))
+# if __name__ == '__main__':
+#     import requests
+#     from pprint import pprint
+#     r = requests.get('http://127.0.0.1:5000/fd5-1-1/config/')
+#     parser = CfgParser()
+#     conf = []
+#     for item in parser.parse(r.json()['configs']['1']):
+#         conf.append({'name': item[0], 'options': item[1], 'syscfg': item[2]})
+#     # pprint(list(filter(lambda i: i['syscfg'], conf)))
+#     # pprint(list(filter(lambda i: not i['syscfg'], conf)))
+#     pprint(list(filter(lambda i: i['name'].startswith('interface GigabitEthernet'), conf)))

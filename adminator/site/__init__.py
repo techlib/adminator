@@ -432,7 +432,6 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.config_pattern.recalculate(uuid))
 
-
     return app
 
 # vim:set sw=4 ts=4 et:

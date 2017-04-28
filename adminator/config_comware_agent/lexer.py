@@ -19,7 +19,7 @@ class CfgLexer(object):
         'TOPLEVEL',
         'SEPARATOR',
         'RETURN',
-        )
+    )
     # t_SUBLEVEL = r'\s\S.*'
     t_SUBLEVEL = r'(\ +\S+)+'
     #~ t_SUBSUBLEVEL = r'\s\s\S.*'

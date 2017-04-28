@@ -8,6 +8,7 @@ from adminator.utils import object_to_dict
 
 __all__ = ['SwitchInterface']
 
+
 def process_value(val):
     if isinstance(val, datetime):
         return val.isoformat()
@@ -42,12 +43,13 @@ class SwitchInterface(Model):
         elif data['admin_status'] == 0 and data['oper_status'] == 0:
             data['link_status'] = 'Adm. down'
         else:
-             data['link_status'] = 'Unknown'
+            data['link_status'] = 'Unknown'
 
     def link_speed_humanize(self, speed):
-        if speed is None: return None
+        if speed is None:
+            return None
         if speed >= 1000:
-            return '{}G'.format(speed//1000)
+            return '{}G'.format(speed // 1000)
         return '{}M'.format(speed)
 
     def list(self):
@@ -65,7 +67,7 @@ class SwitchInterface(Model):
             row['patterns'] = []
             res[row[self.pkey].int] = row
 
-        query2 ='SELECT {1}.interface, {2}.name, {2}.style, {2}.uuid FROM {0}.{1}, {0}.{2} \
+        query2 = 'SELECT {1}.interface, {2}.name, {2}.style, {2}.uuid FROM {0}.{1}, {0}.{2} \
                 WHERE {1}.if_config_pattern = {2}.uuid'.format(self.schema, self.if_to_pat_table, self.pattern_table)
         for pattern in self.db.execute(query2).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
@@ -90,16 +92,15 @@ class SwitchInterface(Model):
 
         if interface.port:
             try:
-                port = self.e(self.port_table).filter_by(connect_to = interface.port).one()
+                port = self.e(self.port_table).filter_by(connect_to=interface.port).one()
                 item['port'] = object_to_dict(port)
             except:
                 item['port'] = None
 
-
         ptrn_query = "SELECT {2}.name, {2}.style, {2}.uuid FROM {0}.{1}, {0}.{2} \
             WHERE {1}.if_config_pattern = {2}.uuid and {1}.interface = '{3}'".format(
-                self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid
-            )
+            self.schema, self.if_to_pat_table, self.pattern_table, interface.uuid
+        )
         item['patterns'] = []
         for pattern in self.db.execute(ptrn_query).fetchall():
             row = dict(zip(pattern.keys(), pattern.values()))
@@ -109,7 +110,6 @@ class SwitchInterface(Model):
         if len(item['patterns']) == 0:
             # item['patterns'].append(['Exotic','bad'])
             item['patterns'].append({'name': 'Exotic', 'style': 'bad', 'uuid': None})
-
 
         mac1_query = "SELECT * FROM {0}.{1} where sw_if_uuid = '{2}'".format(
             self.schema, self.last_interface_for_mac_advance, interface.uuid)

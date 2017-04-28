@@ -46,7 +46,7 @@ class SNMP3comAgent(object):
         ),
     }
 
-    def __init__(self, db, snmpwalk_path=None, update_period=None, query_timeout=None):
+    def __init__(self, db, snmpwalk_path, update_period, query_timeout):
         self.db = db
         self.snmpwalk_path = snmpwalk_path
         self.update_period = int(update_period)
@@ -100,35 +100,10 @@ class SNMP3comAgent(object):
     def get_interfaces(self, ip, version, community, timeout):
         bashCommand = self.snmpwalk_path + ' -t {0} -Cc -c {1} -v {2} -ObentU {3} {4}'
         oids = self.inter_oids
-        # oids = {
-        #     'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
-        #     'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-        #     'Description': (
-        #         '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
-        #     ),
-        #     'OperStatus': ('1.3.6.1.2.1.2.2.1.8', '#IF-MIB::ifOperStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
-        #     'LastChange': (
-        #         '1.3.6.1.2.1.2.2.1.9', '#IF-MIB::ifLastChange.4227913 = Timeticks: (12849) 8 days, 17:10:01.11', '', 1
-        #     ),
-        #     'Name': (
-        #         '1.3.6.1.2.1.31.1.1.1.1', '#IF-MIB::ifName.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
-        #     ),
-        #     'mapping-1': (
-        #         '1.3.6.1.2.1.17.1.4.1.2', '#mapping - SNMPv2-SMI::mib-2.17.1.4.1.2.37 = INTEGER: 4227913',
-        #         'INTEGER: ', 2
-        #     ),
-        #     'Vlan': (
-        #         '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
-        #     ),
-        #     'mapping-2': (
-        #         '1.3.6.1.2.1.17.4.3.1.2',
-        #         '#mapping - SNMPv2-SMI::mib-2.17.7.1.2.2.1.2.13.24.169.5.52.121.109 = INTEGER: 37', 'INTEGER: ', 3
-        #     ),
-        # }
 
         data = {}
 
-        ordered_oids = [('mapping-2', oids['mapping-2']),]
+        ordered_oids = [('mapping-2', oids['mapping-2']), ]
         for key, val in oids.items():
             if key != 'mapping-2':
                 ordered_oids.append((key, val))
@@ -145,7 +120,6 @@ class SNMP3comAgent(object):
                 data[key].append(parsed_value)
 
         return self.join_data(data)
-
 
     def join_data(self, data):
         oids = self.inter_oids
@@ -222,7 +196,7 @@ class SNMP3comAgent(object):
         if last_change > uptime:
             # limitation of SNMP Timeticks datatype (max value = 4294967295 eq. 500 days)
             uptime += 4294967296
-        return '{} seconds'.format((uptime - last_change)//100)
+        return '{} seconds'.format((uptime - last_change) // 100)
 
     def save_if_to_db(self, switch, data, sw_uptime):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
@@ -243,8 +217,8 @@ class SNMP3comAgent(object):
             interface = self.db.sw_interface.filter(where).one()
 
             # SNMP up = 1, down = 2
-            interface.admin_status = 2-int(val['AdminStatus'])
-            interface.oper_status = 2-int(val['OperStatus'])
+            interface.admin_status = 2 - int(val['AdminStatus'])
+            interface.oper_status = 2 - int(val['OperStatus'])
 
             interface.speed = self.process_speed(val['Speed'])
             interface.vlan = self.process_vlan(val['Vlan'])
@@ -263,7 +237,7 @@ class SNMP3comAgent(object):
                             self.db.last_interface_for_mac.mac_address == mac
                         ).one()
                         db_mac.interface = interface.uuid
-                        db_mac.time=update_time
+                        db_mac.time = update_time
                     except NoResultFound:
                         self.db.last_interface_for_mac.insert(
                             mac_address=mac, interface=interface.uuid, time=update_time

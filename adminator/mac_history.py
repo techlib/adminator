@@ -8,6 +8,7 @@ from psycopg2.extras import Inet
 
 __all__ = ['MacHistory']
 
+
 def process_value(val):
     if isinstance(val, datetime):
         return val.isoformat()
@@ -17,6 +18,7 @@ def process_value(val):
         return val.addr
     else:
         return val
+
 
 class MacHistory(Model):
     def init(self):

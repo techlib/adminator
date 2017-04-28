@@ -6,6 +6,7 @@ from adminator.switch_interface import SwitchInterface
 
 __all__ = ['Switch']
 
+
 class Switch(Model):
     def init(self):
         self.table_name = 'switch'

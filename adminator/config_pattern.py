@@ -7,6 +7,7 @@ from adminator.model import Model
 
 __all__ = ['ConfigPatttern']
 
+
 class ConfigPatttern(Model):
     def init(self):
         # Topology schema
@@ -23,17 +24,17 @@ class ConfigPatttern(Model):
         for i in range(mand_len):
             mand_pattern = re.compile(pattern.mandatory[i])
             for j in range(cfg_len):
-                if not (mand_pattern.fullmatch(configuration[j]) == None):
+                if not (mand_pattern.fullmatch(configuration[j]) is None):
                     mand_state[i] = True
                     cfg_state[j] = True
 
         for i in range(cfg_len):
             if not cfg_state[i]:
                 for pos_pattern in pattern.optional:
-                    if not (re.fullmatch(pos_pattern, configuration[i]) == None):
+                    if not (re.fullmatch(pos_pattern, configuration[i]) is None):
                         cfg_state[i] = True
                         break
-        return not( False in mand_state or False in cfg_state)
+        return not (False in mand_state or False in cfg_state)
 
     def recalculate_all(self):
         patterns = self.e().all()
