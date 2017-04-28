@@ -19,6 +19,15 @@ import {Record} from './Record'
 import {Lease} from './Lease'
 import {FeedbackActions} from '../actions'
 import {TopologyList} from './TopologyList'
+import {MacHistoryList} from './MacHistoryList'
+import {SwitchInterfaceList} from './SwitchInterface/SwitchInterfaceList'
+import {SwitchInterfaceDetail} from './SwitchInterface/SwitchInterfaceDetail'
+import {ConfigPatternList} from './ConfigPattern/ConfigPatternList'
+import {ConfigPatternNew} from './ConfigPattern/ConfigPatternNew'
+import {ConfigPatternDetail} from './ConfigPattern/ConfigPatternDetail'
+import {SwitchList} from './Switch/SwitchList'
+import {SwitchNew} from './Switch/SwitchNew'
+import {SwitchDetail} from './Switch/SwitchDetail'
 
 function onRouterUpdate() {
     FeedbackActions.clear()
@@ -44,6 +53,15 @@ ReactDOM.render((
         <Route path="record" component={Record} />
         <Route path="/lease/" component={Lease} />
         <Route path="/topology/" component={TopologyList} />
+        <Route path="/macHistory/" component={MacHistoryList} />
+        <Route path="/swInterface/" component={SwitchInterfaceList} />
+        <Route path="/swInterface/:id" component={SwitchInterfaceDetail} />
+        <Route path="/cfgPattern/" component={ConfigPatternList} />
+        <Route path="/cfgPattern/new" component={ConfigPatternNew} />
+        <Route path="/cfgPattern/:id" component={ConfigPatternDetail} />
+        <Route path="/switch/" component={SwitchList} />
+        <Route path="/switch/new" component={SwitchNew} />
+        <Route path="/switch/:id" component={SwitchDetail} />
     </Route>
   </Router>
  ), document.getElementById('AdminatorApp')

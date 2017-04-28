@@ -80,16 +80,16 @@ class AGUpdater():
     def update(self):
         group = dict()
         tables = dict()
-        ans = self.db.analyzer.filter_by(analyzer_group = self.ag.uuid).all()
+        ans = self.db.analyzer.filter_by(analyzer_group=self.ag.uuid).all()
 
         for an in ans:
             group[an.analyzer_id_in_group] = dict()
             tables[an.analyzer_id_in_group] = self.get_data(
                 an.data_url, an.username, an.password
             )
-            for pp in self.db.patch_panel.filter_by(analyzer = an.uuid).all():
+            for pp in self.db.patch_panel.filter_by(analyzer=an.uuid).all():
                 group[an.analyzer_id_in_group][pp.pp_id_in_analyzer] = {
-                    port.position_on_pp: port for port in self.db.port.filter_by(patch_panel = pp.uuid).all()
+                    port.position_on_pp: port for port in self.db.port.filter_by(patch_panel=pp.uuid).all()
                 }
         connections = self.get_connections(ans, tables)
 
@@ -128,7 +128,7 @@ class AGUpdater():
             raise AGUpdateException((
                 'Invalid response from server {0} in {1}. phase of '
                 'authentication, status code {2}, expected {3}'
-                ).format(url, 1, r.status_code, 401)
+            ).format(url, 1, r.status_code, 401)
             )
 
         r = s.get(url, auth=HTTPBasicAuth(username, password))
@@ -138,7 +138,7 @@ class AGUpdater():
             raise AGUpdateException((
                 'Invalid response from server {0} in {1}. phase of '
                 'authentication, status code {2}, expected {3}'
-                ).format(url, 2, r.status_code, 200)
+            ).format(url, 2, r.status_code, 200)
             )
 
         p = ConMapHTMLParser()
@@ -153,8 +153,8 @@ class AGUpdater():
             for db in range(len(table)):
                 patch_panel = dict()
                 for port in range(len(table[db])):
-                    patch_panel[port+1] = None
-                analyzers[source.analyzer_id_in_group][db+1] = patch_panel
+                    patch_panel[port + 1] = None
+                analyzers[source.analyzer_id_in_group][db + 1] = patch_panel
 
         for source in sources:
             table = tables[source.analyzer_id_in_group]
@@ -167,18 +167,20 @@ class AGUpdater():
                         analyzer_id = int(connection[1])
                         patch_panel = int(connection[3]) - 1
                         port_id = int(connection[5]) - 1
-                        analyzers[source.analyzer_id_in_group][db+1][port+1] = (analyzer_id, patch_panel+1, port_id+1)
+                        analyzers[source.analyzer_id_in_group][db + 1][port + 1] = \
+                            (analyzer_id, patch_panel + 1, port_id + 1)
         return analyzers
 
 
 class TopologyAgent(object):
-    def __init__(self, db):
+    def __init__(self, db, update_period):
         self.db = db
+        self.update_period = int(update_period)
 
     def start(self):
         """Start the periodic checking."""
         self.periodic = task.LoopingCall(self.update)
-        self.periodic.start(300, True)
+        self.periodic.start(self.update_period, True)
 
     def update_analyzer_group(self, ag_updater):
         try:

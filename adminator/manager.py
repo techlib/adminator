@@ -21,6 +21,10 @@ from adminator.lease6 import Lease6
 from adminator.interface import Interface
 from adminator.port import Port
 from adminator.connection import Connection
+from adminator.switch import Switch
+from adminator.mac_history import MacHistory
+from adminator.switch_interface import SwitchInterface
+from adminator.config_pattern import ConfigPatttern
 
 
 class Manager(object):
@@ -45,6 +49,10 @@ class Manager(object):
 
         self.port = Port(self)
         self.connection = Connection(self)
+        self.switch = Switch(self)
+        self.mac_history = MacHistory(self)
+        self.switch_interface = SwitchInterface(self)
+        self.config_pattern = ConfigPatttern(self)
 
 
 # vim:set sw=4 ts=4 et:

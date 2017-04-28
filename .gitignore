@@ -3,3 +3,6 @@
 *~
 node_modules
 adminator/static/dist/*
+config/local.ini
+venv
+.cache

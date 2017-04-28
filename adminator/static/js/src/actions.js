@@ -55,3 +55,19 @@ export var NetworkAclActions = Reflux.createActions([
 export var TopologyActions = Reflux.createActions([
   'list'
 ])
+
+export var MacHistoryActions = Reflux.createActions([
+  'list'
+])
+
+export var SwitchInterfaceActions = Reflux.createActions([
+  'read', 'update', 'list'
+])
+
+export var ConfigPatternActions = Reflux.createActions([
+  'create', 'read', 'update', 'delete', 'list', 'recalculate', 'recalculateall'
+])
+
+export var SwitchActions = Reflux.createActions([
+  'create', 'read', 'update', 'delete', 'list'
+])

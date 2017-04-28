@@ -11,6 +11,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap'
 import * as _ from 'lodash'
 import {regexGridFilter} from '../util/griddle-components'
 import {isIP4, isIP6} from '../util/simple-validators'
+import {pseudoNaturalCompare} from '../util/general'
 
 export var RecordNameComponent = React.createClass({
   render() {
@@ -82,7 +83,7 @@ export var Record = React.createClass({
        item.content_sort = item.content.replace(/\./g, '')
       } else if(isIP6(item.content)) {
        item.content_sort = item.content.replace(/\:/g, '')
-      } else { 
+      } else {
        item.content_sort = item.content
       }
      records.push(item)
@@ -123,14 +124,16 @@ export var Record = React.createClass({
       },{
         columnName: 'name',
         displayName: 'Name',
-        customComponent: RecordNameComponent
-      }, {
+        customComponent: RecordNameComponent,
+        customCompareFn: pseudoNaturalCompare
+      },{
         columnName: 'type',
         displayName: 'Type'
       }, {
         columnName: 'content_sort',
         displayName: 'Content',
-        customComponent: RecordContentComponent
+        customComponent: RecordContentComponent,
+        customCompareFn: pseudoNaturalCompare
       }
 
     ]
@@ -165,6 +168,4 @@ export var Record = React.createClass({
           </div>
     )
   },
-
 })
-

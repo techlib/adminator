@@ -197,7 +197,7 @@ def make_site(db, manager, access_model, debug=False):
     @pass_user_info
     def network_get_handler(**kwargs):
         return flask.jsonify(result=manager.network.list(kwargs.get('privileges')))
-     
+
     @app.route('/network/', methods=['POST'])
     @authorized_only(privilege='admin')
     def network_handler():
@@ -258,7 +258,7 @@ def make_site(db, manager, access_model, debug=False):
             domain = flask.request.get_json(force=True)
             domain['id'] = id
             return flask.jsonify(manager.domain.update(domain))
- 
+
 
     @app.route('/record/', methods=['GET', 'POST'])
     @authorized_only(privilege='admin')
@@ -319,25 +319,25 @@ def make_site(db, manager, access_model, debug=False):
         return flask.jsonify(**info)
 
 
-    @app.route('/port/', methods=['GET', 'POST'])
-    @authorized_only(privilege='user')
-    def port_handler():
-        if 'GET' == flask.request.method:
-            return flask.jsonify(result=manager.port.list())
-        if 'POST' == flask.request.method:
-            return flask.jsonify(manager.port.insert(flask.request.get_json(force=True)))
-
-    @app.route('/port/<uuid>', methods=['GET', 'PUT', 'DELETE'])
-    @authorized_only(privilege='user')
-    def port_item_handler(uuid):
-        if 'GET' == flask.request.method:
-            return flask.jsonify(manager.port.get_item(uuid))
-        if 'DELETE' == flask.request.method:
-            return flask.jsonify(manager.port.delete(uuid))
-        if 'PUT' == flask.request.method:
-            port = flask.request.get_json(force=True)
-            port['uuid'] = uuid
-            return flask.jsonify(manager.port.update(port))
+    # @app.route('/port/', methods=['GET', 'POST'])
+    # @authorized_only(privilege='user')
+    # def port_handler():
+    #     if 'GET' == flask.request.method:
+    #         return flask.jsonify(result=manager.port.list())
+    #     if 'POST' == flask.request.method:
+    #         return flask.jsonify(manager.port.insert(flask.request.get_json(force=True)))
+    #
+    # @app.route('/port/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    # @authorized_only(privilege='user')
+    # def port_item_handler(uuid):
+    #     if 'GET' == flask.request.method:
+    #         return flask.jsonify(manager.port.get_item(uuid))
+    #     if 'DELETE' == flask.request.method:
+    #         return flask.jsonify(manager.port.delete(uuid))
+    #     if 'PUT' == flask.request.method:
+    #         port = flask.request.get_json(force=True)
+    #         port['uuid'] = uuid
+    #         return flask.jsonify(manager.port.update(port))
 
     @app.route('/connection/', methods=['GET'])
     @authorized_only(privilege='user')
@@ -345,13 +345,93 @@ def make_site(db, manager, access_model, debug=False):
         if 'GET' == flask.request.method:
             return flask.jsonify(result=manager.connection.list())
 
-    @app.route('/connection/<uuid>', methods=['GET'])
+    # @app.route('/connection/<uuid>', methods=['GET'])
+    # @authorized_only(privilege='user')
+    # def connection_item_handler(uuid):
+    #     if 'GET' == flask.request.method:
+    #         return flask.jsonify(manager.connection.get_item(uuid))
+
+    @app.route('/switch/', methods=['GET', 'POST'])
     @authorized_only(privilege='user')
-    def connection_item_handler(uuid):
+    def switch_handler():
         if 'GET' == flask.request.method:
-            return flask.jsonify(manager.connection.get_item(uuid))
+            return flask.jsonify(result=manager.switch.list())
+        if 'POST' == flask.request.method:
+            print(flask.request.get_json(force=True))
+            return flask.jsonify(manager.switch.insert(flask.request.get_json(force=True)))
+
+    @app.route('/switch/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='user')
+    def switch_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.switch.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.switch.delete(uuid))
+        if 'PUT' == flask.request.method:
+            switch = flask.request.get_json(force=True)
+            switch['uuid'] = uuid
+            return flask.jsonify(manager.switch.update(switch))
+
+    @app.route('/mac_history/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def mac_history_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.mac_history.list())
+
+    # @app.route('/mac_history/<mac>', methods=['GET'])
+    # @authorized_only(privilege='user')
+    # def mac_history_item_handler(mac):
+    #     if 'GET' == flask.request.method:
+    #         return flask.jsonify(manager.mac_history.get_item(mac))
+
+    @app.route('/switch_interface/', methods=['GET'])
+    @authorized_only(privilege='user')
+    def switch_interface_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.switch_interface.list())
+
+    @app.route('/switch_interface/<uuid>', methods=['GET', 'PUT'])
+    @authorized_only(privilege='user')
+    def switch_interface_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.switch_interface.get_item(uuid))
+        if 'PUT' == flask.request.method:
+            interface = flask.request.get_json(force=True)
+            interface['uuid'] = uuid
+            return flask.jsonify(manager.switch_interface.update(interface))
+
+    @app.route('/config_pattern/', methods=['GET', 'POST'])
+    @authorized_only(privilege='user')
+    def config_pattern_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.config_pattern.list())
+        if 'POST' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.insert(flask.request.get_json(force=True)))
+
+    @app.route('/config_pattern/recalculate', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_recalc_handler():
+        if 'GET' == flask.request.method:
+            return flask.jsonify(result=manager.config_pattern.recalculate_all())
+
+    @app.route('/config_pattern/<uuid>', methods=['GET', 'PUT', 'DELETE'])
+    @authorized_only(privilege='user')
+    def config_pattern_item_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.get_item(uuid))
+        if 'DELETE' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.delete(uuid))
+        if 'PUT' == flask.request.method:
+            pattern = flask.request.get_json(force=True)
+            pattern['uuid'] = uuid
+            return flask.jsonify(manager.config_pattern.update(pattern))
+
+    @app.route('/config_pattern/<uuid>/recalculate', methods=['GET'])
+    @authorized_only(privilege='user')
+    def config_pattern_item_recalc_handler(uuid):
+        if 'GET' == flask.request.method:
+            return flask.jsonify(manager.config_pattern.recalculate(uuid))
 
     return app
-
 
 # vim:set sw=4 ts=4 et:
