@@ -99,15 +99,20 @@ class AGUpdater():
                     try:
                         connection = connections[an_key][pp_key][port_key]
                     except KeyError:
-                        self.db.commit()
-                        raise AGUpdateException((
+                        log.msg(
                             'No data about port analyzer group: {0}, '
                             'unit: {1}, patch panel: {2}, port: {3}'
-                            ).format(self.ag.name, an_key, pp_key, port_key)
+                            .format(self.ag.name, an_key, pp_key, port_key)
                         )
-
                     if connection is not None:
-                        port.connect_to = group[connection[0]][connection[1]][connection[2]].uuid
+                        try:
+                            port.connect_to = group[connection[0]][connection[1]][connection[2]].uuid
+                        except KeyError:
+                            log.msg(
+                                'No data in database about port analyzer group: {0}, '
+                                'unit: {1}, patch panel: {2}, port: {3}'
+                                .format(self.ag.name, connection[0], connection[1], connection[2])
+                            )
                     else:
                         port.connect_to = None
 
@@ -178,7 +183,7 @@ class TopologyAgent(object):
     def update_analyzer_group(self, ag_updater):
         try:
             ag_updater.update()
-        except (RequestException, AGUpdateException) as e:
+        except (RequestException, AGUpdateException, Exception) as e:
             log.msg(
                 'Failed to update analyzer group {0}, error: {1!r}'
                 .format(ag_updater.ag.name, e)
