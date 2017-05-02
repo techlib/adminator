@@ -117,21 +117,6 @@ tree = [
 interface = {
     'name': 'interface GigabitEthernet1/0/1',
     'options': [
-            'port link-type trunk',
-            'port trunk permit vlan 1',
-            'voice vlan 20 enable',
-            'loopback-detection enable',
-            'broadcast-suppression pps 3000',
-            'undo jumboframe enable',
-            'poe enable',
-            'stp edged-port enable',
-            'port-security port-mode mac-else-userlogin'
-        ],
-    'syscfg': False
-}
-
-pattern_1 = flexmock(
-    mandatory = [
         'port link-type trunk',
         'port trunk permit vlan 1',
         'voice vlan 20 enable',
@@ -141,12 +126,27 @@ pattern_1 = flexmock(
         'poe enable',
         'stp edged-port enable',
         'port-security port-mode mac-else-userlogin'
-    ], optional = []
+    ],
+    'syscfg': False
+}
+
+pattern_1 = flexmock(
+    mandatory=[
+        'port link-type trunk',
+        'port trunk permit vlan 1',
+        'voice vlan 20 enable',
+        'loopback-detection enable',
+        'broadcast-suppression pps 3000',
+        'undo jumboframe enable',
+        'poe enable',
+        'stp edged-port enable',
+        'port-security port-mode mac-else-userlogin'
+    ], optional=[]
 )
 
 pattern_2 = flexmock(
-    mandatory = [],
-    optional = [
+    mandatory=[],
+    optional=[
         'port link-type trunk',
         'port trunk permit vlan 1',
         'voice vlan 20 enable',
@@ -160,15 +160,15 @@ pattern_2 = flexmock(
 )
 
 pattern_3 = flexmock(
-    mandatory = ['.*'], optional = []
+    mandatory=['.*'], optional=[]
 )
 
 pattern_4 = flexmock(
-    mandatory = [], optional = ['.*']
+    mandatory=[], optional=['.*']
 )
 
 pattern_5 = flexmock(
-    mandatory = [
+    mandatory=[
         'port link-type trunk',
         'port trunk permit vlan \d+',
         'voice vlan 20 enable',
@@ -177,14 +177,14 @@ pattern_5 = flexmock(
         'undo jumboframe enable',
         'stp edged-port enable',
         'port-security port-mode mac-else-userlogin'
-    ],optional = [
+    ], optional=[
         'poe enable',
         'shutdown'
     ]
 )
 
 pattern_6 = flexmock(
-    mandatory = [
+    mandatory=[
         'port link-type trunk',
         'port trunk permit vlan \d+',
         'loopback-detection enable',
@@ -192,14 +192,14 @@ pattern_6 = flexmock(
         'undo jumboframe enable',
         'stp edged-port enable',
         'port-security port-mode mac-else-userlogin'
-    ],optional = [
+    ], optional=[
         'poe enable',
         'shutdown'
     ]
 )
 
 pattern_7 = flexmock(
-    mandatory = [
+    mandatory=[
         'port link-type trunk',
         'port trunk permit vlan \d+',
         'voice vlan 20 enable',
@@ -208,15 +208,17 @@ pattern_7 = flexmock(
         'undo jumboframe enable',
         'stp edged-port enable',
         'port-security port-mode mac-else-userlogin'
-    ],optional = [
+    ], optional=[
         'shutdown'
     ]
 )
+
 
 def test_cfg_parser():
     parser = CfgParser()
     print(parser.parse(config))
     assert parser.parse(config) == parsed
+
 
 def test_cfg_tree():
     parser = CfgParser()
@@ -226,7 +228,7 @@ def test_cfg_tree():
     assert conf == tree
 
 def test_pattern_match():
-    agent = ConfigComwareAgent(None, None, 0)
+    agent = ConfigComwareAgent(None, None, 0, '', '', '')
     assert agent.pattern_match(pattern_1, interface['options']) == True
     assert agent.pattern_match(pattern_2, interface['options']) == True
     assert agent.pattern_match(pattern_3, interface['options']) == True

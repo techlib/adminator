@@ -14,11 +14,14 @@ from sqlalchemy.orm.exc import NoResultFound
 
 
 class ConfigComwareAgent(object):
-    def __init__(self, db, api_url, update_period):
+    def __init__(self, db, api_url, update_period, username, password, crt_path):
         self.db = db
         # TODO: url from config
         self.update_period = int(update_period)
         self.url = api_url
+        self.username = username
+        self.password = password
+        self.crt_path = False if crt_path.lower() in ['false', '0'] else crt_path
 
     def start(self):
         """Start the periodic checking."""
@@ -29,7 +32,7 @@ class ConfigComwareAgent(object):
         parser = CfgParser()
         try:
             url = self.url + '/{}/config/'.format(switch.name)
-            r = requests.get(url)
+            r = requests.get(url, auth=(self.username, self.password), verify=self.crt_path)
         except Exception as e:
             log.msg('Error while getting configuration for {}({}) from url: {}, {}'.format(
                 switch.name, switch.ip_address, url, e
