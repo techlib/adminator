@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Reflux from 'reflux'
 import {UserInfoStore} from '../stores/UserInfo'
-import {Nav, Navbar, NavItem} from 'react-bootstrap'
+import {Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
 
 var Header = Navbar.Header
@@ -57,43 +57,53 @@ export var AdminNavBar = React.createClass({
         )
     }
 
+    var topology = []
+
     if (UserInfoStore.isAllowed('topology')) {
-        res.push(
+        topology.push(
             <LinkContainer to='/topology/' key='topology'>
-                <NavItem eventKey={2}>Topology</NavItem>
+                <MenuItem eventKey={6.1}>Topology</MenuItem>
             </LinkContainer>
         )
     }
 
     if (UserInfoStore.isAllowed('macHistory')) {
-        res.push(
+        topology.push(
             <LinkContainer to='/macHistory/' key='macHistory'>
-                <NavItem eventKey={2}>MAC history</NavItem>
+                <MenuItem eventKey={6.2}>MAC history</MenuItem>
             </LinkContainer>
         )
     }
 
     if (UserInfoStore.isAllowed('swInterface')) {
-        res.push(
+        topology.push(
             <LinkContainer to='/swInterface/' key='swInterface'>
-                <NavItem eventKey={2}>Switch interfaces</NavItem>
+                <MenuItem eventKey={6.3}>Switch interfaces</MenuItem>
             </LinkContainer>
         )
     }
 
     if (UserInfoStore.isAllowed('cfgPattern')) {
-        res.push(
+        topology.push(
             <LinkContainer to='/cfgPattern/' key='cfgPattern'>
-                <NavItem eventKey={2}>Config patterns</NavItem>
+                <MenuItem eventKey={6.4}>Config patterns</MenuItem>
             </LinkContainer>
         )
     }
 
     if (UserInfoStore.isAllowed('switch')) {
-        res.push(
+        topology.push(
             <LinkContainer to='/switch/' key='switch'>
-                <NavItem eventKey={2}>Switches</NavItem>
+                <MenuItem eventKey={6.5}>Switches</MenuItem>
             </LinkContainer>
+        )
+    }
+
+    if (topology.length > 0) {
+        res.push(
+          <NavDropdown eventKey={6} title='Topology' id="basic-nav-dropdown">
+              {topology}
+          </NavDropdown>
         )
     }
 
@@ -118,7 +128,7 @@ export var AdminNavBar = React.createClass({
                 </li>
            </Nav>
 
-           <Nav className='navbar-nav navbar-primary'>
+           <Nav className='navbar-nav navbar-primary navbar-inverse'>
               {this.getAvailableLinks()}
            </Nav>
     </div>
