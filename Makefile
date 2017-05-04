@@ -22,3 +22,6 @@ clean:
 	rm -rf node_modules
 	rm -rf adminator/static/js/node_modules
 	rm adminator/static/dist/app.bundle.js
+	rm adminator/static/fonts/*
+	rm adminator/static/css/patternfly*
+	rm adminator/static/js/patternfly*

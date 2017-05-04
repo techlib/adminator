@@ -3,6 +3,11 @@
 *~
 node_modules
 adminator/static/dist/*
+adminator/static/fonts/*
+adminator/static/css/patternfly*
+adminator/static/js/patternfly*
+adminator/static/img/spinner*
+adminator/static/img/bg-*
 config/local.ini
 venv
 .cache
