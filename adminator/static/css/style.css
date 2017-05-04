@@ -634,3 +634,9 @@ th:last-child .btn-group, td:last-child .btn-group {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff434343', endColorstr='#ff303030', GradientType=0);
 }
+
+/* Hack to avoid problem with new version of patternfly */
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    left: initial !important;
+    width: initial !important;
+}
