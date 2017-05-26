@@ -38,6 +38,7 @@ export var RecordDetail = React.createClass({
         content: this.refs.content.getValue(),
         type: this.state.data.record.type,
         domain_id: this.state.data.record.domain_id,
+        ttl: this.refs.ttl.getValue(),
         id: this.state.data.record.id
       }
     }}
@@ -55,6 +56,7 @@ export var RecordDetail = React.createClass({
         name: this.refs.name.getValue(),
         content: content,
         type: this.state.data.record.type,
+        ttl: this.state.data.record.ttl,
         domain_id: this.state.data.record.domain_id
       }
     }})
@@ -145,7 +147,16 @@ export var RecordDetail = React.createClass({
               ref='content'
               onChange={this.handleChange}
               value={this.state.data.record.content} />
-        </div>
+            <Input
+              type='text'
+              label='TTL'
+              labelClassName='col-xs-2'
+              wrapperClassName='col-xs-2'
+              ref='ttl'
+              onChange={this.handleChange}
+              value={this.state.data.record.ttl} />
+
+       </div>
         )
       } else if (type == 'SRV') {
         let [priority, port, value] = this.state.data.record.content.split(' ')
@@ -183,7 +194,16 @@ export var RecordDetail = React.createClass({
                 ref='value'
                 onChange={this.handleSrvChange}
                 value={value} />
-          </div>
+              <Input
+                type='text'
+                label='TTL'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-2'
+                ref='ttl'
+                onChange={this.handleChange}
+                value={this.state.data.record.ttl} />
+
+        </div>
         )
       } else if (type == 'TXT') {
         return (
@@ -204,7 +224,16 @@ export var RecordDetail = React.createClass({
                   wrapperClassName='col-xs-8'
                   onChange={this.handleChange}
                   value={this.state.data.record.content} />
-            </div>
+               <Input
+                  type='text'
+                  label='TTL'
+                  labelClassName='col-xs-2'
+                  wrapperClassName='col-xs-2'
+                  ref='ttl'
+                  onChange={this.handleChange}
+                  value={this.state.data.record.ttl} />
+
+           </div>
           )
       } else if (_.includes(['A', 'AAAA', 'CNAME', 'PTR', 'NS', 'SOA'], type)) {
         return (
@@ -225,6 +254,15 @@ export var RecordDetail = React.createClass({
                 ref='content'
                 onChange={this.handleChange}
                 value={this.state.data.record.content} />
+              <Input
+                type='text'
+                label='TTL'
+                labelClassName='col-xs-2'
+                wrapperClassName='col-xs-2'
+                ref='ttl'
+                onChange={this.handleChange}
+                value={this.state.data.record.ttl} />
+
           </div>
         )
       }

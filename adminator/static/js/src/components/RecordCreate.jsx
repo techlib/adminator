@@ -187,6 +187,16 @@ export var RecordCreate = React.createClass({
               onInputChange={this.handleChangeIpv4}
               value={this.state.record.content} />
           </div>
+          <div className='col-xs-8 col-sm-1'>
+            <Input
+              type='text'
+              label='TTL'
+              placeholder='3600'
+              ref='TTL'
+              name='ttl'
+              onChange={this.handleChange}
+              value={this.state.record.ttl} />
+          </div>
         </div>
       )
       case 'AAAA':
@@ -215,6 +225,16 @@ export var RecordCreate = React.createClass({
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
+          <div className='col-xs-8 col-sm-1'>
+            <Input
+              type='text'
+              label='TTL'
+              placeholder='3600'
+              ref='TTL'
+              name='ttl'
+              onChange={this.handleChange}
+              value={this.state.record.ttl} />
+          </div>
         </div>
       )
       case 'PTR':
@@ -240,7 +260,7 @@ export var RecordCreate = React.createClass({
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
-          <div className='col-xs-8 col-sm-4'>
+          <div className='col-xs-8 col-sm-3'>
             <Input
               type='text'
               label='Value'
@@ -249,6 +269,16 @@ export var RecordCreate = React.createClass({
               placeholder='domain.example.com'
               onChange={this.handleChange}
               value={this.state.record.content} />
+          </div>
+          <div className='col-xs-8 col-sm-1'>
+            <Input
+              type='text'
+              label='TTL'
+              placeholder='3600'
+              ref='TTL'
+              name='ttl'
+              onChange={this.handleChange}
+              value={this.state.record.ttl} />
           </div>
         </div>
       )
@@ -284,6 +314,16 @@ export var RecordCreate = React.createClass({
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
+          <div className='col-xs-8 col-sm-1'>
+            <Input
+              type='text'
+              label='TTL'
+              placeholder='3600'
+              ref='TTL'
+              name='ttl'
+              onChange={this.handleChange}
+              value={this.state.record.ttl} />
+          </div>
         </div>
       )
       case 'SRV':
@@ -317,7 +357,7 @@ export var RecordCreate = React.createClass({
               onChange={this.handleSrvChange}
               value={this.state.record.content.port} />
           </div>
-          <div className='col-xs-8 col-sm-4'>
+          <div className='col-xs-8 col-sm-3'>
             <Input
               type='text'
               label='Value'
@@ -326,6 +366,16 @@ export var RecordCreate = React.createClass({
               placeholder='domain.example.com'
               onChange={this.handleSrvChange}
               value={this.state.record.content.value} />
+          </div>
+          <div className='col-xs-8 col-sm-1'>
+            <Input
+              type='text'
+              label='TTL'
+              placeholder='3600'
+              ref='TTL'
+              name='ttl'
+              onChange={this.handleChange}
+              value={this.state.record.ttl} />
           </div>
         </div>
       )
@@ -341,7 +391,7 @@ export var RecordCreate = React.createClass({
                 onChange={this.handleChange}
                 value={this.state.record.name} />
             </div>
-            <div className='col-sm-8'>
+            <div className='col-sm-7'>
               <Input
                 type='textarea'
                 ref='content'
@@ -349,6 +399,16 @@ export var RecordCreate = React.createClass({
                 name='content'
                 onChange={this.handleChange}
                 value={this.state.record.content} />
+            </div>
+            <div className='col-xs-8 col-sm-1'>
+              <Input
+                type='text'
+                label='TTL'
+                placeholder='3600'
+                ref='TTL'
+                name='ttl'
+                onChange={this.handleChange}
+                value={this.state.record.ttl} />
             </div>
           </div>
         )
