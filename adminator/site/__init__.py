@@ -268,17 +268,17 @@ def make_site(db, manager, access_model, debug=False):
         if 'POST' == flask.request.method:
             return flask.jsonify(manager.record.insert(flask.request.get_json(force=True)))
 
-    @app.route('/record/<id>', methods=['GET', 'PUT', 'DELETE'])
+    @app.route('/record/<id>', methods=['GET', 'PATCH', 'DELETE'])
     @authorized_only(privilege='admin')
     def record_item_handler(id):
         if 'GET' == flask.request.method:
             return flask.jsonify(manager.record.get_item(id))
         if 'DELETE' == flask.request.method:
             return flask.jsonify(manager.record.delete(id))
-        if 'PUT' == flask.request.method:
+        if 'PATCH' == flask.request.method:
             record = flask.request.get_json(force=True)
             record['id'] = id
-            return flask.jsonify(manager.record.update(record))
+            return flask.jsonify(manager.record.patch(record))
 
 
     # Leases

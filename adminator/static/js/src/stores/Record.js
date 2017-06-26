@@ -32,7 +32,7 @@ export var RecordStore = Reflux.createStore({
   onUpdate(record) {
     $.ajax({
       url: `/record/${record.id}`,
-      method: 'PUT',
+      method: 'PATCH',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(record)
