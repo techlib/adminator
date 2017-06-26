@@ -115,7 +115,8 @@ export var MacHistoryList = React.createClass({
       {
         columnName: 'dev_desc',
         displayName: 'Description',
-        customComponent: DeviceDescComponent
+        customComponent: DeviceDescComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'display_name',

@@ -11,6 +11,7 @@ import {Pager} from './Pager'
 import {regexGridFilter} from '../util/griddle-components'
 import moment from 'moment'
 import _ from 'lodash'
+import {pseudoNaturalCompare} from '../util/general'
 
 var DeviceDescComponent = React.createClass({
   render() {
@@ -57,8 +58,8 @@ var DeviceInterfacesComponent = React.createClass({
           <div key={item.uuid}>
             <OverlayTrigger placement="right" overlay=
               <Tooltip id={item.uuid}>
-                {item.hostname? item.hostname: 'No hostname'} <br/> 
-                {item.ip4addr? item.ip4addr: 'Dynamic IPv4 ' + (item.lease4 ? '('+item.lease4+')' : '')} <br/> 
+                {item.hostname? item.hostname: 'No hostname'} <br/>
+                {item.ip4addr? item.ip4addr: 'Dynamic IPv4 ' + (item.lease4 ? '('+item.lease4+')' : '')} <br/>
                 {item.ip6addr? item.ip6addr: 'Dynamic IPv6 '} <br/>
                 {net}
               </Tooltip>>
@@ -141,7 +142,8 @@ export var DeviceList = React.createClass({
       {
         columnName: 'description',
         displayName: 'Description',
-        customComponent: DeviceDescComponent
+        customComponent: DeviceDescComponent,
+        customCompareFn: pseudoNaturalCompare
       },
       {
         columnName: 'valid',
@@ -205,4 +207,3 @@ export var DeviceList = React.createClass({
     )
   }
 })
-
