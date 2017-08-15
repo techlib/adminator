@@ -80,6 +80,15 @@ export var RecordCreate = React.createClass({
   },
 
   handleChange(e) {
+    if (e.target.name == 'name') {
+      var domain = e.target.value.split('.').slice(-2).join('.')
+      var selected = null
+      if(selected = _.findLast(this.state.data['list'], (o) => { return o.name == domain })){
+        this.state.record.domain_id = selected.id
+        this.state.domainName = selected.name
+        this.setState({domainName: selected.name, record: this.state.record})
+      }
+    }
     this.state.record[e.target.name] = e.target.value
     if(e.target.name == 'prio') {
       this.state.record.priority = (_.isUndefined(e.target.value) ? 0 : e.target.value)
@@ -464,7 +473,7 @@ export var RecordCreate = React.createClass({
                  </div>
 
                  <div className='col-xs-12 col-md-4 vcenter'>
-                   <BootstrapSelect ref='domain' addonBefore='Domain' data-live-search="true" onChange={this.handleDomainChange} updateOnLoad value={this.props.domain}>
+                   <BootstrapSelect ref='domain' addonBefore='Domain' data-live-search="true" onChange={this.handleDomainChange} updateOnLoad value={this.state.record.domain_id}>
                      {this.state.data['list'].map((domain) => {
                        return <option value={domain.id} data-name={domain.name} key={domain.name}>{domain.name}</option>
                      })}
