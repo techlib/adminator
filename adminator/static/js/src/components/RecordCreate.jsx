@@ -66,6 +66,15 @@ export var RecordCreate = React.createClass({
   handlePtrChange(e) {
     this.state.record.ip = e.target.value
     this.state.record.name = ipToPtr(e.target.value)
+
+    var domain = this.state.record.name.split('.').slice(2).join('.')
+    var selected = null
+    if(selected = _.findLast(this.state.data['list'], (o) => { return o.name == domain })){
+      this.state.record.domain_id = selected.id
+      this.state.domainName = selected.name
+      this.setState({domainName: selected.name, record: this.state.record})
+    }
+
     this.setState({record: this.state.record})
   },
 
