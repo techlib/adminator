@@ -188,7 +188,7 @@ export var DeviceList = React.createClass({
                 </div>
             </div>
               <Feedback />
-            <Griddle results={this.state.data.list}
+            <Griddle results={this.state.data['list']}
                      tableClassName='table table-bordered table-striped table-hover'
                      useGriddleStyles={false}
                      showFilter={true}

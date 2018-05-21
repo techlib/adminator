@@ -17,7 +17,7 @@ export var NetworkStore = Reflux.createStore({
   },
 
   onRead(id) {
-    var me = this
+    var _this = this
     $.ajax({url: `/network/${id}`,
         success: result => {
             this.data.network = result
@@ -25,29 +25,30 @@ export var NetworkStore = Reflux.createStore({
         },
         error: result => {
             BrowserHistory.push('/network/')
-            me.ajaxError(result)
+            _this.ajaxError(result)
         }
     })
   },
 
   onDelete(id) {
-    var me = this
+    var _this = this
     $.ajax({
       url: `/network/${id}`,
       method: 'DELETE',
       dataType: 'json',
       contentType: 'application/json',
       success: () => {
+          _this.onList()
           BrowserHistory.push('/network/')
-          me.ajaxSuccess('Network deleted')
+          _this.ajaxSuccess('Network deleted')
       },
-      error: me.ajaxError
+      error: _this.ajaxError
     })
   },
 
 
   onUpdate(network) {
-    var me = this
+    var _this = this
     $.ajax({
       url: `/network/${network.uuid}`,
       method: 'PATCH',
@@ -56,14 +57,14 @@ export var NetworkStore = Reflux.createStore({
       data: JSON.stringify(network),
       success: () => {
           BrowserHistory.push('/network/')
-          me.ajaxSuccess('Network updated')
+          _this.ajaxSuccess('Network updated')
       },
-      error: me.ajaxError
+      error: _this.ajaxError
     })
   },
 
   onCreate(network) {
-    var me = this
+    var _this = this
     $.ajax({
       url: '/network/',
       method: 'POST',
@@ -72,9 +73,9 @@ export var NetworkStore = Reflux.createStore({
       data: JSON.stringify(network),
       success: result => {
           BrowserHistory.push(`/network/${result.uuid}`)
-          me.ajaxSuccess('Network created')
+          _this.ajaxSuccess('Network created')
       },
-      error: me.ajaxError
+      error: _this.ajaxError
     })
   },
 
