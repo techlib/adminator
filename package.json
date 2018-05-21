@@ -18,7 +18,7 @@
     "eslint-friendly-formatter": "^2.0.6",
     "eslint-loader": "^1.5.0",
     "eslint-plugin-react": "^6.0.0",
-    "griddle-react": "^0.6.1",
+    "griddle-react": "^0.8.2",
     "history": "^2.1.2",
     "ip-address": "^5.8.2",
     "ipaddr.js": "",
