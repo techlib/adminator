@@ -179,6 +179,13 @@ export var RecordCreate = React.createClass({
   },
 
   renderInput() {
+    var placeholders = {
+      'AAAA': '2001:718:12:12::12',
+      'CNAME': 'domain.alias.example.org',
+      'NS': 'dns.example.org',
+      'SOA': 'dns.example.org. hostmaster.example.org. 2020060606 10800 900 604800 129600'
+    }
+
      switch (this.state.record.type) {
      case 'A':
      return (
@@ -187,7 +194,7 @@ export var RecordCreate = React.createClass({
             <Input
               type='text'
               label='Name'
-              placeholder='domain.example.com'
+              placeholder='domain.example.org'
               ref='name'
               name='name'
               onChange={this.handleChange}
@@ -198,7 +205,7 @@ export var RecordCreate = React.createClass({
             <Typeahead
               type='text'
               label='Value'
-              placeholder='10.0.0.0'
+              placeholder='10.0.0.123'
               options={this.state.availableIpv4}
               ref='content'
               name='content'
@@ -227,7 +234,7 @@ export var RecordCreate = React.createClass({
             <Input
               type='text'
               label='Name'
-              placeholder='domain.example.com'
+              placeholder='domain.example.org'
               ref='name'
               name='name'
               onChange={this.handleChange}
@@ -237,7 +244,7 @@ export var RecordCreate = React.createClass({
             <Input
               type='text'
               label='Value'
-              placeholder='10.0.0.123'
+              placeholder={placeholders[this.state.record.type]}
               ref='content'
               name='content'
               onChange={this.handleChange}
@@ -309,7 +316,7 @@ export var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
-              placeholder='example.com'
+              placeholder='example.org'
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -328,7 +335,7 @@ export var RecordCreate = React.createClass({
               label='Value'
               ref='content'
               name='content'
-              placeholder='mailserver.example.com'
+              placeholder='mailserver.example.org'
               onChange={this.handleChange}
               value={this.state.record.content} />
           </div>
@@ -353,7 +360,7 @@ export var RecordCreate = React.createClass({
               label='Name'
               ref='name'
               name='name'
-              placeholder='_service._tcp.example.com'
+              placeholder='_service._tcp.example.org'
               onChange={this.handleChange}
               value={this.state.record.name} />
           </div>
@@ -381,7 +388,7 @@ export var RecordCreate = React.createClass({
               label='Value'
               ref='value'
               name='value'
-              placeholder='domain.example.com'
+              placeholder='domain.example.org'
               onChange={this.handleSrvChange}
               value={this.state.record.content.value} />
           </div>
@@ -434,7 +441,8 @@ export var RecordCreate = React.createClass({
   },
 
   renderTypeButton(type) {
-    let btnCls = classNames({[`btn-${type.toLowerCase()}`]: this.state.record.type==type})
+    console.log(this.state.record.type)
+    let btnCls = classNames({[`btn-${type.toLowerCase()}`]: this.state.record.type==type, 'active': this.state.record.type==type})
     return (
         <Button bsStyle={btnCls}
             bsSize='lg'
