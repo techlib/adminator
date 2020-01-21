@@ -48,7 +48,8 @@ export var DeviceForm = React.createClass({
     getValues() {
         var data = {
             type: this.state.type,
-            description: this.state.description
+            description: this.state.description,
+            location: this.state.location
         }
         if (this.state.type == 'staff') {
             data.description = this.state.description
@@ -123,6 +124,15 @@ export var DeviceForm = React.createClass({
                     name='description'
                     onChange={this.handleChange}
                     value={this.state.description}
+                    {...this.commonProps} />
+
+                <Input
+                    type='text'
+                    label='Location'
+                    ref='location'
+                    name='location'
+                    onChange={this.handleChange}
+                    value={this.state.location}
                     {...this.commonProps} />
 
                 <BootstrapSelect
