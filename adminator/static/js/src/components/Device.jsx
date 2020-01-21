@@ -67,7 +67,8 @@ export var Device = React.createClass({
         return data
     },
 
-    save() {
+    save(e) {
+        e.preventDefault()
         var errors = this.validate()
 
         if (errors.length > 0) {
@@ -125,6 +126,7 @@ export var Device = React.createClass({
 
     render() {
     return (
+        <form onSubmit={this.save}>
         <div className='col-xs-12 container-fluid'>
             <h1>{this.props.title}</h1>
                 <Feedback />
@@ -144,8 +146,7 @@ export var Device = React.createClass({
                     <div className='panel-footer'>
                         <div className="row">
                             <div className="col-xs-6">
-                                <button className='btn btn-primary'
-                                        onClick={this.save}>Save</button>
+                                <button className='btn btn-primary'>Save</button>
                             </div>
                             <div className="col-xs-6 text-right">
 								{this.getDeleteLink()}
@@ -176,6 +177,7 @@ export var Device = React.createClass({
         </div>
     </div>
 </div>
+</form>
     )
     }
 })
