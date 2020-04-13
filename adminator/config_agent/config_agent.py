@@ -13,7 +13,7 @@ from .parser import CfgParser
 from sqlalchemy.orm.exc import NoResultFound
 
 
-class ConfigComwareAgent(object):
+class ConfigAgent(object):
     def __init__(self, db, api_url, update_period, username, password, crt_path):
         self.db = db
         # TODO: url from config
@@ -94,11 +94,13 @@ class ConfigComwareAgent(object):
         start = time.time()
         switces = self.db.switch.filter_by(enable=True, type='3com').all()
         switces.extend(self.db.switch.filter_by(enable=True, type='hp').all())
+        switces.extend(self.db.switch.filter_by(enable=True, type='aruba').all())
         for switch in switces:
             try:
                 self.update_switch(switch)
             except Exception as e:
-                log.msg('Error while updating configuration of {}({}), {}'.format(switch.name, switch.ip_address, e))
+                log.msg('Error while updating configuration of {}({}), {}'.format(
+                    switch.name, switch.ip_address, e))
                 self.db.rollback()
                 continue
 

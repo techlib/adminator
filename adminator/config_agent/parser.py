@@ -70,19 +70,19 @@ class CfgParser(object):
     def p_subblock_subblock_sublevel(self, p):
         'subblock : subblock SUBLEVEL'
         p[0] = p[1]
-        p[0].append(p[2][1:])
+        p[0].append(p[2].lstrip())
 
     def p_subblock_sublevel(self, p):
         'subblock : SUBLEVEL'
-        p[0] = [p[1][1:], ]
+        p[0] = [p[1].lstrip(), ]
 
-    #~ def p_separator_separator_separatorloc(self, p):
-        #~ 'separator : SEPARATOR SEPARATORLOC'
-        #~ p[0] = p[1]
+    # def p_separator_separator_separatorloc(self, p):
+        # 'separator : SEPARATOR SEPARATORLOC'
+        # p[0] = p[1]
 
-    #~ def p_separator_separatorloc_separator(self, p):
-        #~ 'separator : SEPARATORLOC SEPARATOR'
-        #~ p[0] = p[2]
+    # def p_separator_separatorloc_separator(self, p):
+        # 'separator : SEPARATORLOC SEPARATOR'
+        #  p[0] = p[2]
 
     def p_separator_separator(self, p):
         'separator : SEPARATOR'
@@ -90,6 +90,10 @@ class CfgParser(object):
 
     def p_separator_return(self, p):
         'separator : RETURN'
+        p[0] = p[1]
+
+    def p_separator_eof(self, p):
+        'separator : eof'
         p[0] = p[1]
 
     def p_separator_separator_separator(self, p):

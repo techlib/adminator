@@ -13,18 +13,21 @@ class CfgLexerError(Exception):
 
 
 class CfgLexer(object):
+    eof = False
+
     tokens = (
         'SUBLEVEL',
         #~ 'SUBSUBLEVEL',
         'TOPLEVEL',
         'SEPARATOR',
         'RETURN',
+        'eof'
     )
+    t_SEPARATOR = r'([\#;]|\ +exit).*'
     # t_SUBLEVEL = r'\s\S.*'
     t_SUBLEVEL = r'(\ +\S+)+'
-    #~ t_SUBSUBLEVEL = r'\s\s\S.*'
-    t_SEPARATOR = r'\#.*'
-    t_TOPLEVEL = r'([^\#\s]).*'
+    # ~ t_SUBSUBLEVEL = r'\s\s\S.*'
+    t_TOPLEVEL = r'([^\#\s;]).*'
 
     def t_RETURN(self, t):
         r'return'
@@ -33,6 +36,11 @@ class CfgLexer(object):
     def t_newline(self, t):
         r'(\ *\n)+'
         t.lexer.lineno += len(t.value)
+
+    def t_eof(self, t):
+        if not self.eof:
+            self.eof = True
+            return t
 
     # Error handling rule
     def t_error(self, t):
@@ -50,7 +58,7 @@ class CfgLexer(object):
                 break
 
     def tokenize(self, data):
-        #~ 'Debug method!'
+        # 'Debug method!'
         self.lexer.input(data)
         while True:
             tok = self.lexer.token()

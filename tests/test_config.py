@@ -1,5 +1,5 @@
-from adminator.config_comware_agent.parser import CfgParser
-from adminator.config_comware_agent import ConfigComwareAgent
+from adminator.config_agent.parser import CfgParser
+from adminator.config_agent import ConfigAgent
 import flexmock
 
 config = '''
@@ -68,18 +68,18 @@ tree = [
         'name': 'sysname',
         'options': ['sysname FDS3.4'],
         'syscfg': True
-    },{
+    }, {
         'name': 'ndp',
         'options': ['ndp enable'],
         'syscfg': True
-    },{
+    }, {
         'name': 'loopback-detection',
         'options': [
             'loopback-detection enable',
             'loopback-detection multi-port-mode enable'
-            ],
+        ],
         'syscfg': True
-    },{
+    }, {
         'name': 'local-user admin',
         'options': [
             'password cipher HASH1',
@@ -88,7 +88,7 @@ tree = [
             'service-type web'
         ],
         'syscfg': False
-    },{
+    }, {
         'name': 'local-user manager',
         'options': [
             'password cipher HASH2',
@@ -97,7 +97,7 @@ tree = [
             'service-type web'
         ],
         'syscfg': False
-    },{
+    }, {
         'name': 'interface GigabitEthernet1/0/1',
         'options': [
                 'port link-type trunk',
@@ -109,7 +109,7 @@ tree = [
                 'poe enable',
                 'stp edged-port enable',
                 'port-security port-mode mac-else-userlogin'
-            ],
+        ],
         'syscfg': False
     }
 ]
@@ -227,8 +227,9 @@ def test_cfg_tree():
         conf.append({'name': item[0], 'options': item[1], 'syscfg': item[2]})
     assert conf == tree
 
+
 def test_pattern_match():
-    agent = ConfigComwareAgent(None, None, 0, '', '', '')
+    agent = ConfigAgent(None, None, 0, '', '', '')
     assert agent.pattern_match(pattern_1, interface['options']) == True
     assert agent.pattern_match(pattern_2, interface['options']) == True
     assert agent.pattern_match(pattern_3, interface['options']) == True

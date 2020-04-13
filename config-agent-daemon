@@ -26,7 +26,7 @@ from sys import argv, stderr
 from configparser import ConfigParser
 
 # Import all the application handles.
-from adminator import ConfigComwareAgent
+from adminator import ConfigAgent
 
 
 if __name__ == '__main__':
@@ -51,7 +51,7 @@ if __name__ == '__main__':
         db.schema = 'topology'
 
         # Extract agent options, sans the pool_size we handle here.
-        agent_opts = dict(config.items('config-comware'))
+        agent_opts = dict(config.items('config'))
         # agent_opts = dict()
         agent_pool = int(agent_opts.pop('pool_size', 2))
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         reactor.suggestThreadPoolSize(agent_pool)
 
         # Prepare the agent that runs in an exclusive thread.
-        agent = ConfigComwareAgent(db, **agent_opts)
+        agent = ConfigAgent(db, **agent_opts)
 
         # Run the startup code as the first thing.
         reactor.callLater(0, agent.start)

@@ -550,6 +550,10 @@ th:last-child .btn-group, td:last-child .btn-group {
   background-color: #009933;
 }
 
+.label-link-speed-20g {
+  background-color: #009999;
+}
+
 .label-link-speed-24g {
   background-color: #009999;
 }

@@ -8,19 +8,20 @@ import subprocess
 import datetime
 import threading
 import time
+import re
 
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
-__all__ = ['SNMPHPAgent']
+__all__ = ['SNMPArubaAgent']
 
 
-class SNMPHPAgent(object):
+class SNMPArubaAgent(object):
     status_oid = '1.3.6.1.2.1.1'
     oid_engine_time = '1.3.6.1.6.3.10.2.1.3'
 
     inter_oids = {
-        'Speed': ('1.3.6.1.2.1.2.2.1.5', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
+        'Speed': ('1.3.6.1.2.1.31.1.1.1.15', '#IF-MIB::ifSpeed.4227913 = Gauge32: 1000000000', 'Gauge32: ', 1),
         'AdminStatus': ('1.3.6.1.2.1.2.2.1.7', '#IF-MIB::ifAdminStatus.4227913 = INTEGER: up(1)', 'INTEGER: ', 1),
         'Description': (
             '1.3.6.1.2.1.2.2.1.2', '#IF-MIB::ifDescr.4227913 = STRING: GigabitEthernet1/0/37', 'STRING: ', 1
@@ -38,6 +39,9 @@ class SNMPHPAgent(object):
         ),
         'Vlan': (
             '1.3.6.1.2.1.17.7.1.4.5.1.1', '#SNMPv2-SMI::mib-2.17.7.1.4.5.1.1.4227913 = Gauge32: 13', 'Gauge32: ', 1
+        ),
+        'Alias': (
+            '1.3.6.1.2.1.31.1.1.1.18', '#1.3.6.1.2.1.31.1.1.1.18.59 = STRING: S1.3.043', 'STRING: ', 1
         ),
         'mapping-2': (
             '1.3.6.1.2.1.17.4.3.1.2',
@@ -77,7 +81,7 @@ class SNMPHPAgent(object):
         data = {}
 
         command = bashCommand.format(timeout, community, version, ip, oid)
-        # timeout - diferent (oid, ip) need diferent timeout => problem
+        # ~ timeout - diferent (oid, ip) need diferent timeout => problem
         output = subprocess.check_output(command.split(), timeout=self.query_timeout).decode('utf-8')
         for line in output.split('\n')[:-1]:
             prefix_lenght = len(oid) + 2
@@ -161,6 +165,7 @@ class SNMPHPAgent(object):
     def save_to_db(self, switch, data):
         sw_info = data['switch']
         self.save_if_to_db(switch, data['interfaces'], sw_info['uptime'])
+        self.save_if_topology_to_db(switch, data['interfaces'])
         switch.uptime = '{} seconds'.format(int(sw_info['engineUptime']))
         switch.sys_description = sw_info['description']
         switch.sys_objectID = sw_info['objectID']
@@ -173,18 +178,9 @@ class SNMPHPAgent(object):
 
     def process_speed(self, data, name, admin_status, oper_status):
         # link (adm) down, speed auto => non zero value
-        if admin_status == 0 or oper_status == 0:
+        if admin_status != 1 or oper_status != 1:
             return None
-        name = name.lower()
         speed = int(data)
-        if speed == 4294967295:
-            if name.startswith('ten-gigabitethernet'):
-                return 10000
-            # for example Bridge-Aggregation, 4294967295 means 3Gbit in my case
-            else:
-                return None
-        else:
-            speed //= 1000000
         if speed == 0:
             return None
 
@@ -206,16 +202,61 @@ class SNMPHPAgent(object):
             uptime += 4294967296
         return '{} seconds'.format((uptime - last_change) // 100)
 
+    def save_if_topology_to_db(self, switch, data):
+        analyzer = self.db.analyzer.filter_by(name=switch.name).one()
+
+        for key, val in data.items():
+            if not re.match(r'\d+/\d+', val['Name']):
+                continue
+            unit_number, interface_number = map(int, val['Name'].split('/', 2))
+            where = and_(self.db.patch_panel.analyzer == analyzer.uuid,
+                         self.db.patch_panel.pp_id_in_analyzer == unit_number)
+            try:
+                patch_panel = self.db.patch_panel.filter(where).one()
+            except NoResultFound:
+                self.db.patch_panel.insert(pp_id_in_analyzer=unit_number, analyzer=analyzer.uuid)
+                self.db.commit()
+            finally:
+                patch_panel = self.db.patch_panel.filter(where).one()
+
+            where = and_(self.db.port.patch_panel == patch_panel.uuid,
+                         self.db.port.name == val['Name'])
+            try:
+                port = self.db.port.filter(where).one()
+            except NoResultFound:
+                self.db.port.insert(
+                    patch_panel=patch_panel.uuid,
+                    position_on_pp=interface_number,
+                    name=val['Name'],
+                    type='sw'
+                )
+                self.db.commit()
+            finally:
+                port = self.db.port.filter(where).one()
+
+            try:
+                other_port = self.db.port.filter_by(name=val['Alias']).one()
+                other_port.connect_to = port.uuid
+                port.connect_to = other_port.uuid
+                self.db.commit()
+            except NoResultFound:
+                pass
+
+            where = and_(self.db.sw_interface.switch == switch.uuid,
+                         self.db.sw_interface.name == val['Name'])
+            interface = self.db.sw_interface.filter(where).one()
+            if interface.port != port.uuid:
+                interface.port = port.uuid
+                self.db.commit()
+
     def save_if_to_db(self, switch, data, sw_uptime):
-        # ~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
-        # ~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
         for key, val in data.items():
             where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
             try:
                 interface = self.db.sw_interface.filter(where).one()
             except NoResultFound:
                 self.db.sw_interface.insert(name=val['Name'], switch=switch.uuid)
-        self.db.commit()
+                self.db.commit()
 
         update_time = datetime.datetime.now()
         for key, val in data.items():
@@ -256,6 +297,7 @@ class SNMPHPAgent(object):
             else:
                 self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
                 self.db.last_interface_for_mac.filter_by(interface=interface.uuid).delete()
+
         self.db.commit()
 
     def parallel_update(self, switch, output):
@@ -279,7 +321,7 @@ class SNMPHPAgent(object):
         start = time.time()
         threads = []
         data = {}
-        for switch in self.db.switch.filter_by(enable=True, type='hp').all():
+        for switch in self.db.switch.filter_by(enable=True, type='aruba').all():
             data[switch.uuid] = {'switch': None, 'interfaces': None}
             t = threading.Thread(target=self.parallel_update, args=(switch, data))
             t.start()
@@ -288,7 +330,7 @@ class SNMPHPAgent(object):
         for t in threads:
             t.join()
 
-        for switch in self.db.switch.filter_by(enable=True, type='hp').all():
+        for switch in self.db.switch.filter_by(enable=True, type='aruba').all():
             if data[switch.uuid]:
                 try:
                     self.save_to_db(switch, data[switch.uuid])
