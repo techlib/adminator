@@ -51,7 +51,7 @@ if __name__ == '__main__':
         db.schema = 'topology'
 
         # Extract agent options, sans the pool_size we handle here.
-        agent_opts = dict(config.items('snmp-hp'))
+        agent_opts = dict(config.items('snmp-aruba'))
         # agent_opts = dict()
         agent_pool = int(agent_opts.pop('pool_size', 2))
 
