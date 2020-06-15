@@ -176,6 +176,7 @@ export var RecordCreate = React.createClass({
       RecordActions.create(this.state.record)
       FeedbackActions.set('success', 'Form has been submited')
     }
+    setTimeout(this.props.hideHandler, 2000);
   },
 
   renderInput() {
