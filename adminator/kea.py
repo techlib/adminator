@@ -7,7 +7,7 @@ from copy import deepcopy
 from collections import Mapping
 from uuid import UUID
 from struct import unpack
-from codecs import encode
+from codecs import encode, decode
 
 DEFAULTS = {
     'Dhcp4': {
@@ -132,7 +132,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
             if otype.type == 'binary':
                 csv = False
-                value = encode(bytes(v.value, 'utf8'), 'hex')
+                value = decode(encode(bytes(v.value, 'utf8'), 'hex'), 'utf8')
             else:
                 csv = True
                 value = v.value
