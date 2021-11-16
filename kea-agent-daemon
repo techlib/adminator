@@ -23,7 +23,7 @@ from sqlsoup import SQLSoup
 
 # Command line arguments follow the GNU conventions.
 from getopt import gnu_getopt
-from sys import argv, stderr
+from sys import argv, stderr, exit
 
 # Configuration is stored in a simple ini file.
 from configparser import ConfigParser
@@ -65,6 +65,12 @@ if __name__ == '__main__':
         txpg.addNotifyObserver(agent.notify)
         db.addCallback(lambda _: txpg.runOperation('listen dhcp'))
         db.addCallback(lambda _: log.msg('Listening For dhcp Notifications'))
+
+        def error(failure, call):
+            log.err(failure, "DB connection error")
+            exit(1)
+
+        db.addErrback(error)
 
         # Run the startup code as the first thing.
         reactor.callLater(0, agent.start)
