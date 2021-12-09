@@ -84,6 +84,10 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     'option-data': list(options(net.uuid, None, 4)),
                     'reservations': list(reservations(net.uuid, 4)),
                     'reservation-mode': 'all',
+                    'user-context': {
+                        'description': net.description,
+                        'vlan': net.vlan
+                    },
                 }
 
                 nexts = next_server(net.uuid, None)
@@ -100,6 +104,10 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     'option-data': list(options(net.uuid, None, 6)),
                     'reservations': list(reservations(net.uuid, 6)),
                     'reservation-mode': 'all',
+                    'user-context': {
+                        'description': net.description,
+                        'vlan': net.vlan
+                    },
                 }
 
     def pools(net, v):
