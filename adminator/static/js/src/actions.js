@@ -1,35 +1,35 @@
 import * as Reflux from 'reflux-core'
 
 export var DomainActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list'
 ])
 
 export var RecordActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list'
 ])
 
 export var DeviceActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list', 'select'
 ])
 
 export var NetworkActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list'
 ])
 
 export var InterfaceActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list'
 ])
 
 export var UserActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list', 'listEnabled'
+    'create', 'read', 'update', 'delete', 'list', 'listEnabled'
 ])
 
 export var Lease6Actions = Reflux.createActions([
-  'read', 'delete', 'list'
+    'read', 'delete', 'list'
 ])
 
 export var Lease4Actions = Reflux.createActions([
-  'read', 'delete', 'list'
+    'read', 'delete', 'list'
 ])
 
 export var DhcpOptionActions = Reflux.createActions([
@@ -49,25 +49,25 @@ export var UserInfoActions = Reflux.createActions([
 ])
 
 export var NetworkAclActions = Reflux.createActions([
-  'read', 'update', 'list'
+    'read', 'update', 'list'
 ])
 
 export var TopologyActions = Reflux.createActions([
-  'list'
+    'list'
 ])
 
 export var MacHistoryActions = Reflux.createActions([
-  'list'
+    'list'
 ])
 
 export var SwitchInterfaceActions = Reflux.createActions([
-  'read', 'update', 'list'
+    'read', 'update', 'list'
 ])
 
 export var ConfigPatternActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list', 'recalculate', 'recalculateall'
+    'create', 'read', 'update', 'delete', 'list', 'recalculate', 'recalculateall'
 ])
 
 export var SwitchActions = Reflux.createActions([
-  'create', 'read', 'update', 'delete', 'list'
+    'create', 'read', 'update', 'delete', 'list'
 ])
