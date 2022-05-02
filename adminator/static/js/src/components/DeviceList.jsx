@@ -226,7 +226,7 @@ export var DeviceList = React.createClass({
               <i className="fa fa-trash-o"></i> Delete selected
             </Button>
             <Button bsStyle='info' disabled={this.state.data.selected.length == 0} onClick={this.clearSelected}>
-              <i className="fa fa-ban"></i> Clear slected
+              <i className="fa fa-ban"></i> Clear selected
             </Button>
             <Button bsStyle='warning' onClick={this.selectAll}>
               <i className="fa fa-list"></i> Select all (filtered)
