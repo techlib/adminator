@@ -11,12 +11,23 @@ export var DeviceStore = Reflux.createStore({
     listenables: [DeviceActions],
     data: { 'device': [], 'list': [], 'errors': [], 'selected': [] },
 
-    onSelect(id) {
-        if (!this.data.selected.includes(id)) {
-            this.data.selected.push(id)
-        } else {
-            this.data.selected = _.without(this.data.selected, id)
+    onSelect(ids) {
+        if (!_.isArray(ids)) {
+            ids = [ids]
         }
+        _.each(ids, (id) => {
+            if (!this.data.selected.includes(id)) {
+                this.data.selected.push(id)
+            } else {
+                this.data.selected = _.without(this.data.selected, id)
+            }
+        })
+
+        this.trigger(this.data)
+    },
+
+    onClearSelected() {
+        this.data.selected = []
         this.trigger(this.data)
     },
 

@@ -9,7 +9,7 @@ export var RecordActions = Reflux.createActions([
 ])
 
 export var DeviceActions = Reflux.createActions([
-    'create', 'read', 'update', 'delete', 'list', 'select'
+    'create', 'read', 'update', 'delete', 'list', 'select', 'clearSelected'
 ])
 
 export var NetworkActions = Reflux.createActions([

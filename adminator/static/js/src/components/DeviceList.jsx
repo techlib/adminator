@@ -118,9 +118,10 @@ var DeviceUserComponent = React.createClass({
 
 
 export var DeviceList = React.createClass({
-  mixins: [Reflux.listenTo(DeviceStore, 'handleData')],
+  mixins: [ModalConfirmMixin, Reflux.listenTo(DeviceStore, 'handleData')],
 
   handleData(data) {
+    console.log(data)
     var devices = []
     _.each(data.list, (item) => {
       item.selected = data.selected.includes(item.uuid)
@@ -143,14 +144,26 @@ export var DeviceList = React.createClass({
     return { data: { list: [], selected: [] } }
   },
 
-  selectDevice(row) {
-    DeviceActions.select(row.props.data.uuid)
+  deleteSelected() {
+    this.modalConfirm('Confirm delete', `Delete all selected devices?`,
+      { 'confirmLabel': 'DELETE', 'confirmClass': 'danger' })
+      .then(() => {
+        _.each(this.state.data.selected, (item) => {
+          DeviceActions.delete(item)
+        })
+      })
   },
 
-  deleteSelected() {
-    _.each(this.state.data.selected, (item) => {
-      DeviceActions.delete(item)
+  clearSelected() {
+    DeviceActions.clearSelected()
+  },
+
+  selectAll() {
+    var items = []
+    _.each(this.refs.Griddle.getCurrentResults(), (item) => {
+      items.push(item.uuid)
     })
+    DeviceActions.select(items)
   },
 
   render() {
@@ -202,20 +215,27 @@ export var DeviceList = React.createClass({
     return (
       <div className='container-fluid col-xs-12'>
         <div className="row">
-          <div className="col-xs-12 col-sm-10">
+          <div className="col-xs-12 col-sm-8">
             <h1>Devices</h1>
           </div>
-          <div className="col-xs-12 col-sm-2 h1 text-right">
+          <div className="col-xs-12 col-sm-4 h1 text-right">
             <a className='btn btn-success' href='#/device/new'>
               <i className='fa fa-plus'></i> New device
             </a>
             <Button bsStyle='danger' disabled={this.state.data.selected.length == 0} onClick={this.deleteSelected}>
               <i className="fa fa-trash-o"></i> Delete selected
             </Button>
+            <Button bsStyle='info' disabled={this.state.data.selected.length == 0} onClick={this.clearSelected}>
+              <i className="fa fa-ban"></i> Clear slected
+            </Button>
+            <Button bsStyle='warning' onClick={this.selectAll}>
+              <i className="fa fa-list"></i> Select all (filtered)
+            </Button>
+
           </div>
         </div>
         <Feedback />
-        <Griddle results={this.state.data['list']}
+        <Griddle ref="Griddle" results={this.state.data['list']}
           tableClassName='table table-bordered table-striped table-hover'
           useGriddleStyles={false}
           showFilter={true}
@@ -229,7 +249,6 @@ export var DeviceList = React.createClass({
           customFilterer={regexGridFilter}
           useCustomFilterer='true'
           columnMetadata={columnMeta}
-          onRowClick={this.selectDevice.bind(this)}
         />
       </div>
     )
