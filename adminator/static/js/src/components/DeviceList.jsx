@@ -121,7 +121,6 @@ export var DeviceList = React.createClass({
   mixins: [ModalConfirmMixin, Reflux.listenTo(DeviceStore, 'handleData')],
 
   handleData(data) {
-    console.log(data)
     var devices = []
     _.each(data.list, (item) => {
       item.selected = data.selected.includes(item.uuid)
@@ -190,6 +189,10 @@ export var DeviceList = React.createClass({
         customComponent: DeviceUserComponent
       },
       {
+        columnName: 'location',
+        displayName: 'Location'
+      },
+      {
         columnName: 'type',
         displayName: 'Type'
       },
@@ -244,7 +247,7 @@ export var DeviceList = React.createClass({
           customPagerComponent={Pager}
           sortAscendingComponent={<span className='fa fa-sort-alpha-asc'></span>}
           sortDescendingComponent={<span className='fa fa-sort-alpha-desc'></span>}
-          columns={['interfaces', 'description', 'type', 'user', 'valid', 'c']}
+          columns={['interfaces', 'description', 'location', 'type', 'user', 'valid', 'c']}
           resultsPerPage='20'
           customFilterer={regexGridFilter}
           useCustomFilterer='true'
