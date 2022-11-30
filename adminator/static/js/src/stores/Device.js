@@ -9,7 +9,7 @@ import * as _ from 'lodash'
 export var DeviceStore = Reflux.createStore({
     mixins: [ErrorMixin],
     listenables: [DeviceActions],
-    data: { 'device': [], 'list': [], 'errors': [], 'selected': [] },
+    data: { 'device': [], 'list': [], 'errors': [], 'selected': [], 'ping': {} },
 
     onSelect(ids) {
         if (!_.isArray(ids)) {
@@ -110,5 +110,19 @@ export var DeviceStore = Reflux.createStore({
                 this.trigger(this.data)
             }
         })
+    },
+
+    onPing(id) {
+        $.ajax({
+            url: `/device/ping/${id}`,
+            method: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: result => {
+                this.data.ping[result['uuid']] = result['result']
+                this.trigger(this.data)
+            }
+        })
     }
+
 })

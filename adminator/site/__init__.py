@@ -15,6 +15,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import date, datetime, timedelta
 from xml.sax.saxutils import escape
 
+from pythonping import ping
+
 import flask
 import os
 import re
@@ -434,9 +436,24 @@ def make_site(db, manager, access_model, debug=False):
 
     @app.route('/ping', methods=['GET'])
     @authorized_only(privilege='user')
-    def ping():
+    def flask_ping():
         return flask.jsonify(pong=True)
 
+
+    @app.route('/device/ping/<uuid>', methods=['GET'])
+    @authorized_only(privilege='user')
+    @pass_user_info
+    def device_ping(uuid, **kwargs):
+        device = manager.device.get_item(uuid, kwargs.get('privileges'))
+        result = False
+        for interface in device.get('interfaces', []):
+            lease4 = interface.get('lease4')
+            addr = interface.get('ip4addr') if lease4 is None else lease4
+            if addr:
+                result = ping(addr, timeout=1, count=2).success()
+                if result:
+                    return flask.jsonify({'result': result, 'uuid': uuid})
+        return flask.jsonify({'result': result, 'uuid': uuid})
 
     return app
 

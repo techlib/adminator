@@ -31,6 +31,10 @@ var DeviceActionsComponent = React.createClass({
     DeviceActions.select(this.props.rowData.uuid)
   },
 
+  pingDevice() {
+    DeviceActions.ping(this.props.rowData.uuid)
+  },
+
   deleteDevice() {
     var name = this.props.rowData.description
     this.modalConfirm('Confirm delete', `Delete ${name}?`,
@@ -49,10 +53,16 @@ var DeviceActionsComponent = React.createClass({
           </Button>
         </OverlayTrigger>
         <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Select</Tooltip> >
-      <Button bsStyle={this.props.rowData.selected ? 'success' : 'info'} onClick={this.selectDevice}>
-        <i className="fa fa-check-circle-o"></i>
-      </Button>
+          <Button bsStyle={this.props.rowData.selected ? 'info' : 'secondary'} onClick={this.selectDevice}>
+            <i className="fa fa-check-circle-o"></i>
+          </Button>
         </OverlayTrigger >
+        <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Ping</Tooltip>>
+        <Button bsStyle={this.props.rowData.ping ? 'success' : 'secondary'} onClick={this.pingDevice}>
+            <i className="fa fa-hand-o-up"></i>
+          </Button>
+        </OverlayTrigger>
+
       </ButtonGroup >
     )
   }
@@ -124,6 +134,7 @@ export var DeviceList = React.createClass({
     var devices = []
     _.each(data.list, (item) => {
       item.selected = data.selected.includes(item.uuid)
+      item.ping = data.ping[item.uuid]
 
       var isExpired = (item.type == 'visitor') &&
         !moment().isBetween(item.valid[0], item.valid[1])
@@ -132,6 +143,7 @@ export var DeviceList = React.createClass({
     })
     this.state.data.list = devices
     this.state.data.selected = data.selected
+    this.state.data.ping = data.ping
     this.setState(this.state)
   },
 
@@ -140,7 +152,7 @@ export var DeviceList = React.createClass({
   },
 
   getInitialState() {
-    return { data: { list: [], selected: [] } }
+    return { data: { list: [], selected: [], ping: {} } }
   },
 
   deleteSelected() {
@@ -155,6 +167,12 @@ export var DeviceList = React.createClass({
 
   clearSelected() {
     DeviceActions.clearSelected()
+  },
+
+  pingSelected() {
+      _.each(this.state.data.selected, (item) => {
+        DeviceActions.ping(item)
+      })
   },
 
   selectAll() {
@@ -225,6 +243,9 @@ export var DeviceList = React.createClass({
             <a className='btn btn-success' href='#/device/new'>
               <i className='fa fa-plus'></i> New device
             </a>
+            <Button bsStyle='pink' disabled={this.state.data.selected.length == 0} onClick={this.pingSelected}>
+              <i className="fa fa-hand-o-up"></i> Ping selected
+            </Button>
             <Button bsStyle='danger' disabled={this.state.data.selected.length == 0} onClick={this.deleteSelected}>
               <i className="fa fa-trash-o"></i> Delete selected
             </Button>
