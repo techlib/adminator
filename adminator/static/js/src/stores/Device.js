@@ -28,6 +28,7 @@ export var DeviceStore = Reflux.createStore({
 
     onClearSelected() {
         this.data.selected = []
+        this.data.ping = {}
         this.trigger(this.data)
     },
 

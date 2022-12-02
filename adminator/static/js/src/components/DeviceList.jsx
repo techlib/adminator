@@ -48,17 +48,17 @@ var DeviceActionsComponent = React.createClass({
     return (
       <ButtonGroup>
         <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Delete</Tooltip>>
-        <Button bsStyle='danger' onClick={this.deleteDevice}>
-            <i className="fa fa-trash-o"></i>
+        <Button bsStyle='danger btn-lg' onClick={this.deleteDevice}>
+        <i className="fa fa-trash-o"></i>
           </Button>
         </OverlayTrigger>
         <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Select</Tooltip> >
-          <Button bsStyle={this.props.rowData.selected ? 'info' : 'secondary'} onClick={this.selectDevice}>
+          <Button bsStyle={this.props.rowData.selected ? 'info btn-lg' : 'secondary btn-lg'} onClick={this.selectDevice}>
             <i className="fa fa-check-circle-o"></i>
           </Button>
         </OverlayTrigger >
         <OverlayTrigger placement="top" overlay=<Tooltip id={this.props.rowData.uuid}>Ping</Tooltip>>
-        <Button bsStyle={this.props.rowData.ping ? 'success' : 'secondary'} onClick={this.pingDevice}>
+        <Button bsStyle={this.props.rowData.ping ? 'success btn-lg' : 'secondary btn-lg'} onClick={this.pingDevice}>
             <i className="fa fa-hand-o-up"></i>
           </Button>
         </OverlayTrigger>
@@ -141,10 +141,13 @@ export var DeviceList = React.createClass({
       item.active = ((item.users && !item.users.enabled) || isExpired) ? 'inactive' : 'active'
       devices.push(item)
     })
-    this.state.data.list = devices
     this.state.data.selected = data.selected
     this.state.data.ping = data.ping
+    this.state.data.list = devices
+    var savedpage = this.refs.Griddle.state.page
     this.setState(this.state)
+    this.refs.Griddle.state.page = savedpage
+    this.refs.Griddle.setState(this.refs.Griddle.state)
   },
 
   componentDidMount() {
@@ -243,7 +246,7 @@ export var DeviceList = React.createClass({
             <a className='btn btn-success' href='#/device/new'>
               <i className='fa fa-plus'></i> New device
             </a>
-            <Button bsStyle='pink' disabled={this.state.data.selected.length == 0} onClick={this.pingSelected}>
+            <Button bsStyle='dark' disabled={this.state.data.selected.length == 0} onClick={this.pingSelected}>
               <i className="fa fa-hand-o-up"></i> Ping selected
             </Button>
             <Button bsStyle='danger' disabled={this.state.data.selected.length == 0} onClick={this.deleteSelected}>
@@ -259,7 +262,7 @@ export var DeviceList = React.createClass({
           </div>
         </div>
         <Feedback />
-        <Griddle ref="Griddle" results={this.state.data['list']}
+        <Griddle ref="Griddle" results={this.state.data.list}
           tableClassName='table table-bordered table-striped table-hover'
           useGriddleStyles={false}
           showFilter={true}
