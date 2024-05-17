@@ -1,6 +1,6 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
-
+from sqlmodel import select, delete
 from twisted.internet import task
 from twisted.python import log
 
@@ -11,7 +11,7 @@ import time
 
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
-
+from adminator.db_entity.topology import *
 
 __all__ = ['SNMP3comAgent']
 
@@ -131,7 +131,7 @@ class SNMP3comAgent(object):
             for val in data[prop]:
                 if not val[0] in mapped_vals[oid[3]] and len(val) is 2:
                     mapped_vals[oid[3]][val[0]] = {}
-                if len(val) is 2:
+                if len(val) == 2:
                     mapped_vals[oid[3]][val[0]][prop] = val[1]
 
         for key, val in mapped_vals[3].items():
@@ -169,7 +169,7 @@ class SNMP3comAgent(object):
         switch.sys_location = sw_info['location']
         switch.sys_services = int(sw_info['services'])
         switch.last_update = datetime.datetime.now()
-        self.db.commit()
+        self.db().commit()
 
     def process_speed(self, data):
         speed = int(data)
@@ -202,19 +202,20 @@ class SNMP3comAgent(object):
         #~ no row (new sw in stack, etc) or multiple ((switch, name) is uniq pair -> no multiple)
         #~ http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.one
         for key, val in data.items():
-            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
+            where = and_(SwInterface.switch == switch.uuid, SwInterface.name == val['Name'])
             try:
-                interface = self.db.sw_interface.filter(where).one()
+                interface = self.db().exec(select(SwInterface).filter(where)).one()
             except NoResultFound:
-                self.db.sw_interface.insert(name=val['Name'], switch=switch.uuid)
-        self.db.commit()
+                to_insert = SwInterface(name=val['Name'], switch=switch.uuid)
+                self.db().add(to_insert)
+        self.db().commit()
 
         update_time = datetime.datetime.now()
         for key, val in data.items():
             if not ('Vlan' in val):
                 val['Vlan'] = 0
-            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
-            interface = self.db.sw_interface.filter(where).one()
+            where = and_(SwInterface.switch == switch.uuid, SwInterface.name == val['Name'])
+            interface = self.db().exec(select(SwInterface).filter(where)).one()
 
             # SNMP up = 1, down = 2
             interface.admin_status = 2 - int(val['AdminStatus'])
@@ -225,27 +226,32 @@ class SNMP3comAgent(object):
 
             interface.last_change = self.process_last_change(val['LastChange'], sw_uptime)
 
-            self.db.mac_address.filter_by(interface=interface.uuid).delete()
+            self.db().exec(delete(MacAddress).filter_by(interface=interface.uuid))
             if interface.ignore_macs is False:
                 if len(val['MACs']) > 0:
-                    self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
+                    self.db().exec(delete(LastMacsOnInterface).filter_by(interface=interface.uuid))
                 for mac in val['MACs']:
-                    self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
-                    self.db.last_macs_on_interface.insert(mac_address=mac, interface=interface.uuid, time=update_time)
+                    mac_to_insert = MacAddress(mac_address=mac, interface=interface.uuid)
+                    self.db().add(mac_to_insert)
+                    last_mac_to_insert = LastMacsOnInterface(mac_address=mac, interface=interface.uuid, time=update_time)
+                    self.db().add(last_mac_to_insert)
+
                     try:
-                        db_mac = self.db.last_interface_for_mac.filter(
-                            self.db.last_interface_for_mac.mac_address == mac
-                        ).one()
+                        db_mac = self.db().exec(select(LastInterfaceForMac).filter(
+                            LastInterfaceForMac.mac_address == mac
+                        )).one()
+
                         db_mac.interface = interface.uuid
                         db_mac.time = update_time
                     except NoResultFound:
-                        self.db.last_interface_for_mac.insert(
-                            mac_address=mac, interface=interface.uuid, time=update_time
-                        )
+                        last_mac_to_insert = LastInterfaceForMac(mac_address=mac, interface=interface.uuid, time=update_time)
+                        self.db().add(last_mac_to_insert)
             else:
-                self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
-                self.db.last_interface_for_mac.filter_by(interface=interface.uuid).delete()
-        self.db.commit()
+                self.db().exec(delete(LastMacsOnInterface).filter_by(interface=interface.uuid))
+                self.db().exec(delete(LastInterfaceForMac).filter_by(interface=interface.uuid))
+
+
+        self.db().commit()
 
     # def parallel_update(self, switch, snmp_profile, output):
     def parallel_update(self, switch, output):
@@ -269,7 +275,7 @@ class SNMP3comAgent(object):
         start = time.time()
         threads = []
         data = {}
-        for switch in self.db.switch.filter_by(enable=True, type='3com').all():
+        for switch in self.db().exec(select(Switch).filter_by(enable=True, type='3com')):
             data[switch.uuid] = {'switch': None, 'interfaces': None}
             # snmp_profile = self.db.snmp_profile.get(switch.snmp_profile)
             # t = threading.Thread(target=self.parallel_update, args=(switch, snmp_profile, data))
@@ -280,7 +286,7 @@ class SNMP3comAgent(object):
         for t in threads:
             t.join()
 
-        for switch in self.db.switch.filter_by(enable=True, type='3com').all():
+        for switch in self.db().exec(select(Switch).filter_by(enable=True, type='3com')):
             if data[switch.uuid]:
                 try:
                     self.save_to_db(switch, data[switch.uuid])
