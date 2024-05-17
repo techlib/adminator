@@ -7,6 +7,7 @@ from psycopg2.extras import DateTimeRange, Range, RangeCaster
 from psycopg2.extensions import AsIs
 from sqlalchemy.types import UserDefinedType
 from sqlalchemy.dialects.postgresql.base import ischema_names
+
 import binascii
 
 class TSRangeType(UserDefinedType):
@@ -53,8 +54,9 @@ class InetRangeType(UserDefinedType):
     def bind_processor(self, dialect):
         def process(value):
             if value:
-                return AsIs(self.caster.range(value[0], value[1], '[]'))
+                return "[{},{}]".format(value[0], value[1])
         return process
+
 
     def result_processor(self, dialect, coltype):
         def process(value):
@@ -80,10 +82,31 @@ class ByteaType(UserDefinedType):
                 return None
         return process
 
+class UUIDType(UserDefinedType):
+    def get_col_spec(self):
+        return 'UUID'
+
+    def bind_processor(self, dialect):
+        def process(value):
+            if value:
+                raise Exception('Not implemented')
+        return process
+
+    def result_processor(self, dialect, coltype):
+        def process(value):
+            if value:
+                return str(value)
+            else:
+                return None
+        return process
 
 ischema_names['tsrange']   = TSRangeType
 ischema_names['range']     = RangeType
 ischema_names['inetrange'] = InetRangeType
 ischema_names['bytea'] = ByteaType
+ischema_names['uuid'] = UUIDType
+
+
+
 
 # vim:set sw=4 ts=4 et:
