@@ -4,12 +4,14 @@
 import ldap3
 from twisted.internet import task
 from twisted.python import log
+from adminator.db_entity.network import User
+from sqlmodel import select, update
 
 __all__ = ['LdapAgent']
 
 class LdapAgent(object):
     def __init__(self, db, url, bind_user, bind_pass):
-        self.ldap = ldap3.Connection(url, user=bind_user, password=bind_pass, auto_bind=True)
+        #self.ldap = ldap3.Connection(url, user=bind_user, password=bind_pass, auto_bind=True)
         self.db = db
 
     def start(self):
@@ -19,19 +21,21 @@ class LdapAgent(object):
 
     def update(self):
         log.msg('LDAP sync started')
-        self.db.user.update({'enabled': False})
+        self.db().exec(update(User).values(enabled=False))
+
         for user in self.get_users():
-            e = self.db.user.get(user['cn'])
+            e = self.db().exec(select(User).where(User.cn == user['cn'])).one()
             if e:
                 for k,v in user.items():
                     setattr(e, k, v)
             else:
                 self.db.user.insert(**user)
-        self.db.commit()
+        self.db().commit()
         log.msg('LDAP sync finished')
 
     def get_users(self):
         users = []
+        return users
         c = self.ldap.search(
                 'ou=users,o=ntk', 
                 '(|(ntkCategory=Z)(ntkCategory=ZV)(ntkCategory=ZU))', 

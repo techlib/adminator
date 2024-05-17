@@ -15,10 +15,8 @@ from twisted.python import log
 
 
 # Data are accessed through SQLSoup, using SQLAlchemy.
-from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
-from sqlsoup import SQLSoup
-
+from sqlalchemy.orm import scoped_session
 # Command line arguments follow the GNU conventions.
 from getopt import gnu_getopt
 from sys import argv, stderr
@@ -28,7 +26,7 @@ from configparser import ConfigParser
 
 # Import all the application handles.
 from adminator import LdapAgent
-
+from sqlmodel import Session
 
 if __name__ == '__main__':
     def do_start(config):
@@ -40,17 +38,18 @@ if __name__ == '__main__':
 
         # Default to much saner database query defaults and always
         # commit and/or flush statements explicitly.
-        factory = sessionmaker(autocommit=False, autoflush=False)
+        engine = create_engine(db_url, echo=False)
 
-        # Prepare database connection with table reflection.
-        engine = create_engine(db_url)
-        session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
-        db = SQLSoup(engine, session=session)
+        # factory to create scoped_session of type Session (from sqlmodel, not sqlalchemy)
+        # to avoid multi-threading problems in new versions of things
+        def sqlmodel_factory():
+            return Session(engine, autoflush=False)
+
+        db = scoped_session(sqlmodel_factory)
 
         # Extract agent options, sans the pool_size we handle here.
         agent_opts = dict(config.items('ldap'))
         agent_pool = int(agent_opts.pop('pool_size', 2))
-
         # Set the correct thread pool size for the agent.
         reactor.suggestThreadPoolSize(agent_pool)
 
