@@ -12,7 +12,7 @@ export var DeviceInterface = React.createClass({
 
     getInitialState() {
         var res = this.props.item
-        if (_.isArray(this.props.networks) && this.props.networks.length > 0) {
+        if (_.isArray(this.props.networks) && this.props.networks.length > 0 && this.props.item.network == null) {
             res.network = this.props.networks[0].uuid
         }
         return res
