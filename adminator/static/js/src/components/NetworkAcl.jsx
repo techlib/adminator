@@ -10,7 +10,7 @@ var DeviceTypeSelector = React.createClass({
 types: ['device', 'staff', 'visitor'],
 
 getState() {
-  return _.invert(this.state, true)[1] || []
+  return _.invertBy(this.state )[1] || []
 },
 
 handleChange(evt) {
