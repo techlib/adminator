@@ -8,6 +8,8 @@ from collections import Mapping
 from uuid import UUID
 from struct import unpack
 from codecs import encode, decode
+from sqlmodel import select
+from adminator.db_entity.network import Network, NetworkPool, DhcpOption, DhcpOptionValue, Interface
 
 DEFAULTS = {
     'Dhcp4': {
@@ -75,14 +77,14 @@ def generate_kea_config(db, tpl=DEFAULTS):
         }
 
     def subnets(v):
-        for net in db.network.all():
+        for net in db().exec(select(Network)):
             if v == 4 and net.prefix4 is not None:
                 config = {
-                    'id': uuid2bigint(net.uuid),
+                    'id': uuid2bigint(str(net.uuid)),
                     'subnet': net.prefix4,
-                    'pools': list(pools(net.uuid, v)),
-                    'option-data': list(options(net.uuid, None, 4)),
-                    'reservations': list(reservations(net.uuid, 4)),
+                    'pools': list(pools(str(net.uuid), v)),
+                    'option-data': list(options(str(net.uuid), None, 4)),
+                    'reservations': list(reservations(str(net.uuid), 4)),
                     'reservation-mode': 'all',
                     'user-context': {
                         'description': net.description,
@@ -90,7 +92,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
                     },
                 }
 
-                nexts = next_server(net.uuid, None)
+                nexts = next_server(str(net.uuid), None)
                 if nexts is not None:
                     config['next-server'] = nexts
 
@@ -98,11 +100,11 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
             elif v == 6 and net.prefix6 is not None:
                 yield {
-                    'id': uuid2bigint(net.uuid),
+                    'id': uuid2bigint(str(net.uuid)),
                     'subnet': net.prefix6,
-                    'pools': list(pools(net.uuid, v)),
-                    'option-data': list(options(net.uuid, None, 6)),
-                    'reservations': list(reservations(net.uuid, 6)),
+                    'pools': list(pools(str(net.uuid), v)),
+                    'option-data': list(options(str(net.uuid), None, 6)),
+                    'reservations': list(reservations(str(net.uuid), 6)),
                     'reservation-mode': 'all',
                     'user-context': {
                         'description': net.description,
@@ -111,14 +113,14 @@ def generate_kea_config(db, tpl=DEFAULTS):
                 }
 
     def pools(net, v):
-        for pool in db.network_pool.filter_by(network=net).all():
+        for pool in db().exec(select(NetworkPool).filter(NetworkPool.network == net)):
             if v == 4 and '.' in pool.range[0]:
                 yield {'pool': '{} - {}'.format(*pool.range)}
             elif v == 6 and ':' in pool.range[0]:
                 yield {'pool': '{} - {}'.format(*pool.range)}
 
     def next_server(net=None, dev=None):
-        options = db.option_value.filter_by(network=net, device=dev, option='next-server').all()
+        options = db().exec(select(DhcpOptionValue).filter_by(network=net, device=dev, option='next-server'))
 
         for option in options:
             return option.value
@@ -127,9 +129,10 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
     def options(net, dev, family):
         f = 'inet' if family == 4 else 'inet6'
-        types = {o.name: o for o in db.option.filter_by(family=f).all()}
 
-        for v in db.option_value.filter_by(network=net, device=dev).all():
+        types = {o.name: o for o in db().exec(select(DhcpOption).filter_by(family=f))}
+
+        for v in db().exec(select(DhcpOptionValue).filter_by(network=net, device=dev)):
             if v.option not in types:
                 continue
 
@@ -154,7 +157,8 @@ def generate_kea_config(db, tpl=DEFAULTS):
             }
 
     def reservations(net, family):
-        for iface in db.interface.filter_by(network=net).all():
+
+        for iface in db().exec(select(Interface).filter_by(network=net)):
             reservation = {
                 'hw-address': iface.macaddr,
             }

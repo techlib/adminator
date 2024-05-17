@@ -1,11 +1,11 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
+from sqlmodel import select, delete
 
 from adminator.model import Model
+from .db_entity.network import NetworkPool
 
-__all__ = ['NetworkPool']
-
-class NetworkPool(Model):
+class NetworkPoolModel(Model):
     def init(self):
         self.table_name = 'network_pool'
         # Primary key
@@ -14,7 +14,9 @@ class NetworkPool(Model):
     def set_pools(self, network, data):
         assert network is not None, 'Primary key not set'
 
-        self.e().filter_by(**{'network': network}).delete()
+        #self.e().filter_by(**{'network': network}).delete()
+
+        self.db().exec(delete(NetworkPool).filter_by(**{'network': network}))
 
         result = []
 
@@ -24,7 +26,7 @@ class NetworkPool(Model):
                 'range': item['range']
             }
 
-            result.append(self.e().insert(**newVal))
+            result.append(self.db().add(NetworkPool(**newVal)))
         return result
 
 # vim:set sw=4 ts=4 et:

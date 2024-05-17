@@ -1,26 +1,27 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
+from sqlmodel import select,delete
 
 from adminator.model import Model
 from adminator.utils import object_to_dict
-from sqlalchemy import and_
+from .db_entity.network import DhcpOptionValue
 
-__all__ = ['DhcpOptionValue']
+__all__ = ['DhcpOptionValueModel']
 
-class DhcpOptionValue(Model):
+class DhcpOptionValueModel(Model):
     def init(self):
         self.table_name = 'option_value'
         # Primary key
         self.pkey = 'uuid'
         # Relations
-        self.relate('type', self.e('option'))
+        #self.relate('type', self.e('option'))
         self.include_relations = {'item': ['type'], 'list': ['type']}
-
+        self.db_entity = DhcpOptionValue
     def list_global(self):
         items = []
-        query = self.e().filter_by(**{'network': None, 'device': None}).all()
-
-        for item in query:
+        #query = self.e().filter_by(**{'network': None, 'device': None}).all()
+        query = select(DhcpOptionValue).where(DhcpOptionValue.network == None).where(DhcpOptionValue.device == None)
+        for item in self.db().exec(query):
             item = object_to_dict(item, include=self.include_relations.get('list'))
             items.append(item)
         return items
@@ -33,7 +34,7 @@ class DhcpOptionValue(Model):
 
     def set_global(self, data):
         res = self.set_options(data);
-        self.db.commit()
+        self.db().commit()
         return list(map(object_to_dict, res))
 
     def set_options(self, data, kind=None, uuid=None):
@@ -44,7 +45,8 @@ class DhcpOptionValue(Model):
         else:
             search = {'network': None, 'device': None}
 
-        self.e().filter_by(**search).delete()
+        #self.e().filter_by(**search).delete()
+        self.db().exec(delete(DhcpOptionValue).filter_by(**search))
 
         result = []
 
@@ -57,7 +59,10 @@ class DhcpOptionValue(Model):
             if kind is not None:
                 newVal[kind] = uuid
 
-            result.append(self.e().insert(**newVal))
+            new_item = DhcpOptionValue(**newVal)
+            self.db().add(new_item)
+            result.append(new_item)
+
         return result
 
 

@@ -2,22 +2,27 @@
 # -*- coding: utf-8 -*-
 
 from adminator.model import Model
+from .db_entity.dhcp import Lease6
+from sqlmodel import text
+import ipaddress
 
-__all__ = ['Lease6']
+from .utils import object_to_dict
 
-class Lease6(Model):
+
+class Lease6Model(Model):
     def init(self):
         self.table_name = 'lease6'
         # Schema
         self.schema = 'kea'
         # Primary key
         self.pkey = 'address'
+        self.db_entity = Lease6
 
 
     def list(self):
         items = []
-        for item in self.db.execute('select * from kea.lease6').fetchall():
-            obj = (dict(zip(item.keys(), item.values())))
+        for item in self.db.execute(text('select * from kea.lease6')):
+            obj = item._asdict()
 
             if obj['address']:
                 obj['address'] = str(ipaddress.IPv6Address(obj['address']))

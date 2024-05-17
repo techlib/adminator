@@ -1,31 +1,35 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
+from sqlalchemy import delete
 
 from adminator.model import Model
+from .db_entity.network import Interface
 
-__all__ = ['Interface']
 
-class Interface(Model):
+class InterfaceModel(Model):
     def init(self):
         self.schema = 'network'
         self.table_name = 'interface'
         self.pkey = 'uuid'
 
     def set_device_interfaces(self, device, data):
-        search = {'device': device}
-        self.e().filter_by(**search).delete()
+        delStm = delete(Interface).where(Interface.device == device)
+        self.db().exec(delStm)
 
         result = []
 
         for item in data:
-            newVal = {}
+            newVal = {'device': str(device)}
 
             for k,v in item.items():
                 if v == '':
                     v = None
 
                 newVal[k] = v
-            result.append(self.e().insert(**newVal))
+
+            newInterface = Interface(**newVal)
+            n = self.db().add(newInterface)
+            result.append(n)
 
         return result
 

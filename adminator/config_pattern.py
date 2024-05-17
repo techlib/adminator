@@ -4,16 +4,16 @@
 import re
 
 from adminator.model import Model
+from .db_entity.topology import IfConfigPattern, SwInterface, InterfaceToPattern
+from sqlmodel import select, delete, text
 
-__all__ = ['ConfigPatttern']
-
-
-class ConfigPatttern(Model):
+class ConfigPattternModel(Model):
     def init(self):
         # Topology schema
         self.schema = 'topology'
         self.table_name = 'if_config_pattern'
         self.pkey = 'uuid'
+        self.db_entity = IfConfigPattern
 
     def pattern_match(self, pattern, configuration):
         # TODO: TypeError: 'NoneType' object is not iterable, etc
@@ -37,27 +37,25 @@ class ConfigPatttern(Model):
         return not (False in mand_state or False in cfg_state)
 
     def recalculate_all(self):
-        patterns = self.e().all()
-        self.db.if_to_pattern.delete()
-        for interface in self.db.sw_interface.all():
+        patterns = self.db().exec(select(IfConfigPattern)).all()
+        self.db().exec(delete(InterfaceToPattern))
+        for interface in self.db().exec(select(SwInterface)):
             for pattern in patterns:
                 if self.pattern_match(pattern, interface.configuration):
-                    self.db.if_to_pattern.insert(
-                        interface=interface.uuid, if_config_pattern=pattern.uuid
-                    )
+                    pattern_to_insert = InterfaceToPattern(interface=interface.uuid, if_config_pattern=pattern.uuid)
+                    self.db().add(pattern_to_insert)
         self.db.commit()
         return 0
 
     def recalculate(self, uuid):
-        pattern = self.e().filter_by(**{self.pkey: uuid}).one()
-        interfaces = self.db.sw_interface.all()
+        pattern = self.db().exec(select(IfConfigPattern).filter_by(uuid=uuid)).one()
+        interfaces = self.db().exec(select(SwInterface)).all()
         match = 0
-        self.db.if_to_pattern.filter_by(if_config_pattern=uuid).delete()
+        self.db().exec(delete(InterfaceToPattern).filter_by(if_config_pattern=uuid))
         for interface in interfaces:
             if self.pattern_match(pattern, interface.configuration):
-                self.db.if_to_pattern.insert(
-                    interface=interface.uuid, if_config_pattern=pattern.uuid
-                )
+                pattern_to_insert = InterfaceToPattern(interface=interface.uuid, if_config_pattern=pattern.uuid)
+                self.db().add(pattern_to_insert)
                 match += 1
         self.db.commit()
 

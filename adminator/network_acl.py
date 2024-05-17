@@ -3,10 +3,9 @@
 
 from adminator.model import Model
 from adminator.utils import object_to_dict
-
-__all__ = ['NetworkAcl']
-
-class NetworkAcl(Model):
+from .db_entity.network import NetworkAcl
+from sqlmodel import select, delete
+class NetworkAclModel(Model):
     def init(self):
         # Table name
         self.table_name = 'network_acl'
@@ -15,13 +14,13 @@ class NetworkAcl(Model):
 
     def get_role(self, role):
         res = {}
-        for item in self.e().filter_by(**{'role': role}).all():
-            res[item.network] = list(item.device_types or [])
+        for item in self.db().exec(select(NetworkAcl).filter_by(**{'role': role})):
+            res[str(item.network)] = list(item.device_types or [])
 
         return res
 
     def patch(self, role, data):
-        self.e().filter_by(role=role).delete()
+        self.db().exec(delete(NetworkAcl).filter_by(role=role))
 
         result = []
 
@@ -31,9 +30,10 @@ class NetworkAcl(Model):
                 'network': item['network'],
                 'device_types': item['device_types']
             }
-            result.append(self.e().insert(**newVal))
+            newItem = NetworkAcl(**newVal)
+            result.append(self.db().add(newItem))
 
-        self.db.commit()
+        self.db().commit()
 
         return {} #object_to_dict(result)
 

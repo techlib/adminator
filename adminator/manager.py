@@ -3,28 +3,25 @@
 
 __all__ = ['Manager']
 
-from twisted.internet.threads import deferToThread
-from twisted.internet import task, reactor
-from twisted.python import log
 
-from adminator.device import Device
-from adminator.dhcp_value import DhcpOptionValue
-from adminator.dhcp_option import DhcpOption
-from adminator.user import User
-from adminator.network import Network
-from adminator.network_pool import NetworkPool
-from adminator.network_acl import NetworkAcl
-from adminator.domain import Domain
-from adminator.record import Record
-from adminator.lease4 import Lease4
-from adminator.lease6 import Lease6
-from adminator.interface import Interface
-from adminator.port import Port
-from adminator.connection import Connection
-from adminator.switch import Switch
-from adminator.mac_history import MacHistory
-from adminator.switch_interface import SwitchInterface
-from adminator.config_pattern import ConfigPatttern
+from adminator.device import DeviceModel
+from adminator.dhcp_value import DhcpOptionValueModel
+from adminator.dhcp_option import DhcpOptionModel
+from adminator.domain import DomainModel
+from adminator.user import UserModel
+from adminator.network import NetworkModel
+from adminator.network_pool import NetworkPoolModel
+from adminator.network_acl import NetworkAclModel
+from adminator.record import RecordModel
+from adminator.lease4 import Lease4Model
+from adminator.lease6 import Lease6Model
+from adminator.interface import InterfaceModel
+from adminator.port import PortModel
+from adminator.connection import ConnectionModel
+from adminator.switch import SwitchModel
+from adminator.mac_history import MacHistoryModel
+from adminator.switch_interface import SwitchInterfaceModel
+from adminator.config_pattern import ConfigPattternModel
 
 
 class Manager(object):
@@ -32,27 +29,28 @@ class Manager(object):
         self.db = db
 
         # Something like models
-        self.user = User(self)
-        self.device = Device(self)
-        self.interface = Interface(self)
-        self.dhcp_option = DhcpOption(self)
-        self.dhcp_option_value = DhcpOptionValue(self)
-        self.network = Network(self)
-        self.network_pool = NetworkPool(self)
-        self.network_acl = NetworkAcl(self)
+        self.user = UserModel(self)
+        self.device = DeviceModel(self)
+        self.interface = InterfaceModel(self)
+        self.dhcp_option = DhcpOptionModel(self)
+        self.dhcp_option_value = DhcpOptionValueModel(self)
+        self.network = NetworkModel(self)
+        self.network_pool = NetworkPoolModel(self)
+        self.network_acl = NetworkAclModel(self)
 
-        self.record = Record(self)
-        self.domain = Domain(self)
+        self.record = RecordModel(self)
+        self.domain = DomainModel(self)
 
-        self.lease4 = Lease4(self)
-        self.lease6 = Lease6(self)
+        self.lease4 = Lease4Model(self)
+        self.lease6 = Lease6Model(self)
 
-        self.port = Port(self)
-        self.connection = Connection(self)
-        self.switch = Switch(self)
-        self.mac_history = MacHistory(self)
-        self.switch_interface = SwitchInterface(self)
-        self.config_pattern = ConfigPatttern(self)
+        self.port = PortModel(self)
+        self.connection = ConnectionModel(self)
+        self.switch = SwitchModel(self)
+        self.mac_history = MacHistoryModel(self)
+        self.switch_interface = SwitchInterfaceModel(self)
+        self.config_pattern = ConfigPattternModel(self)
+
 
 
 # vim:set sw=4 ts=4 et:

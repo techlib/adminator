@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from adminator.model import Model
-from adminator.switch_interface import SwitchInterface
+from adminator.switch_interface import SwitchInterfaceModel
 
-__all__ = ['Switch']
+from .db_entity.topology import Switch
 
-
-class Switch(Model):
+class SwitchModel(Model):
     def init(self):
         self.table_name = 'switch'
         # Primary key
@@ -17,10 +16,11 @@ class Switch(Model):
         # Relations
         self.relate('interfaces', self.e('sw_interface'))
         self.include_relations = {'item': ['interfaces'], 'list': []}
+        self.db_entity = Switch
 
     def get_item(self, key):
         item = super().get_item(key)
-        switch_interface = SwitchInterface(self.manager)
+        switch_interface = SwitchInterfaceModel(self.manager)
         for interface in item['interfaces']:
             switch_interface.fill_link_status(interface)
             interface['speed_label'] = switch_interface.link_speed_humanize(interface['speed'])

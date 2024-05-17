@@ -3,21 +3,17 @@
 
 from adminator.model import Model
 from adminator.utils import object_to_dict
+from sqlmodel import text, select
+from .db_entity.dns import Record
 
-__all__ = ['Record']
-
-class Record(Model):
+class RecordModel(Model):
     def init(self):
         # PDNS schema
         self.schema = 'pdns'
         self.table_name = 'records'
         self.pkey = 'id'
+        self.db_entity = Record
 
-    def list(self):
-        records = []
-        for record in self.db.execute('select * from pdns.records').fetchall():
-            records.append(dict(zip(record.keys(), record.values())))
-        return records
 
     def insert(self, data):
         newVal = {}
@@ -26,16 +22,15 @@ class Record(Model):
                 if v == '': v = None
                 newVal[k] = v
 
-        e = self.e().insert(**newVal)
-        self.db.session.flush()
-
+        e = Record(**newVal)
+        self.db.add(e)
         self.db.commit()
 
     def patch(self, data):
         assert data.get(self.pkey) is not None, 'Primary key is not set'
 
         id = data[self.pkey]
-        item = self.e().filter_by(**{self.pkey: id}).one()
+        item = self.db().exec(select(self.db_entity).filter_by(**{self.pkey: id})).one()
 
         for k,v in data.items():
             if k in self.get_relationships() or k == self.pkey:
