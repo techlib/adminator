@@ -13,12 +13,19 @@ from twisted.web.wsgi import WSGIResource
 from twisted.web.server import Site
 from twisted.python.threadpool import ThreadPool
 from twisted.python import log
+import psycopg2.extras
 
 # Data are accessed through SQLSoup, using SQLAlchemy.
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
-from sqlsoup import SQLSoup
+from sqlalchemy.ext.automap import automap_base
+#from sqlsoup import SQLSoup
+#from sqlalchemy.orm import Session
 
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import  relationship
+from sqlalchemy.schema import MetaData
+from sqlmodel import Session
 # Command line arguments follow the GNU conventions.
 from getopt import gnu_getopt
 from sys import argv, stderr
@@ -28,7 +35,7 @@ from configparser import ConfigParser
 
 # Import all the application handles.
 from adminator import make_site, Manager, AccessModel
-
+from adminator.db import TSRangeType
 
 if __name__ == '__main__':
     def do_start(config):
@@ -49,12 +56,14 @@ if __name__ == '__main__':
 
         # Default to much saner database query defaults and always
         # commit and/or flush statements explicitly.
-        factory = sessionmaker(autocommit=False, autoflush=False)
+        engine = create_engine(db_url, echo=False)
 
-        # Prepare database connection with table reflection.
-        engine = create_engine(db_url)
-        session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
-        db = SQLSoup(engine, session=session)
+        # factory to create scoped_session of type Session (from sqlmodel, not sqlalchemy)
+        # to avoid multi-threading problems in new versions of things
+        def sqlmodel_factory():
+            return Session(engine, autoflush=False)
+
+        db = scoped_session(sqlmodel_factory)
 
         # Extract manager options, sans the pool_size we handle here.
         manager_opts = dict(config.items('manager'))
@@ -70,6 +79,8 @@ if __name__ == '__main__':
         site = make_site(db, manager, access_model, debug=http_debug)
 
         # Prepare WSGI site with a separate thread pool.
+
+
         pool = ThreadPool(http_pool, http_pool, 'http')
         site = Site(WSGIResource(reactor, pool, site))
         pool.start()

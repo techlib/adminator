@@ -14,7 +14,6 @@ from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import date, datetime, timedelta
 from xml.sax.saxutils import escape
-
 from pythonping import ping
 
 import flask
@@ -310,7 +309,7 @@ def make_site(db, manager, access_model, debug=False):
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
-        manager.db.rollback()
+        manager.db().rollback()
 
     # Logged user info
     @app.route('/user-info/', methods=['GET'])
