@@ -12,7 +12,8 @@ from sqlalchemy import and_
 from .parser import CfgParser
 from sqlalchemy.orm.exc import NoResultFound
 
-
+from adminator.db_entity.topology import  SwInterface, Switch, InterfaceToPattern, IfConfigPattern
+from sqlmodel import select, delete
 class ConfigAgent(object):
     def __init__(self, db, api_url, update_period, username, password, crt_path):
         self.db = db
@@ -47,15 +48,15 @@ class ConfigAgent(object):
                 name = inter['name'][len('interface '):]
                 try:
                     where = and_(
-                        self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == name
+                        SwInterface.switch == switch.uuid, SwInterface.name == name
                     )
-                    db_if = self.db.sw_interface.filter(where).one()
+                    db_if = self.db().exec(select(SwInterface).filter(where)).one()
                     db_if.configuration = inter['options']
                 except NoResultFound:
                     log.msg('The interface {} hasn\'t been found at switch {}({})'.format(
                         name, switch.name, switch.ip_address
                     ))
-        self.db.commit()
+        self.db().commit()
 
     def pattern_match(self, pattern, configuration):
         # TODO: TypeError: 'NoneType' object is not iterable, etc
@@ -79,29 +80,30 @@ class ConfigAgent(object):
         return not(False in mand_state or False in cfg_state)
 
     def all_pattern_recalculate(self):
-        patterns = self.db.if_config_pattern.all()
-        for interface in self.db.sw_interface.all():
-            self.db.if_to_pattern.filter_by(interface=interface.uuid).delete()
+        patterns = self.db().exec(select(IfConfigPattern)).all()
+        for interface in self.db().exec(select(SwInterface)):
+            self.db().exec(delete(InterfaceToPattern).where(InterfaceToPattern.interface == interface.uuid))
             for pattern in patterns:
                 if self.pattern_match(pattern, interface.configuration):
-                    self.db.if_to_pattern.insert(
-                        interface=interface.uuid, if_config_pattern=pattern.uuid
-                    )
-        self.db.commit()
+                    to_insert = InterfaceToPattern(interface=interface.uuid, if_config_pattern=pattern.uuid)
+                    self.db().add(to_insert)
+        self.db().commit()
 
     def update(self):
         log.msg('Switch configuration sync started')
         start = time.time()
-        switces = self.db.switch.filter_by(enable=True, type='3com').all()
-        switces.extend(self.db.switch.filter_by(enable=True, type='hp').all())
-        switces.extend(self.db.switch.filter_by(enable=True, type='aruba').all())
+
+        switces = self.db().exec(select(Switch).filter(Switch.enable == True, Switch.type == '3com')).all()
+        switces.extend(self.db().exec(select(Switch).filter(Switch.enable == True, Switch.type == 'hp')).all())
+        switces.extend(self.db().exec(select(Switch).filter(Switch.enable == True, Switch.type == 'aruba')).all())
+
         for switch in switces:
             try:
                 self.update_switch(switch)
             except Exception as e:
                 log.msg('Error while updating configuration of {}({}), {}'.format(
                     switch.name, switch.ip_address, e))
-                self.db.rollback()
+                self.db().rollback()
                 continue
 
         self.all_pattern_recalculate()

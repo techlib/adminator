@@ -16,7 +16,7 @@ from twisted.python import log
 # Data are accessed through SQLSoup, using SQLAlchemy.
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
-from sqlsoup import SQLSoup
+from sqlmodel import Session
 
 # Command line arguments follow the GNU conventions.
 from getopt import gnu_getopt
@@ -42,13 +42,16 @@ if __name__ == '__main__':
         # unused
         # factory = sessionmaker(autocommit=False, autoflush=False)
 
-        # Prepare database connection with table reflection.
-        engine = create_engine(db_url)
-        session = scoped_session(
-            sessionmaker(autocommit=False, autoflush=False)
-        )
-        db = SQLSoup(engine, session=session)
-        db.schema = 'topology'
+        # Default to much saner database query defaults and always
+        # commit and/or flush statements explicitly.
+        engine = create_engine(db_url, echo=False)
+
+        # factory to create scoped_session of type Session (from sqlmodel, not sqlalchemy)
+        # to avoid multi-threading problems in new versions of things
+        def sqlmodel_factory():
+            return Session(engine, autoflush=False)
+
+        db = scoped_session(sqlmodel_factory)
 
         # Extract agent options, sans the pool_size we handle here.
         agent_opts = dict(config.items('config'))
