@@ -5,13 +5,15 @@ from twisted.internet import task
 from twisted.python import log
 
 import subprocess
-import datetime
+from datetime import datetime
 import threading
 import time
 import re
 
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
+from adminator.db_entity.topology import *
+from sqlmodel import select, delete
 
 __all__ = ['SNMPArubaAgent']
 
@@ -173,8 +175,8 @@ class SNMPArubaAgent(object):
         switch.sys_name = sw_info['name']
         switch.sys_location = sw_info['location']
         switch.sys_services = int(sw_info['services'])
-        switch.last_update = datetime.datetime.now()
-        self.db.commit()
+        switch.last_update = datetime.now()
+        self.db().commit()
 
     def process_speed(self, data, name, admin_status, oper_status):
         # link (adm) down, speed auto => non zero value
@@ -203,67 +205,67 @@ class SNMPArubaAgent(object):
         return '{} seconds'.format((uptime - last_change) // 100)
 
     def save_if_topology_to_db(self, switch, data):
-        analyzer = self.db.analyzer.filter_by(name=switch.name).one()
+        analyzer = self.db().exec(select(Analyzer).where(Analyzer.name == switch.name)).one()
 
         for key, val in data.items():
             if not re.match(r'\d+/\d+', val['Name']):
                 continue
             unit_number, interface_number = map(int, val['Name'].split('/', 2))
-            where = and_(self.db.patch_panel.analyzer == analyzer.uuid,
-                         self.db.patch_panel.pp_id_in_analyzer == unit_number)
+            where = and_(PatchPanel.analyzer == analyzer.uuid,
+                         PatchPanel.pp_id_in_analyzer == unit_number)
             try:
-                patch_panel = self.db.patch_panel.filter(where).one()
+                patch_panel = self.db().exec(select(PatchPanel).filter(where)).one()
             except NoResultFound:
-                self.db.patch_panel.insert(pp_id_in_analyzer=unit_number, analyzer=analyzer.uuid)
-                self.db.commit()
+                pp_to_insert = PatchPanel(pp_id_in_analyzer=unit_number, analyzer=analyzer.uuid)
+                self.db().add(pp_to_insert)
+                self.db().commit()
             finally:
-                patch_panel = self.db.patch_panel.filter(where).one()
+                patch_panel = self.db().exec(select(PatchPanel).filter(where)).one()
 
-            where = and_(self.db.port.patch_panel == patch_panel.uuid,
-                         self.db.port.name == val['Name'])
+            where = and_(Port.patch_panel == patch_panel.uuid,
+                         Port.name == val['Name'])
             try:
-                port = self.db.port.filter(where).one()
+                port = self.db().exec(select(Port).filter(where)).one()
             except NoResultFound:
-                self.db.port.insert(
-                    patch_panel=patch_panel.uuid,
-                    position_on_pp=interface_number,
-                    name=val['Name'],
-                    type='sw'
-                )
-                self.db.commit()
+                port_to_insert = Port(patch_panel=patch_panel.uuid, position_on_pp=interface_number, name=val['Name'], type='sw')
+                self.db().add(port_to_insert)
+                self.db().commit()
             finally:
-                port = self.db.port.filter(where).one()
+                port = self.db().exec(select(Port).filter(where)).one()
+
 
             try:
-                other_port = self.db.port.filter_by(name=val['Alias']).one()
+                other_port = self.db().exec(select(Port).filter_by(name=val['Alias'])).one()
                 other_port.connect_to = port.uuid
                 port.connect_to = other_port.uuid
-                self.db.commit()
+                self.db().add(port)
+                self.db().commit()
             except NoResultFound:
                 pass
 
-            where = and_(self.db.sw_interface.switch == switch.uuid,
-                         self.db.sw_interface.name == val['Name'])
-            interface = self.db.sw_interface.filter(where).one()
+            where = and_(SwInterface.switch == switch.uuid,
+                         SwInterface.name == val['Name'])
+            interface = self.db().exec(select(SwInterface).filter(where)).one()
             if interface.port != port.uuid:
                 interface.port = port.uuid
-                self.db.commit()
+                self.db().commit()
 
     def save_if_to_db(self, switch, data, sw_uptime):
         for key, val in data.items():
-            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
+            where = and_(SwInterface.switch == switch.uuid, SwInterface.name == val['Name'])
             try:
-                interface = self.db.sw_interface.filter(where).one()
+                interface = self.db().exec(select(SwInterface).filter(where)).one()
             except NoResultFound:
-                self.db.sw_interface.insert(name=val['Name'], switch=switch.uuid)
-                self.db.commit()
+                interface_to_insert = SwInterface(name=val['Name'], switch=switch.uuid)
+                self.db().add(interface_to_insert)
+                self.db().commit()
 
-        update_time = datetime.datetime.now()
+        update_time = datetime.now()
         for key, val in data.items():
             if not ('Vlan' in val):
                 val['Vlan'] = 0
-            where = and_(self.db.sw_interface.switch == switch.uuid, self.db.sw_interface.name == val['Name'])
-            interface = self.db.sw_interface.filter(where).one()
+            where = and_(SwInterface.switch == switch.uuid, SwInterface.name == val['Name'])
+            interface = self.db().exec(select(SwInterface).filter(where)).one()
 
             # SNMP up = 1, down = 2
             interface.admin_status = 2 - int(val['AdminStatus'])
@@ -276,29 +278,31 @@ class SNMPArubaAgent(object):
 
             interface.last_change = self.process_last_change(val['LastChange'], sw_uptime)
 
-            self.db.mac_address.filter_by(interface=interface.uuid).delete()
+            self.db().exec(delete(MacAddress).filter_by(interface=interface.uuid))
+
             if interface.ignore_macs is False:
                 if len(val['MACs']) > 0:
-                    self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
+                    self.db().exec(delete(LastMacsOnInterface).filter_by(interface=interface.uuid))
                 for mac in val['MACs']:
-                    self.db.mac_address.insert(mac_address=mac, interface=interface.uuid,)
-                    self.db.last_macs_on_interface.insert(
-                        mac_address=mac, interface=interface.uuid, time=update_time)
+                    mac_to_insert = MacAddress(mac_address=mac, interface=interface.uuid)
+                    self.db().add(mac_to_insert)
+                    last_mac_to_insert = LastMacsOnInterface(mac_address=mac, interface=interface.uuid, time=update_time)
+                    self.db().add(last_mac_to_insert)
                     try:
-                        db_mac = self.db.last_interface_for_mac.filter(
-                            self.db.last_interface_for_mac.mac_address == mac
-                        ).one()
+                        db_mac = self.db().exec(select(LastInterfaceForMac).filter_by(mac_address=mac)).one()
+
                         db_mac.interface = interface.uuid
                         db_mac.time = update_time
                     except NoResultFound:
-                        self.db.last_interface_for_mac.insert(
+                        last_interface_for_mac = LastInterfaceForMac(
                             mac_address=mac, interface=interface.uuid, time=update_time
                         )
+                        self.db().add(last_interface_for_mac)
             else:
-                self.db.last_macs_on_interface.filter_by(interface=interface.uuid).delete()
-                self.db.last_interface_for_mac.filter_by(interface=interface.uuid).delete()
+                self.db().exec(delete(LastMacsOnInterface).filter_by(interface=interface.uuid))
+                self.db().exec(delete(LastInterfaceForMac).filter_by(interface=interface.uuid))
 
-        self.db.commit()
+        self.db().commit()
 
     def parallel_update(self, switch, output):
         start = time.time()
@@ -321,7 +325,7 @@ class SNMPArubaAgent(object):
         start = time.time()
         threads = []
         data = {}
-        for switch in self.db.switch.filter_by(enable=True, type='aruba').all():
+        for switch in self.db().exec(select(Switch).filter_by(enable=True, type='aruba')):
             data[switch.uuid] = {'switch': None, 'interfaces': None}
             t = threading.Thread(target=self.parallel_update, args=(switch, data))
             t.start()
@@ -330,7 +334,7 @@ class SNMPArubaAgent(object):
         for t in threads:
             t.join()
 
-        for switch in self.db.switch.filter_by(enable=True, type='aruba').all():
+        for switch in self.db().exec(select(Switch).filter_by(enable=True, type='aruba')):
             if data[switch.uuid]:
                 try:
                     self.save_to_db(switch, data[switch.uuid])

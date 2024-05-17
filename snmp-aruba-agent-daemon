@@ -16,7 +16,6 @@ from twisted.python import log
 # Data are accessed through SQLSoup, using SQLAlchemy.
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
-from sqlsoup import SQLSoup
 
 # Command line arguments follow the GNU conventions.
 from getopt import gnu_getopt
@@ -27,7 +26,7 @@ from configparser import ConfigParser
 
 # Import all the application handles.
 from adminator import SNMPArubaAgent
-
+from sqlmodel import Session
 
 if __name__ == '__main__':
     def do_start(config):
@@ -43,12 +42,14 @@ if __name__ == '__main__':
         # factory = sessionmaker(autocommit=False, autoflush=False)
 
         # Prepare database connection with table reflection.
-        engine = create_engine(db_url)
-        session = scoped_session(
-            sessionmaker(autocommit=False, autoflush=False)
-        )
-        db = SQLSoup(engine, session=session)
-        db.schema = 'topology'
+        engine = create_engine(db_url, echo=False)
+
+        # factory to create scoped_session of type Session (from sqlmodel, not sqlalchemy)
+        # to avoid multi-threading problems in new versions of things
+        def sqlmodel_factory():
+            return Session(engine, autoflush=False)
+
+        db = scoped_session(sqlmodel_factory)
 
         # Extract agent options, sans the pool_size we handle here.
         agent_opts = dict(config.items('snmp-aruba'))
