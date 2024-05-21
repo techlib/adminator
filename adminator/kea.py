@@ -10,6 +10,7 @@ from struct import unpack
 from codecs import encode, decode
 from sqlmodel import select
 from adminator.db_entity.network import Network, NetworkPool, DhcpOption, DhcpOptionValue, Interface
+import ipaddress
 
 DEFAULTS = {
     'Dhcp4': {
@@ -26,8 +27,10 @@ DEFAULTS = {
             'name': 'network',
             'user': 'network',
         },
-    },
+    }
+}
 
+DEFAULTS6 = {
     'Dhcp6': {
         'valid-lifetime': 4000,
         'renew-timer':    1000,
@@ -166,9 +169,11 @@ def generate_kea_config(db, tpl=DEFAULTS):
             if iface.hostname:
                 reservation['hostname'] = iface.hostname
 
-            if family == 4 and iface.ip4addr is not None:
+            if family == 4 and iface.ip4addr is not None and \
+                    ipaddress.ip_address(iface.ip4addr) in ipaddress.ip_network(iface.network_.prefix4):
                 reservation['ip-address'] = iface.ip4addr
-            elif family == 6 and iface.ip6addr is not None:
+            elif family == 6 and iface.ip6addr is not None and \
+                    ipaddress.ip_address(iface.ip6addr) in ipaddress.ip_network(iface.network_.prefix6):
                 reservation['ip-address'] = iface.ip6addr
             else:
                 continue
@@ -178,7 +183,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
     c = deepcopy(tpl)
     dict_update_r(c, {
         'Dhcp4': dhcp4_config(),
-        'Dhcp6': dhcp6_config(),
+#        'Dhcp6': dhcp6_config(),
     })
 
     return c
