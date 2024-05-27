@@ -51,7 +51,7 @@ class Device(SQLModel, table=True):
 
     uuid: UUID = Field(sa_column_kwargs={'server_default': text('uuid_generate_v4()')}, primary_key=True)
     description: str
-    location: str
+    location: str = Field(default='')
     type: Optional[str]
     user: Optional[str] = Field(foreign_key='user.cn')
     valid: Optional[TSRangeType] = Field(sa_type=TSRangeType)
