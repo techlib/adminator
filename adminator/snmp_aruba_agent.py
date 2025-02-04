@@ -135,9 +135,9 @@ class SNMPArubaAgent(object):
             if not oid[3] in mapped_vals:
                 mapped_vals[oid[3]] = {}
             for val in data[prop]:
-                if not val[0] in mapped_vals[oid[3]] and len(val) is 2:
+                if not val[0] in mapped_vals[oid[3]] and len(val) == 2:
                     mapped_vals[oid[3]][val[0]] = {}
-                if len(val) is 2:
+                if len(val) == 2:
                     mapped_vals[oid[3]][val[0]][prop] = val[1]
 
         for key, val in mapped_vals[3].items():
