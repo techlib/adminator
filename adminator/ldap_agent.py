@@ -34,7 +34,7 @@ class LdapAgent(object):
             except NoResultFound as e:
                 print('Inserting:')
                 print(user)
-                a = self.db.user.insert(**user)
+                a = self.db().add(User(**user))
                 print(a)
 
         self.db().commit()
