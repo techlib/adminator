@@ -60,6 +60,67 @@ def generate_kea_config(db, tpl=DEFAULTS):
     :param tpl: Template to extend instead of starting from scratch.
     :return: Dictionary that can be JSON-encoded and written out.
     """
+    def get_global_option_value_by_code(code, family='inet'):
+        """
+        Find DHCP option value by code.
+
+        family: 'inet' for IPv4, 'inet6' for IPv6.
+        Finds DhcpOption(family=family, code=code) and its DhcpOptionValue
+        with network=None, device=None.
+        """
+        # Find (DhcpOption)
+        opt = None
+        for o in db().exec(
+            select(DhcpOption).filter_by(family=family).where(DhcpOption.code == code)
+        ):
+            opt = o
+            break
+
+        if opt is None:
+            return None
+
+        # Get option value (DhcpOptionValue)
+        val = None
+        for v in db().exec(
+            select(DhcpOptionValue).filter_by(
+                network=None,
+                device=None,
+                option=opt.name
+            )
+        ):
+            val = v
+            break
+
+        return val.value if val is not None else None
+
+    def update_boot_file_client_classes(config):
+        """
+        Take options 224 (BIOS) and 225 (UEFI) and fill them into
+        Dhcp4.client-classes[].option-data[].data instead of 'boot.bios'/'boot.uefi'.
+        """
+        dhcp4 = config.get('Dhcp4', {})
+        classes = dhcp4.get('client-classes', [])
+        if not classes:
+            return
+
+        bios_boot = get_global_option_value_by_code(224, family='inet')
+        uefi_boot = get_global_option_value_by_code(225, family='inet')
+
+        for cls in classes:
+            name = cls.get('name')
+            opts = cls.get('option-data', []) or []
+
+            for od in opts:
+                if od.get('name') != 'boot-file-name':
+                    continue
+
+                # UEFI class
+                if name == 'UEFI' and uefi_boot:
+                    od['data'] = uefi_boot
+
+                # BIOS class
+                if name == 'BIOS' and bios_boot:
+                    od['data'] = bios_boot
 
     def dhcp4_config():
         config = {
@@ -141,6 +202,9 @@ def generate_kea_config(db, tpl=DEFAULTS):
 
             otype = types[v.option]
 
+            if family == 4 and otype.code in (224, 225):
+                continue
+
             if otype.name == 'next-server':
                 continue
 
@@ -185,7 +249,7 @@ def generate_kea_config(db, tpl=DEFAULTS):
         'Dhcp4': dhcp4_config(),
 #        'Dhcp6': dhcp6_config(),
     })
-
+    update_boot_file_client_classes(c)
     return c
 
 
