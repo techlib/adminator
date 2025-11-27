@@ -22,7 +22,7 @@ class DeviceModel(Model):
         for privilege in privileges:
             s = select(NetworkAcl).where(NetworkAcl.role == privilege)
             for acl in self.db().exec(s):
-                acls[acl.network] = acl.device_types
+                acls[str(acl.network)] = acl.device_types
         return acls
 
     def get_item(self, key, privileges):
@@ -39,8 +39,8 @@ class DeviceModel(Model):
         # Check ACLs
         acl = self.network_acls(privileges)
         if 'admin' not in privileges:
-            for interface in item.interface:
-                if str(interface.network) not in acl.keys() or item.type not in acl[str(interface.network)]:
+            for interface in item['interfaces']:
+                if str(interface['network']) not in acl.keys() or item['type'] not in acl[str(interface['network'])]:
                     raise Exception('RBAC Forbidden')
 
         return item
