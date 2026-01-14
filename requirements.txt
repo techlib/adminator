@@ -22,7 +22,7 @@ pyasn1==0.6.0
 pydantic==2.7.1
 pydantic_core==2.18.2
 pythonping==1.1.4
-requests==2.31.0
+requests==2.32.0
 six==1.16.0
 SQLAlchemy==2.0.30
 sqlmodel==0.0.18
